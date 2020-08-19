@@ -17,20 +17,20 @@ class CFileWriter : public IWriter
 private:
 	FILE*			hf;
 public:
-	CFileWriter		(const char *name, bool exclusive)
+	CFileWriter		(const char *name, bool exclusive, bool append)
 	{
 		R_ASSERT	(name && name[0]);
 		fName		= name;
 		VerifyPath	(*fName);
         if (exclusive){
-    		int handle	= _sopen(*fName,_O_WRONLY|_O_TRUNC|_O_CREAT|_O_BINARY,SH_DENYWR);
+    		int handle	= _sopen(*fName,_O_WRONLY|(append ? 0 : _O_TRUNC)|_O_CREAT|_O_BINARY,SH_DENYWR);
 #ifdef _EDITOR
     		if (handle==-1)
     			Msg	("!Can't create file: '%s'. Error: '%s'.",*fName,_sys_errlist[errno]);
 #endif
-    		hf		= _fdopen(handle,"wb");
+    		hf		= _fdopen(handle, append ? "ab" : "wb");
         }else{
-			hf			= fopen(*fName,"wb");
+			hf			= fopen(*fName, append ? "ab" : "wb");
 			if (hf==0)
 				Msg		("!Can't write file: '%s'. Error: '%s'.",*fName,_sys_errlist[errno]);
 		}

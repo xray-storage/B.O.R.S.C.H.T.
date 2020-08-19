@@ -31,6 +31,8 @@ public:
 	IWriter*					w_open_ex		(LPCSTR initial, LPCSTR N);
 	IC IWriter*					w_open			(LPCSTR N) override {return w_open(0,N);}
 	IC IWriter*					w_open_ex		(LPCSTR N) override {return w_open_ex(0,N);}
+	IWriter*					w_open_append	(LPCSTR N) override { return w_open_append(0, N); }
+	IWriter*					w_open_append	(LPCSTR initial, LPCSTR N);
 	void						w_close			(IWriter* &S) override;
 
 	bool						exist			(LPCSTR N) override;

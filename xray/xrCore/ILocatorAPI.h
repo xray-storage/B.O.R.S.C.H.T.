@@ -45,6 +45,7 @@ struct ILocatorAPI
 	virtual IWriter*					w_open				(LPCSTR initial, LPCSTR N) = 0;
 	virtual IWriter*					w_open				(LPCSTR N) = 0;
 	virtual IWriter*					w_open_ex			(LPCSTR N) = 0;
+	virtual IWriter*					w_open_append		(LPCSTR N) = 0;
 	virtual void						w_close				(IWriter* &S) = 0;
 
 	virtual void						auth_generate		(xr_vector<xr_string>&	ignore, xr_vector<xr_string>&	important) = 0;
