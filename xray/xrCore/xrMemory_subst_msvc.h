@@ -42,15 +42,6 @@ IC	void	xr_delete	(T* &ptr)
 		ptr = NULL;
 	}
 }
-template <class T>
-IC	void	xr_delete	(T* const &ptr)
-{
-	if (ptr) 
-	{
-		xr_special_free<std::is_polymorphic_v<T>,T>(ptr);
-		const_cast<T*&>(ptr) = NULL;
-	}
-}
 
 #ifdef DEBUG_MEMORY_MANAGER
 	void XRCORE_API mem_alloc_gather_stats				(const bool &value);
