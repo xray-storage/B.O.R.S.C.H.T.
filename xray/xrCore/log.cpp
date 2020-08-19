@@ -21,6 +21,7 @@ xr_vector<std::pair<u32, shared_str> >*		LogFile			= NULL;
 static LogCallback			LogCB			= 0;
 static bool writeTimestamp = false;
 static u32 startTimestamp = GetTickCount();
+static u32 flushed = 0;
 
 std::tuple<int, int, int> GetHms(u32 timestamp)
 {
@@ -34,9 +35,9 @@ void FlushLog			()
 {
 	if (!no_log){
 		logCS.Enter			();
-		IWriter *f			= FS.w_open(logFName);
+		IWriter *f			= FS.w_open_append(logFName);
         if (f) {
-            for (u32 it=0; it<LogFile->size(); it++)	{
+            for (u32 it=flushed; it<LogFile->size(); it++)	{
                 auto [hour, min, sec] = GetHms((*LogFile)[it].first);
                 char timeStr[12];
                 sprintf(timeStr, "[%02d:%02d:%02d] ", hour % 100, min, sec);
@@ -44,6 +45,7 @@ void FlushLog			()
 				LPCSTR		s	= *((*LogFile)[it].second);
 				f->w_string	(s?s:"");
 			}
+            flushed = LogFile->size();
             FS.w_close		(f);
         }
 		logCS.Leave			();
@@ -202,6 +204,7 @@ void CreateLog			(BOOL nl)
 	strconcat			(sizeof(log_file_name),log_file_name,Core.ApplicationName,"_",Core.UserName,".log");
 	if (FS.path_exist("$logs$"))
 		FS.update_path	(logFName,"$logs$",log_file_name);
+    FS.file_delete(logFName);
 	if (!no_log){
         IWriter *f		= FS.w_open	(logFName);
         if (f==NULL){
@@ -223,4 +226,10 @@ void CloseLog(void)
 void Log_WriteTimestamp()
 {
     writeTimestamp = true;
+}
+
+void ClearLog()
+{
+	LogFile->clear_not_free	();
+    flushed = 0;
 }

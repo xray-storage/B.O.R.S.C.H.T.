@@ -20,6 +20,7 @@ void 					CreateLog	(BOOL no_log=FALSE);
 void 					InitLog		();
 void 					CloseLog	();
 void	XRCORE_API		FlushLog	();
+void	XRCORE_API		ClearLog	();
 
 extern 	XRCORE_API	xr_vector<std::pair<u32, shared_str> >*		LogFile;
 extern 	XRCORE_API	BOOL						LogExecCB;
