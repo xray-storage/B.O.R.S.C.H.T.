@@ -17,8 +17,18 @@ static BOOL 				no_log			= TRUE;
 #else // PROFILE_CRITICAL_SECTIONS
 	static xrCriticalSection	logCS;
 #endif // PROFILE_CRITICAL_SECTIONS
-xr_vector<shared_str>*		LogFile			= NULL;
+xr_vector<std::pair<u32, shared_str> >*		LogFile			= NULL;
 static LogCallback			LogCB			= 0;
+static bool writeTimestamp = false;
+static u32 startTimestamp = GetTickCount();
+
+std::tuple<int, int, int> GetHms(u32 timestamp)
+{
+    auto [ts1, ms] = std::div(timestamp, 1000);
+    auto [ts2, sec] = std::div(ts1, 60);
+    auto [hour, min] = std::div(ts2, 60);
+    return {hour, min, sec};
+}
 
 void FlushLog			()
 {
@@ -27,7 +37,11 @@ void FlushLog			()
 		IWriter *f			= FS.w_open(logFName);
         if (f) {
             for (u32 it=0; it<LogFile->size(); it++)	{
-				LPCSTR		s	= *((*LogFile)[it]);
+                auto [hour, min, sec] = GetHms((*LogFile)[it].first);
+                char timeStr[12];
+                sprintf(timeStr, "[%02d:%02d:%02d] ", hour % 100, min, sec);
+                f->w(timeStr, 11);
+				LPCSTR		s	= *((*LogFile)[it].second);
 				f->w_string	(s?s:"");
 			}
             FS.w_close		(f);
@@ -52,7 +66,7 @@ void AddOne				(const char *split)
 	{
 		shared_str			temp = shared_str(split);
 //		DUMP_PHASE;
-		LogFile->push_back	(temp);
+		LogFile->emplace_back(GetTickCount() - startTimestamp, temp);
 	}
 
 	//exec CallBack
@@ -171,7 +185,7 @@ LPCSTR log_name			()
 	return				(log_file_name);
 }
 
-LPCSTR logFullName()
+LPCSTR LogFullName()
 {
 	return logFName;
 }
@@ -179,7 +193,7 @@ LPCSTR logFullName()
 void InitLog()
 {
 	R_ASSERT			(LogFile==NULL);
-	LogFile				= xr_new< xr_vector<shared_str> >();
+	LogFile				= xr_new< xr_vector<std::pair<u32, shared_str> > >();
 }
 
 void CreateLog			(BOOL nl)
@@ -204,4 +218,9 @@ void CloseLog(void)
 	FlushLog		();
  	LogFile->clear	();
 	xr_delete		(LogFile);
+}
+
+void Log_WriteTimestamp()
+{
+    writeTimestamp = true;
 }

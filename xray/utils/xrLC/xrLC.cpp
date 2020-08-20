@@ -232,6 +232,7 @@ int APIENTRY WinMain(HINSTANCE hInst,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
+    Log_WriteTimestamp();
 //	g_temporary_stuff	= &trivial_encryptor::decode;
 //	g_dummy_stuff		= &trivial_encryptor::encode;
 
