@@ -92,6 +92,14 @@ void Progress		(const float F)
 	*/
 }
 
+static xr_vector<xr_string> phaseTimes;
+
+void LogPhaseTimes()
+{
+    for (const auto& time : phaseTimes)
+        Msg("%s", time.c_str());
+}
+
 void Phase			(const char *phase_name)
 {
 	while (!(hwPhaseTime && hwStage)) Sleep(1);
@@ -105,6 +113,7 @@ void Phase			(const char *phase_name)
 		sprintf				( tbuf,"%s : %s",make_time(phase_total_time/1000).c_str(),	phase);
 		SendMessage			( hwPhaseTime, LB_DELETESTRING, SendMessage(hwPhaseTime,LB_GETCOUNT,0,0)-1,0);
 		SendMessage			( hwPhaseTime, LB_ADDSTRING, 0, (LPARAM) tbuf);
+        phaseTimes.push_back(tbuf);
 	}
 
 	// Start _new phase

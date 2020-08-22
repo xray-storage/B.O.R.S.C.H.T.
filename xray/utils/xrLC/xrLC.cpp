@@ -4,6 +4,7 @@
 #include "math.h"
 #include "build.h"
 #include "../xrLC_Light/xrLC_GlobalData.h"
+#include "cl_log.h"
 
 #define PROTECTED_BUILD
 
@@ -206,12 +207,13 @@ void Startup(LPSTR     lpCmdLine)
 	FS.update_path			(lfn,_game_levels_,name);
 	pBuild->Run				(lfn);
 	xr_delete				(pBuild);
+	clMsg					("Build succesful!\n\nPhase times:");
 
 	// Show statistic
-	extern	std::string make_time(u32 sec);
+	LogPhaseTimes			();
 	u32	dwEndTime			= dwStartupTime.GetElapsed_ms();
 	sprintf					(inf,"Time elapsed: %s",make_time(dwEndTime/1000).c_str());
-	clMsg					("Build succesful!\n%s",inf);
+	Msg						("------------------------------------------\n%s",inf);
 
 	if (!strstr(cmd,"-silent"))
 		MessageBox			(logWindow,inf,"Congratulation!",MB_OK|MB_ICONINFORMATION);

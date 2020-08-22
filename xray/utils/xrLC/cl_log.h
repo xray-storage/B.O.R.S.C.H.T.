@@ -7,3 +7,6 @@ void Phase			(const char *phase_name);
 
 void logThread	    (void *dummy);
 void logCallback	(LPCSTR c);
+
+void LogPhaseTimes	();
+std::string make_time(u32 sec);
