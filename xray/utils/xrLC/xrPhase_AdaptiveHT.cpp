@@ -5,10 +5,10 @@
 #include "../xrLC_Light/light_point.h"
 #include "../xrLC_Light/xrdeflector.h"
 #include "../xrLC_Light/xrface.h"
-
 #include "../../xrcdb/xrcdb.h"
 #include "../../Include/face_smoth_flags.h"
 
+#include <tbb/tbb.h>
 
 const	float	aht_max_edge	= c_SS_maxsize/2.5f;	// 2.0f;			// 2 m
 //const	float	aht_min_edge	= .2f;					// 20 cm
@@ -151,15 +151,34 @@ void CBuild::xrPhase_AdaptiveHT	()
 		Light_prepare				();
 
 		// calc approximate normals for vertices + base lighting
-		for (u32 vit=0; vit<lc_global_data()->g_vertices().size(); vit++)	
-		{
-			base_color_c		vC;
-			Vertex*		V		= lc_global_data()->g_vertices()[vit];
-			V->normalFromAdj	();
-			LightPoint			(&DB, lc_global_data()->RCAST_Model(), vC, V->P, V->N, pBuild->L_static(), LP_dont_rgb+LP_dont_sun,0);
-			vC.mul				(0.5f);
-			V->C._set			(vC);
-		}
+        if (lc_global_data()->useTbb()) {
+            auto vertices = lc_global_data()->g_vertices();
+            auto grain = std::max(1u, vertices.size() / tbb::task_arena().max_concurrency() / 10);
+            tbb::parallel_for(
+                tbb::blocked_range<size_t>(0, vertices.size(), grain), [&vertices](const auto& r) {
+                    CDB::COLLIDER_Work DB;
+                    DB.ray_options(0);
+                    for (size_t i = r.begin(); i != r.end(); ++i) {
+                        base_color_c vC;
+                        Vertex* V = vertices[i];
+                        V->normalFromAdj();
+                        LightPoint(&DB, lc_global_data()->RCAST_Model(), vC, V->P, V->N, pBuild->L_static(),
+                            LP_dont_rgb + LP_dont_sun, 0);
+                        vC.mul(0.5f);
+                        V->C._set(vC);
+                    }
+                });
+        } else {
+            for (u32 vit = 0; vit < lc_global_data()->g_vertices().size(); vit++) {
+                base_color_c vC;
+                Vertex* V = lc_global_data()->g_vertices()[vit];
+                V->normalFromAdj();
+                LightPoint(&DB, lc_global_data()->RCAST_Model(), vC, V->P, V->N, pBuild->L_static(),
+                    LP_dont_rgb + LP_dont_sun, 0);
+                vC.mul(0.5f);
+                V->C._set(vC);
+            }
+        }
 	}
 
 	//////////////////////////////////////////////////////////////////////////
