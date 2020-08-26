@@ -84,7 +84,7 @@ Fvector Center(const Fbox& bb)
 }
 
 BOOL NeedMerge(vecFace& subdiv, Fbox& bb_base);
-BOOL ValidateMerge(u32 f1, Fbox& bb_base, const Fbox& bb_base_orig, u32 f2, Fbox& bb, float& volume);
+BOOL ValidateMerge(u32 f1, const Fbox& bb_base, const Fbox& bb_base_orig, u32 f2, const Fbox& bb, float& volume);
 void RemoveEmptySplits();
 
 void xrPhase_MergeGeometry_Tbb()
