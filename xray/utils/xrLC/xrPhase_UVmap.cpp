@@ -136,6 +136,13 @@ void UVmapSplit(vecFace& split, UVmapResult& result)
     }
 }
 
+void RemoveEmptySplits()
+{
+    auto it = std::partition(g_XSplit.begin(), g_XSplit.end(), [](auto split) { return !split->empty(); });
+    std::for_each(it, g_XSplit.end(), [](auto& split) { xr_delete(split); });
+    g_XSplit.erase(it, g_XSplit.end());
+}
+
 void CBuild::xrPhase_UVmap_Tbb()
 {
     tbb::atomic<size_t> progress { 0 };
@@ -158,8 +165,7 @@ void CBuild::xrPhase_UVmap_Tbb()
     for (auto split : add.newSplits)
         Detach(split, lc_global_data()->g_vertices());
     IsolateVertices(FALSE);
-    g_XSplit.erase(
-        std::remove_if(g_XSplit.begin(), g_XSplit.end(), [](auto split) { return split->empty(); }), g_XSplit.end());
+    RemoveEmptySplits();
     append(g_XSplit, add.newSplits);
     append(lc_global_data()->g_deflectors(), add.deflectors);
 }

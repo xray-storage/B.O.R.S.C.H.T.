@@ -1,9 +1,7 @@
 #include "stdafx.h"
-
 #include "build.h"
 #include "../xrlc_light/xrface.h"
-
-extern void Detach		(vecFace* S);
+#include "../xrLC_Light/xrLC_GlobalData.h"
 
 IC BOOL	FaceEqual		(Face* F1, Face* F2)
 {
@@ -99,52 +97,62 @@ IC BOOL	ValidateMerge	(u32 f1, Fbox& bb_base, const Fbox& bb_base_orig, u32 f2, 
 	return TRUE;
 }
 
-void CBuild::xrPhase_MergeGeometry	()
+void xrPhase_MergeGeometry_Legacy()
 {
-	Status("Processing...");
-	validate_splits		();
-	for (u32 split=0; split<g_XSplit.size(); split++)
-	{
-		vecFace&	subdiv	= *(g_XSplit[split]);
-		bool		bb_base_orig_inited = false;
-		Fbox		bb_base_orig;
-		Fbox		bb_base;
-		while (NeedMerge(subdiv,bb_base))	
-		{
-			//	Save original AABB for later tests
-			if (!bb_base_orig_inited)
-			{
-				bb_base_orig_inited = true;
-				bb_base_orig = bb_base;
-			}
+    for (u32 split = 0; split < g_XSplit.size(); split++) {
+        vecFace& subdiv = *(g_XSplit[split]);
+        bool bb_base_orig_inited = false;
+        Fbox bb_base_orig;
+        Fbox bb_base;
+        while (NeedMerge(subdiv, bb_base)) {
+            //	Save original AABB for later tests
+            if (!bb_base_orig_inited) {
+                bb_base_orig_inited = true;
+                bb_base_orig = bb_base;
+            }
 
-			// **OK**. Let's find the best candidate for merge
-			u32	selected		= split;
-			float	selected_volume	= flt_max;
-			for (u32 test=split+1; test<g_XSplit.size(); test++)
-			{
-				Fbox		bb;
-				float		volume;
-				vecFace&	TEST	= *(g_XSplit[test]);
+            // **OK**. Let's find the best candidate for merge
+            u32 selected = split;
+            float selected_volume = flt_max;
+            for (u32 test = split + 1; test < g_XSplit.size(); test++) {
+                Fbox bb;
+                float volume;
+                vecFace& TEST = *(g_XSplit[test]);
 
-				if (!FaceEqual(subdiv.front(),TEST.front()))						continue;
-				if (!NeedMerge(TEST,bb))											continue;
-				if (!ValidateMerge(subdiv.size(),bb_base, bb_base_orig, TEST.size(),bb,volume))	continue;
+                if (!FaceEqual(subdiv.front(), TEST.front()))
+                    continue;
+                if (!NeedMerge(TEST, bb))
+                    continue;
+                if (!ValidateMerge(subdiv.size(), bb_base, bb_base_orig, TEST.size(), bb, volume))
+                    continue;
 
-				if (volume<selected_volume)	{
-					selected		= test;
-					selected_volume	= volume;
-				}
-			}
-			if (selected == split)	break;	// No candidates for merge
+                if (volume < selected_volume) {
+                    selected = test;
+                    selected_volume = volume;
+                }
+            }
+            if (selected == split)
+                break; // No candidates for merge
 
-			// **OK**. Perform merge
-			subdiv.insert	(subdiv.begin(), g_XSplit[selected]->begin(), g_XSplit[selected]->end());
-			xr_delete		(g_XSplit[selected]);
-			g_XSplit.erase	(g_XSplit.begin()+selected);
-		}
-		Progress(_sqrt(_sqrt(float(split)/float(g_XSplit.size()))));
-	}
-	clMsg("%d subdivisions.",g_XSplit.size());
-	validate_splits			();
+            // **OK**. Perform merge
+            subdiv.insert(subdiv.begin(), g_XSplit[selected]->begin(), g_XSplit[selected]->end());
+            xr_delete(g_XSplit[selected]);
+            g_XSplit.erase(g_XSplit.begin() + selected);
+        }
+        Progress(_sqrt(_sqrt(float(split) / float(g_XSplit.size()))));
+    }
+}
+
+void xrPhase_MergeGeometry_Tbb();
+
+void CBuild::xrPhase_MergeGeometry()
+{
+    Status("Processing...");
+    validate_splits();
+    if (lc_global_data()->useTbb())
+        xrPhase_MergeGeometry_Tbb();
+    else
+        xrPhase_MergeGeometry_Legacy();
+    clMsg("%d subdivisions.", g_XSplit.size());
+    validate_splits();
 }

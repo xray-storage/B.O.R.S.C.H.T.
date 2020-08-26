@@ -318,6 +318,9 @@
     <ClCompile Include="utils.cpp">
       <Filter>%2a%2a%2a COMPILER %2a%2a%2a</Filter>
     </ClCompile>
+    <ClCompile Include="xrPhase_MergeGeometry_tbb.cpp">
+      <Filter>%2a%2a%2a COMPILER %2a%2a%2a</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc">
