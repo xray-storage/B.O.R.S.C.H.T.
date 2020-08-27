@@ -100,7 +100,6 @@ void CBuild::xrPhase_MergeLM()
 		std::stable_sort(Layer.begin(),Layer.end(),sort_defl_complex);
 
 		// Select first deflectors which can fit
-		Status		("Selection...");
 		u32 maxarea		= c_LMAP_size*c_LMAP_size*8;	// Max up to 8 lm selected
 		u32 curarea		= 0;
 		u32 merge_count	= 0;
@@ -121,7 +120,6 @@ void CBuild::xrPhase_MergeLM()
 		// Process 
 		for (u32 it=0; it<merge_count; it++) 
 		{
-			if (0==(it%1024))	Status	("Process [%d/%d]...",it,merge_count);
 			lm_layer&	L		= Layer[it]->layer;
 			L_rect		rT,rS; 
 			rS.a.set	(0,0);
