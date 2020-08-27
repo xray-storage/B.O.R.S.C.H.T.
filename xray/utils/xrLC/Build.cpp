@@ -375,6 +375,8 @@ void CBuild::err_save	()
 	err.w_u32		(err_invalid().size()/(3*sizeof(Fvector)));
 	err.w			(err_invalid().pointer(), err_invalid().size());
 	err.close_chunk	();
+	
+	FS.w_close(fs);
 }
 
 void CBuild::MU_ModelsCalculateNormals()
