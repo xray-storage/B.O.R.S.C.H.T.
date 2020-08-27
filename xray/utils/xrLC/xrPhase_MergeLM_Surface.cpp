@@ -70,7 +70,7 @@ bool Place_Perpixel	(L_rect& R, lm_layer* D, BOOL bRotate)
 }
 
 // Check for intersection
-BOOL _rect_place(L_rect &r, lm_layer* D)
+bool _rect_place(L_rect &r, lm_layer* D, bool& rotated)
 {
 	L_rect R;
 
@@ -85,9 +85,9 @@ BOOL _rect_place(L_rect &r, lm_layer* D)
 				if (surface[_Y*c_LMAP_size+_X]) continue;
 				R.init(_X,_Y,_X+r.b.x,_Y+r.b.y);
 				if (Place_Perpixel	(R,D,FALSE)) {
-					_rect_register	(R,D,FALSE);
 					r.set			(R);
-					return TRUE;
+					rotated			= false;
+					return true;
 				}
 			}
 		}
@@ -105,14 +105,14 @@ BOOL _rect_place(L_rect &r, lm_layer* D)
 				
 				R.init(_X,_Y,_X+r.b.y,_Y+r.b.x);
 				if (Place_Perpixel	(R,D,TRUE)) {
-					_rect_register	(R,D,TRUE);
 					r.set			(R);
-					return TRUE;
+					rotated			= true;
+					return true;
 				}
 			}
 		}
 	}
 	
-	return FALSE;
+	return false;
 };
 

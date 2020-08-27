@@ -7,7 +7,8 @@
 #include "../xrlc_light/lightmap.h"
 // Surface access
 extern void _InitSurface	();
-extern BOOL _rect_place		(L_rect &r, lm_layer*		D);
+extern bool _rect_place(L_rect& r, lm_layer* D, bool& rotated);
+extern void _rect_register(L_rect& R, lm_layer* D, BOOL bRotate);
 
 IC int	compare_defl		(CDeflector* D1, CDeflector* D2)
 {
@@ -126,18 +127,11 @@ void CBuild::xrPhase_MergeLM()
 			rS.b.set	(L.width+2*BORDER-1, L.height+2*BORDER-1);
 			rS.iArea	= L.Area();
 			rT			= rS;
-			if (_rect_place(rT,&L)) 
+			bool rotated;
+			if (_rect_place(rT, &L, rotated)) 
 			{
-				BOOL		bRotated;
-				if (rT.SizeX() == rS.SizeX()) {
-					R_ASSERT(rT.SizeY() == rS.SizeY());
-					bRotated = FALSE;
-				} else {
-					R_ASSERT(rT.SizeX() == rS.SizeY());
-					R_ASSERT(rT.SizeY() == rS.SizeX());
-					bRotated = TRUE;
-				}
-				lmap->Capture		(Layer[it],rT.a.x,rT.a.y,rT.SizeX(),rT.SizeY(),bRotated);
+				_rect_register		(rT, &L, rotated);
+				lmap->Capture		(Layer[it],rT.a.x,rT.a.y,rT.SizeX(),rT.SizeY(),rotated);
 				Layer[it]->bMerged	= TRUE;
 			}
 			Progress(_sqrt(float(it)/float(merge_count)));
