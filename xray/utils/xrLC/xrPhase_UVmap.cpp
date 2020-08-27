@@ -79,8 +79,6 @@ void CBuild::xrPhase_UVmap_Legacy()
     }
 }
 
-template <typename Cont> void append(Cont& cont, const Cont& add) { cont.insert(cont.end(), add.begin(), add.end()); }
-
 struct UVmapResult {
     vec2Face newSplits;
     vecDefl deflectors;
@@ -125,16 +123,15 @@ void UVmapSplit(vecFace& split, UVmapResult& result)
         deflector->OA_Export();
 
         // Detach affected faces
-        vecFace faces_affected;
-        std::copy_if(split.begin(), split.end(), std::back_inserter(faces_affected),
-            [deflector](Face* F) { return F->pDeflector == deflector; });
-        split.erase(
-            std::remove_if(split.begin(), split.end(), [deflector](Face* F) { return F->pDeflector == deflector; }),
-            split.end());
-
-        result.newSplits.push_back(xr_new<vecFace>(std::move(faces_affected)));
+        auto it
+            = std::partition(split.begin(), split.end(), [deflector](Face* F) { return F->pDeflector != deflector; });
+        result.newSplits.push_back(xr_new<vecFace>());
+        result.newSplits.back()->insert(result.newSplits.back()->end(), it, split.end());
+        split.erase(it, split.end());
     }
 }
+
+template <typename Cont> void append(Cont& cont, const Cont& add) { cont.insert(cont.end(), add.begin(), add.end()); }
 
 void RemoveEmptySplits()
 {
@@ -146,22 +143,22 @@ void RemoveEmptySplits()
 void CBuild::xrPhase_UVmap_Tbb()
 {
     tbb::atomic<size_t> progress { 0 };
-    UVmapResult init {};
-    UVmapResult add = tbb::parallel_reduce(
-        tbb::blocked_range<size_t>(0, g_XSplit.size(), 10), init,
-        [&progress](const tbb::blocked_range<size_t>& r, UVmapResult init) -> UVmapResult {
+    tbb::combinable<UVmapResult> temp;
+    size_t grain = std::max(1u, g_XSplit.size() / tbb::task_arena().max_concurrency() / 10);
+    tbb::parallel_for(
+        tbb::blocked_range<size_t>(0, g_XSplit.size(), grain), [&progress, &temp](const tbb::blocked_range<size_t>& r) {
+            auto& local = temp.local();
             for (size_t SP = r.begin(); SP != r.end(); ++SP) {
-                UVmapSplit(*g_XSplit[SP], init);
+                UVmapSplit(*g_XSplit[SP], local);
                 progress.fetch_and_increment();
                 Progress(progress * 1.0f / g_XSplit.size());
             }
-            return init;
-        },
-        [](UVmapResult x, UVmapResult y) -> UVmapResult {
-            append(x.newSplits, y.newSplits);
-            append(x.deflectors, y.deflectors);
-            return x;
         });
+    UVmapResult add;
+    temp.combine_each([&add](UVmapResult x) {
+        append(add.newSplits, x.newSplits);
+        append(add.deflectors, x.deflectors);
+    });
     for (auto split : add.newSplits)
         Detach(split, lc_global_data()->g_vertices());
     IsolateVertices(FALSE);
