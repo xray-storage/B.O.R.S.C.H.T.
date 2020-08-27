@@ -362,7 +362,7 @@ void CBuild::Load	(const b_params& Params, const IReader& _in_FS)
 						}
 						if ((w != BT.dwWidth) || (h != BT.dwHeight))
 						{
-							Msg		("! THM doesn't correspond to the texture: %dx%d -> %dx%d", BT.dwWidth, BT.dwHeight, w, h);
+							Msg		("! THM doesn't correspond to the texture: THM [%dx%d] != TEX[%dx%d]", BT.dwWidth, BT.dwHeight, w, h);
 							BT.dwWidth	= BT.THM.width = w;
 							BT.dwHeight	= BT.THM.height = h;
 						}
