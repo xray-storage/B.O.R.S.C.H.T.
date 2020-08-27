@@ -148,7 +148,7 @@ void CBuild::Load	(const b_params& Params, const IReader& _in_FS)
 		{
 			err_save		();
 			if (lc_global_data()->b_skip_invalid())
-				clMsg("* Total %d invalid faces. Do something.", InvalideFaces());
+				Msg("! ERROR: %d invalid faces. Do something.", InvalideFaces());
 			else
 				Debug.fatal(DEBUG_INFO,"* FATAL: %d invalid faces. Compilation aborted",InvalideFaces());
 		}
