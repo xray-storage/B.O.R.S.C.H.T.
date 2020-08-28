@@ -96,39 +96,33 @@ void UVmapSplit(vecFace& split, UVmapResult& result)
     if (Fvl->hasImplicitLighting())
         return;
 
-    //   find first poly that doesn't has mapping and start recursion
-    while (TRUE) {
-        // Select maximal sized poly
-        Face* msF = NULL;
-        float msA = 0;
-        for (vecFaceIt it = split.begin(); it != split.end(); it++) {
-            if ((*it)->pDeflector == NULL) {
-                float a = (*it)->CalcArea();
-                if (a > msA) {
-                    msF = (*it);
-                    msA = a;
-                }
-            }
-        }
-        if (!msF)
-            break;
+    size_t start = result.deflectors.size();
 
+    struct FaceWithArea {
+        Face* f;
+        float area;
+    };
+    xr_vector<FaceWithArea> sortedByAreaDesc(split.size());
+    std::transform(split.begin(), split.end(), sortedByAreaDesc.begin(), [](Face* f) { return FaceWithArea {f, f->CalcArea()}; });
+    std::stable_sort(sortedByAreaDesc.begin(), sortedByAreaDesc.end(), [](const auto& x, const auto& y) { return x.area > y.area; });
+
+    for (auto [msF, _] : sortedByAreaDesc) {
+        if (msF->pDeflector)
+            continue;
         CDeflector* deflector = xr_new<CDeflector>();
         result.deflectors.push_back(deflector);
-
         deflector->OA_SetNormal(msF->N);
         msF->OA_Unwarp(deflector);
-
-        // break the cycle to startup again
         deflector->OA_Export();
-
-        // Detach affected faces
-        auto it
-            = std::partition(split.begin(), split.end(), [deflector](Face* F) { return F->pDeflector != deflector; });
-        result.newSplits.push_back(xr_new<vecFace>());
-        result.newSplits.back()->insert(result.newSplits.back()->end(), it, split.end());
-        split.erase(it, split.end());
     }
+
+    for (size_t i = start; i != result.deflectors.size(); ++i) {
+        const auto& polys = result.deflectors[i]->UVpolys;
+        vecFace* subSplit = xr_new<vecFace>(polys.size());
+        std::transform(polys.begin(), polys.end(), subSplit->begin(), [](const auto& p) { return p.owner; });
+        result.newSplits.push_back(subSplit);
+    }
+    split.clear();
 }
 
 template <typename Cont> void append(Cont& cont, const Cont& add) { cont.insert(cont.end(), add.begin(), add.end()); }
