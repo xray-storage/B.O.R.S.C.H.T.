@@ -191,7 +191,11 @@ SVS*	CResourceManager::_CreateVS		(LPCSTR _name)
 		R_ASSERT2					(fs,cname);
 		//_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, D3DXSHADER_DEBUG | D3DXSHADER_PACKMATRIX_ROWMAJOR /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
 //		_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, D3D10_SHADER_DEBUG | D3D10_SHADER_PACK_MATRIX_ROW_MAJOR /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
-		_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
+		DWORD flags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR;
+#ifdef DEBUG
+		flags |= D3DCOMPILE_DEBUG /*| D3DCOMPILE_WARNINGS_ARE_ERRORS*/ | D3DCOMPILE_ALL_RESOURCES_BOUND;
+#endif
+		_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, flags /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR | D3D10_SHADER_AVOID_FLOW_CONTROL /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
 		FS.r_close					(fs);
 
@@ -340,7 +344,11 @@ SPS*	CResourceManager::_CreatePS			(LPCSTR _name)
 		HRESULT						_hr			= S_OK;
 		//_hr = ::Render->shader_compile	(name,data,size, NULL, &Includer, c_entry, c_target, D3DXSHADER_DEBUG | D3DXSHADER_PACKMATRIX_ROWMAJOR, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_DEBUG | D3D10_SHADER_PACK_MATRIX_ROW_MAJOR, &pShaderBuf, &pErrorBuf, NULL);
-		_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR, &pShaderBuf, &pErrorBuf, NULL);
+		DWORD flags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR;
+#ifdef DEBUG
+		flags |= D3DCOMPILE_DEBUG /*| D3DCOMPILE_WARNINGS_ARE_ERRORS*/ | D3DCOMPILE_ALL_RESOURCES_BOUND;
+#endif
+		_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, flags, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR | D3D10_SHADER_AVOID_FLOW_CONTROL, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = D3DXCompileShader		(text,text_size, NULL, &Includer, c_entry, c_target, D3DXSHADER_DEBUG | D3DXSHADER_PACKMATRIX_ROWMAJOR, &pShaderBuf, &pErrorBuf, NULL);
 		xr_free						(data);
@@ -460,7 +468,11 @@ SGS*	CResourceManager::_CreateGS			(LPCSTR name)
 		ID3DBlob*					pShaderBuf	= NULL;
 		ID3DBlob*					pErrorBuf	= NULL;
 		HRESULT						_hr			= S_OK;
-		_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR, &pShaderBuf, &pErrorBuf, NULL);
+		DWORD flags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR;
+#ifdef DEBUG
+		flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_WARNINGS_ARE_ERRORS;
+#endif
+		_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, flags, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR | D3D10_SHADER_AVOID_FLOW_CONTROL, &pShaderBuf, &pErrorBuf, NULL);
 		xr_free						(data);
 
@@ -489,6 +501,7 @@ SGS*	CResourceManager::_CreateGS			(LPCSTR name)
 			else	_hr = E_FAIL;
 		}else
 		{
+			Log		("! GS: ", name);
 			Msg("error is %s", (LPCSTR)pErrorBuf->GetBufferPointer());
 		}
 		_RELEASE		(pShaderBuf);

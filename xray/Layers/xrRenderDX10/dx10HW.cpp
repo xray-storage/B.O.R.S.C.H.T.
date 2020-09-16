@@ -326,7 +326,7 @@ void CHW::CreateDevice( HWND m_hWnd, bool move_window )
 
 	UINT createDeviceFlags = 0;
 #ifdef DEBUG
-	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+//	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
    HRESULT R;
 	// Create the device
@@ -385,6 +385,22 @@ void CHW::CreateDevice( HWND m_hWnd, bool move_window )
 		break;
 	}
 	*/
+
+//#ifdef DEBUG
+//	ID3D11Debug* d3dDebug = nullptr;
+//	if (SUCCEEDED(pDevice->QueryInterface(__uuidof(ID3D11Debug), (void**)&d3dDebug)))
+//	{
+//		ID3D11InfoQueue* d3dInfoQueue = nullptr;
+//		if (SUCCEEDED(d3dDebug->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&d3dInfoQueue)))
+//		{
+//			d3dInfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_CORRUPTION, true);
+//			d3dInfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR, true);
+//			d3dInfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_WARNING, true);
+//		}
+//		_RELEASE(d3dInfoQueue);
+//	}
+//	_RELEASE(d3dDebug);
+//#endif
 
 	// Capture misc data
 //	DX10: Don't neeed this?

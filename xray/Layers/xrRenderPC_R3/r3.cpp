@@ -1055,7 +1055,7 @@ HRESULT	CRender::shader_compile			(
 	HRESULT		_result	= D3DCompile( 
 		pSrcData, 
 		SrcDataLen,
-		"",//NULL, //LPCSTR pFileName,	//	NVPerfHUD bug workaround.
+		name,
 		defines, pInclude, pFunctionName,
 		pTarget,
       Flags, 0,
