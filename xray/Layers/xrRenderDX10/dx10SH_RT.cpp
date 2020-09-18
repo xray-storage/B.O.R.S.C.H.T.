@@ -49,8 +49,8 @@ void CRT::create	(LPCSTR Name, u32 w, u32 h,	D3DFORMAT f, u32 SampleCount )
 	//}
 
 	// Check width-and-height of render target surface
-	if (w>D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION)		return;
-	if (h>D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION)		return;
+	if (w>D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION)		return;
+	if (h>D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION)		return;
 
 	// Select usage
 	u32 usage	= 0;
@@ -90,8 +90,8 @@ void CRT::create	(LPCSTR Name, u32 w, u32 h,	D3DFORMAT f, u32 SampleCount )
 	//_hr = HW.pDevice->CheckFormatSupport( dx10FMT, &FormatSupport);
 	//if (FAILED(_hr)) return;
 	//if (!(
-			//(FormatSupport&D3D10_FORMAT_SUPPORT_TEXTURE2D) 
-			//&&	(FormatSupport&(bUseAsDepth?D3D10_FORMAT_SUPPORT_DEPTH_STENCIL:D3D10_FORMAT_SUPPORT_RENDER_TARGET))
+			//(FormatSupport&D3D11_FORMAT_SUPPORT_TEXTURE2D) 
+			//&&	(FormatSupport&(bUseAsDepth?D3D11_FORMAT_SUPPORT_DEPTH_STENCIL:D3D11_FORMAT_SUPPORT_RENDER_TARGET))
 		//))
 		//return;
 
@@ -100,7 +100,7 @@ void CRT::create	(LPCSTR Name, u32 w, u32 h,	D3DFORMAT f, u32 SampleCount )
 	//_hr = HW.pDevice->CreateTexture		(w, h, 1, usage, f, D3DPOOL_DEFAULT, &pSurface,NULL);
 	//if (FAILED(_hr) || (0==pSurface))	return;
 	// Create the render target texture
-	D3D10_TEXTURE2D_DESC desc;
+	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory( &desc, sizeof(desc) );
 	desc.Width = dwWidth;
 	desc.Height = dwHeight;
@@ -108,15 +108,15 @@ void CRT::create	(LPCSTR Name, u32 w, u32 h,	D3DFORMAT f, u32 SampleCount )
 	desc.ArraySize = 1;
 	desc.Format = dx10FMT;
 	desc.SampleDesc.Count = SampleCount;
-	desc.Usage = D3D10_USAGE_DEFAULT;
+	desc.Usage = D3D11_USAGE_DEFAULT;
    if( SampleCount <= 1 )
-	   desc.BindFlags = D3D10_BIND_SHADER_RESOURCE | (bUseAsDepth ? D3D10_BIND_DEPTH_STENCIL : D3D10_BIND_RENDER_TARGET);
+	   desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | (bUseAsDepth ? D3D11_BIND_DEPTH_STENCIL : D3D11_BIND_RENDER_TARGET);
    else
    {
-      desc.BindFlags = (bUseAsDepth ? D3D10_BIND_DEPTH_STENCIL : (D3D10_BIND_SHADER_RESOURCE | D3D10_BIND_RENDER_TARGET));
+      desc.BindFlags = (bUseAsDepth ? D3D11_BIND_DEPTH_STENCIL : (D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET));
       if( RImplementation.o.dx10_msaa_opt )
       {
-         desc.SampleDesc.Quality = UINT(D3D10_STANDARD_MULTISAMPLE_PATTERN);
+         desc.SampleDesc.Quality = UINT(D3D11_STANDARD_MULTISAMPLE_PATTERN);
       }
    }
 
@@ -128,15 +128,16 @@ void CRT::create	(LPCSTR Name, u32 w, u32 h,	D3DFORMAT f, u32 SampleCount )
 	//R_CHK		(pSurface->GetSurfaceLevel	(0,&pRT));
 	if (bUseAsDepth)
 	{
-		D3D10_DEPTH_STENCIL_VIEW_DESC	ViewDesc;
+		D3D11_DEPTH_STENCIL_VIEW_DESC	ViewDesc;
+		ZeroMemory( &ViewDesc, sizeof(ViewDesc) );
 		ViewDesc.Format = DXGI_FORMAT_UNKNOWN;
       if( SampleCount <= 1 )
       {
-		   ViewDesc.ViewDimension = D3D10_DSV_DIMENSION_TEXTURE2D;
+		   ViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
       }
       else
       {
-		   ViewDesc.ViewDimension = D3D10_DSV_DIMENSION_TEXTURE2DMS;
+		   ViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
          ViewDesc.Texture2DMS.UnusedField_NothingToDefine = 0;
       }
 		ViewDesc.Texture2D.MipSlice = 0;
@@ -223,7 +224,7 @@ void CRTC::create	(LPCSTR Name, u32 size,	D3DFORMAT f)
 	//}
 
 	// Check width-and-height of render target surface
-	if (size>D3D10_REQ_TEXTURECUBE_DIMENSION)		return;
+	if (size>D3D11_REQ_TEXTURECUBE_DIMENSION)		return;
 
 	//	TODO: DX10: Validate cube texture format
 	// Validate render-target usage

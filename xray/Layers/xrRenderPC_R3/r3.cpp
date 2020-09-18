@@ -281,7 +281,7 @@ void					CRender::create					()
 		o.ssao_opt_data = true;
 
 	o.dx10_sm4_1		= ps_r2_ls_flags.test((u32)R3FLAG_USE_DX10_1);
-	o.dx10_sm4_1		= o.dx10_sm4_1 && ( HW.pDevice1 != 0 );
+	o.dx10_sm4_1		= o.dx10_sm4_1 && ( HW.FeatureLevel >= D3D_FEATURE_LEVEL_10_1 );
 
 	//	MSAA option dependencies
 
@@ -289,11 +289,11 @@ void					CRender::create					()
 	o.dx10_msaa_samples = (1 << ps_r3_msaa);
 
 	o.dx10_msaa_opt		= ps_r2_ls_flags.test(R3FLAG_MSAA_OPT);
-	o.dx10_msaa_opt		= o.dx10_msaa_opt && o.dx10_msaa && ( HW.pDevice1 != 0 );
+	o.dx10_msaa_opt		= o.dx10_msaa_opt && o.dx10_msaa && ( HW.FeatureLevel >= D3D_FEATURE_LEVEL_10_1 );
 
 	//o.dx10_msaa_hybrid	= ps_r2_ls_flags.test(R3FLAG_MSAA_HYBRID);
 	o.dx10_msaa_hybrid	= ps_r2_ls_flags.test((u32)R3FLAG_USE_DX10_1);
-	o.dx10_msaa_hybrid	&= !o.dx10_msaa_opt && o.dx10_msaa && ( HW.pDevice1 != 0) ;
+	o.dx10_msaa_hybrid	&= !o.dx10_msaa_opt && o.dx10_msaa && ( HW.FeatureLevel >= D3D_FEATURE_LEVEL_10_1 );
 
 	//	Allow alpha test MSAA for DX10.0
 
@@ -374,9 +374,9 @@ void					CRender::create					()
 
 	rmNormal					();
 	marker						= 0;
-	D3D10_QUERY_DESC			qdesc;
+	D3D11_QUERY_DESC			qdesc;
 	qdesc.MiscFlags				= 0;
-	qdesc.Query					= D3D10_QUERY_EVENT;
+	qdesc.Query					= D3D11_QUERY_EVENT;
 	ZeroMemory(q_sync_point, sizeof(q_sync_point));
 	//R_CHK						(HW.pDevice->CreateQuery(&qdesc,&q_sync_point[0]));
 	//R_CHK						(HW.pDevice->CreateQuery(&qdesc,&q_sync_point[1]));
@@ -387,7 +387,7 @@ void					CRender::create					()
 	//R_CHK						(HW.pDevice->CreateQuery(D3DQUERYTYPE_EVENT,&q_sync_point[1]));
 	for (u32 i=0; i<HW.Caps.iGPUNum; ++i)
 		R_CHK(HW.pDevice->CreateQuery(&qdesc,&q_sync_point[i]));
-	q_sync_point[0]->End();
+	HW.pContext->End(q_sync_point[0]);
 
 	xrRender_apply_tf			();
 	::PortalTraverser.initialize();
@@ -448,15 +448,15 @@ void CRender::reset_begin()
 
 void CRender::reset_end()
 {
-	D3D10_QUERY_DESC			qdesc;
+	D3D11_QUERY_DESC			qdesc;
 	qdesc.MiscFlags				= 0;
-	qdesc.Query					= D3D10_QUERY_EVENT;
+	qdesc.Query					= D3D11_QUERY_EVENT;
 	//R_CHK						(HW.pDevice->CreateQuery(&qdesc,&q_sync_point[0]));
 	//R_CHK						(HW.pDevice->CreateQuery(&qdesc,&q_sync_point[1]));
 	for (u32 i=0; i<HW.Caps.iGPUNum; ++i)
 		R_CHK(HW.pDevice->CreateQuery(&qdesc,&q_sync_point[i]));
 	//	Prevent error on first get data
-	q_sync_point[0]->End();
+	HW.pContext->End(q_sync_point[0]);
 	//q_sync_point[1]->End();
 	//R_CHK						(HW.pDevice->CreateQuery(D3DQUERYTYPE_EVENT,&q_sync_point[0]));
 	//R_CHK						(HW.pDevice->CreateQuery(D3DQUERYTYPE_EVENT,&q_sync_point[1]));
@@ -624,25 +624,25 @@ void					CRender::set_Object				(IRenderable*	O )
 void					CRender::rmNear				()
 {
 	IRender_Target* T	=	getTarget	();
-	D3D_VIEWPORT VP		=	{0,0,T->get_width(),T->get_height(),0,0.02f };
+	D3D_VIEWPORT VP		=	{0,0,(float)T->get_width(),(float)T->get_height(),0,0.02f };
 
-	HW.pDevice->RSSetViewports(1, &VP);
+	HW.pContext->RSSetViewports(1, &VP);
 	//CHK_DX				(HW.pDevice->SetViewport(&VP));
 }
 void					CRender::rmFar				()
 {
 	IRender_Target* T	=	getTarget	();
-	D3D_VIEWPORT VP		=	{0,0,T->get_width(),T->get_height(),0.99999f,1.f };
+	D3D_VIEWPORT VP		=	{0,0,(float)T->get_width(),(float)T->get_height(),0.99999f,1.f };
 
-	HW.pDevice->RSSetViewports(1, &VP);
+	HW.pContext->RSSetViewports(1, &VP);
 	//CHK_DX				(HW.pDevice->SetViewport(&VP));
 }
 void					CRender::rmNormal			()
 {
 	IRender_Target* T	=	getTarget	();
-	D3D_VIEWPORT VP		= {0,0,T->get_width(),T->get_height(),0,1.f };
+	D3D_VIEWPORT VP		= {0,0,(float)T->get_width(),(float)T->get_height(),0,1.f };
 
-	HW.pDevice->RSSetViewports(1, &VP);
+	HW.pContext->RSSetViewports(1, &VP);
 	//CHK_DX				(HW.pDevice->SetViewport(&VP));
 }
 
@@ -1018,24 +1018,30 @@ HRESULT	CRender::shader_compile			(
 	{
 		if ('v'==pTarget[0])
       {
-         if( HW.pDevice1 == 0 )
-            pTarget = D3D10GetVertexShaderProfile(HW.pDevice);	// vertex	"vs_4_0"; //
-         else
-            pTarget = "vs_4_1";	// pixel	"ps_4_0"; //
+			if( HW.FeatureLevel == D3D_FEATURE_LEVEL_10_0 )
+				pTarget = "vs_4_0";
+			else //if( HW.FeatureLevel == D3D_FEATURE_LEVEL_10_1 )
+				pTarget = "vs_4_1";
+			//else if( HW.FeatureLevel == D3D_FEATURE_LEVEL_11_0 )
+			//	pTarget = "vs_5_0";
       }
 		else if ('p'==pTarget[0])
       {
-         if( HW.pDevice1 == 0 )
-            pTarget = D3D10GetPixelShaderProfile(HW.pDevice);	// pixel	"ps_4_0"; //
-         else
-            pTarget = "ps_4_1";	// pixel	"ps_4_0"; //
+			if( HW.FeatureLevel == D3D_FEATURE_LEVEL_10_0 )
+				pTarget = "ps_4_0";
+			else //if( HW.FeatureLevel == D3D_FEATURE_LEVEL_10_1 )
+				pTarget = "ps_4_1";
+			//else if( HW.FeatureLevel == D3D_FEATURE_LEVEL_11_0 )
+			//	pTarget = "ps_5_0";
       }
 		else if ('g'==pTarget[0])		
       {
-         if( HW.pDevice1 == 0 )
-            pTarget = D3D10GetGeometryShaderProfile(HW.pDevice);	// geometry	"gs_4_0"; //
-         else
-            pTarget = "gs_4_1";	// pixel	"ps_4_0"; //
+			if( HW.FeatureLevel == D3D_FEATURE_LEVEL_10_0 )
+				pTarget = "gs_4_0";
+			else //if( HW.FeatureLevel == D3D_FEATURE_LEVEL_10_1 )
+				pTarget = "gs_4_1";
+			//else if( HW.FeatureLevel == D3D_FEATURE_LEVEL_11_0 )
+			//	pTarget = "gs_5_0";
       }
 	}
 
@@ -1046,15 +1052,15 @@ HRESULT	CRender::shader_compile			(
 	
 	//HRESULT		_result	= D3D10CompileShader(pSrcData,SrcDataLen,NULL, defines,pInclude,pFunctionName,pTarget,Flags,ppShader,ppErrorMsgs,ppConstantTable);
 
-	HRESULT		_result	= D3DX10CompileFromMemory( 
+	HRESULT		_result	= D3DCompile( 
 		pSrcData, 
 		SrcDataLen,
 		"",//NULL, //LPCSTR pFileName,	//	NVPerfHUD bug workaround.
 		defines, pInclude, pFunctionName,
 		pTarget,
-      Flags, 0, NULL, 
+      Flags, 0,
 		ppShader,
-		ppErrorMsgs,NULL
+		ppErrorMsgs
 		);
 
 	if (SUCCEEDED(_result) && o.disasm)

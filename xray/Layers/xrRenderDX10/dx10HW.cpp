@@ -14,9 +14,9 @@
 #include "StateManager\dx10SamplerStateCache.h"
 #include "StateManager\dx10StateCache.h"
 
-#include <d3dx/d3dx10core.h>
+#include <d3dx/d3dx11core.h>
 #include <imgui.h>
-#include "imgui_impl_dx10.h"
+#include "imgui_impl_dx11.h"
 
 #ifndef _EDITOR
 void	fill_vid_mode_list			(CHW* _hw);
@@ -141,22 +141,22 @@ void CHW::CreateDevice( HWND m_hWnd, bool move_window )
 	CreateD3D();
 
 	/* Partially implemented dynamic load
-	typedef HRESULT _D3D10CreateDeviceAndSwapChain(
+	typedef HRESULT _D3D11CreateDeviceAndSwapChain(
 		IDXGIAdapter *pAdapter,
-		D3D10_DRIVER_TYPE DriverType,
+		D3D11_DRIVER_TYPE DriverType,
 		HMODULE Software,
 		UINT Flags,
 		UINT SDKVersion,
 		DXGI_SWAP_CHAIN_DESC *pSwapChainDesc,
 		IDXGISwapChain **ppSwapChain,
-		ID3D10Device **ppDevice
+		ID3D11Device **ppDevice
 		);
 
 
 
-	_D3D10CreateDeviceAndSwapChain *CreateDeviceAndSwapChain = 
-		(_D3D10CreateDeviceAndSwapChain*)
-		GetProcAddress(hD3D,"D3D10CreateDeviceAndSwapChain");
+	_D3D11CreateDeviceAndSwapChain *CreateDeviceAndSwapChain = 
+		(_D3D11CreateDeviceAndSwapChain*)
+		GetProcAddress(hD3D,"D3D11CreateDeviceAndSwapChain");
 	R_ASSERT(CreateDeviceAndSwapChain);
 	*/
 
@@ -166,10 +166,10 @@ void CHW::CreateDevice( HWND m_hWnd, bool move_window )
 	BOOL  bWindowed			= !psDeviceFlags.is(rsFullscreen);
 
 	m_DriverType = Caps.bForceGPU_REF ? 
-		D3D10_DRIVER_TYPE_REFERENCE : D3D10_DRIVER_TYPE_HARDWARE;
+		D3D_DRIVER_TYPE_REFERENCE : D3D_DRIVER_TYPE_HARDWARE;
 
 	if (m_bUsePerfhud)
-		m_DriverType = D3D10_DRIVER_TYPE_REFERENCE;
+		m_DriverType = D3D_DRIVER_TYPE_REFERENCE;
 
 	//	For DirectX 10 adapter is already created in create D3D.
 	/*
@@ -326,24 +326,25 @@ void CHW::CreateDevice( HWND m_hWnd, bool move_window )
 
 	UINT createDeviceFlags = 0;
 #ifdef DEBUG
-	//createDeviceFlags |= D3D10_CREATE_DEVICE_DEBUG;
+	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
    HRESULT R;
 	// Create the device
 	//	DX10 don't need it?
 	//u32 GPU		= selectGPU();	
-   R =  D3DX10CreateDeviceAndSwapChain(   m_pAdapter,
+    D3D_FEATURE_LEVEL pFeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
+   R =  D3D11CreateDeviceAndSwapChain(   0,
                                           m_DriverType,
                                           NULL,
                                           createDeviceFlags,
+										  pFeatureLevels,
+										  (UINT)std::size(pFeatureLevels),
+	   									  D3D11_SDK_VERSION,
                                           &sd,
                                           &m_pSwapChain,
-		                                    &pDevice );
-
-   if(!FAILED(R))
-   {
-      D3DX10GetFeatureLevel1( pDevice, &pDevice1 );
-   }
+		                                    &pDevice,
+											&FeatureLevel,		
+											&pContext);
 
 	/*
 	if (FAILED(R))	{
@@ -402,12 +403,12 @@ void CHW::CreateDevice( HWND m_hWnd, bool move_window )
 	fill_vid_mode_list							(this);
 #endif
 
-	ImGui_ImplDX10_Init(m_hWnd, pDevice);
+	ImGui_ImplDX11_Init(m_hWnd, pDevice, pContext);
 }
 
 void CHW::DestroyDevice()
 {
-	ImGui_ImplDX10_Shutdown();
+	ImGui_ImplDX11_Shutdown();
 
 	//	Destroy state managers
 	StateManager.Reset();
@@ -431,8 +432,10 @@ void CHW::DestroyDevice()
 	_SHOW_REF				("refCount:m_pSwapChain",m_pSwapChain);
 	_RELEASE				(m_pSwapChain);
 
+#ifdef USE_DX10
+	_RELEASE				(pContext);
+#endif
 
-	_RELEASE				(HW.pDevice1);
 	_SHOW_REF				("DeviceREF:",HW.pDevice);
 	_RELEASE				(HW.pDevice);
 
@@ -449,7 +452,7 @@ void CHW::DestroyDevice()
 //////////////////////////////////////////////////////////////////////
 void CHW::Reset (HWND hwnd)
 {
-	ImGui_ImplDX10_InvalidateDeviceObjects();
+	ImGui_ImplDX11_InvalidateDeviceObjects();
 
 	DXGI_SWAP_CHAIN_DESC &cd = m_ChainDesc;
 
@@ -556,7 +559,7 @@ void CHW::Reset (HWND hwnd)
 #endif
 	*/
 
-	ImGui_ImplDX10_CreateDeviceObjects();
+	ImGui_ImplDX11_CreateDeviceObjects();
 }
 
 D3DFORMAT CHW::selectDepthStencil	(D3DFORMAT fTarget)
@@ -989,8 +992,8 @@ void CHW::UpdateViews()
 
 	// Create a render target view
 	//R_CHK	(pDevice->GetRenderTarget			(0,&pBaseRT));
-	ID3D10Texture2D *pBuffer;
-	R = m_pSwapChain->GetBuffer( 0, __uuidof( ID3D10Texture2D ), (LPVOID*)&pBuffer );
+	ID3D11Texture2D *pBuffer;
+	R = m_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)&pBuffer );
 	R_CHK(R);
 
 	R = pDevice->CreateRenderTargetView( pBuffer, NULL, &pBaseRT);
@@ -1000,8 +1003,8 @@ void CHW::UpdateViews()
 	//	Create Depth/stencil buffer
 	//	HACK: DX10: hard depth buffer format
 	//R_CHK	(pDevice->GetDepthStencilSurface	(&pBaseZB));
-	ID3D10Texture2D* pDepthStencil = NULL;
-	D3D10_TEXTURE2D_DESC descDepth;
+	ID3D11Texture2D* pDepthStencil = NULL;
+	D3D11_TEXTURE2D_DESC descDepth;
 	descDepth.Width = sd.BufferDesc.Width;
 	descDepth.Height = sd.BufferDesc.Height;
 	descDepth.MipLevels = 1;
@@ -1009,8 +1012,8 @@ void CHW::UpdateViews()
 	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	descDepth.SampleDesc.Count = 1;
 	descDepth.SampleDesc.Quality = 0;
-	descDepth.Usage = D3D10_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D10_BIND_DEPTH_STENCIL;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	descDepth.CPUAccessFlags = 0;
 	descDepth.MiscFlags = 0;
 	R = pDevice->CreateTexture2D( &descDepth,       // Texture desc

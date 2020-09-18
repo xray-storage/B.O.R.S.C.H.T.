@@ -82,8 +82,8 @@ public:
 	ref_cbuffer						m_aVertexConstants[MaxCBuffers];
 	ref_cbuffer						m_aPixelConstants[MaxCBuffers];
 	ref_cbuffer						m_aGeometryConstants[MaxCBuffers];
-	D3D10_PRIMITIVE_TOPOLOGY		m_PrimitiveTopology;
-	ID3D10InputLayout*				m_pInputLayout;
+	D3D11_PRIMITIVE_TOPOLOGY		m_PrimitiveTopology;
+	ID3D11InputLayout*				m_pInputLayout;
 	DWORD							dummy0;	//	Padding to avoid warning	
 	DWORD							dummy1;	//	Padding to avoid warning	
 	DWORD							dummy2;	//	Padding to avoid warning	
