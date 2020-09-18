@@ -176,11 +176,11 @@ void CScriptEngine::lua_error			(lua_State *L)
 	print_output			(L,"",LUA_ERRRUN);
 	ai().script_engine().on_error	(L);
 
-#if !XRAY_EXCEPTIONS
-	Debug.fatal				(DEBUG_INFO,"LUA error: %s",lua_tostring(L,-1));
-#else
-	throw					lua_tostring(L,-1);
-#endif
+//#if !XRAY_EXCEPTIONS
+//	Debug.fatal				(DEBUG_INFO,"LUA error: %s",lua_tostring(L,-1));
+//#else
+//	throw					lua_tostring(L,-1);
+//#endif
 }
 
 int  CScriptEngine::lua_pcall_failed	(lua_State *L)
@@ -188,9 +188,9 @@ int  CScriptEngine::lua_pcall_failed	(lua_State *L)
 	print_output			(L,"",LUA_ERRRUN);
 	ai().script_engine().on_error	(L);
 
-#if !XRAY_EXCEPTIONS
-	Debug.fatal				(DEBUG_INFO,"LUA error: %s",lua_isstring(L,-1) ? lua_tostring(L,-1) : "");
-#endif
+//#if !XRAY_EXCEPTIONS
+//	Debug.fatal				(DEBUG_INFO,"LUA error: %s",lua_isstring(L,-1) ? lua_tostring(L,-1) : "");
+//#endif
 	if (lua_isstring(L,-1))
 		lua_pop				(L,1);
 	return					(LUA_ERRRUN);
