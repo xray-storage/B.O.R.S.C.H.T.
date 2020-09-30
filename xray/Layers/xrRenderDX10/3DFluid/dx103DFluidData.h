@@ -4,6 +4,8 @@
 
 #include "dx103DFluidEmitters.h"
 
+#ifdef HAS_3DFLUID
+
 class dx103DFluidData
 {
 public:
@@ -73,5 +75,7 @@ private:
 	ID3DRenderTargetView	*m_pRenderTargetViews[ VP_NUM_TARGETS ];
 	ID3D11Texture3D			*m_pRTTextures[ VP_NUM_TARGETS ];
 };
+
+#endif  // HAS_3DFLUID
 
 #endif	//	dx103DFluidData_included

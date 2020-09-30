@@ -169,23 +169,26 @@ void R_dsgraph_structure::r_dsgraph_insert_dynamic	(dxRender_Visual *pVisual, Fv
 		
 
 #ifdef USE_RESOURCE_DEBUGGER
-	#ifdef	USE_DX10
+	#ifdef	HAS_GS
 		mapMatrixVS::TNode*			Nvs		= map.insert		(pass.vs);
 		mapMatrixGS::TNode*			Ngs		= Nvs->val.insert	(pass.gs);
 		mapMatrixPS::TNode*			Nps		= Ngs->val.insert	(pass.ps);
-	#else	//	USE_DX10
+	#else	//	HAS_GS
 		mapMatrixVS::TNode*			Nvs		= map.insert		(pass.vs);
 		mapMatrixPS::TNode*			Nps		= Nvs->val.insert	(pass.ps);
-	#endif	//	USE_DX10
+	#endif	//	HAS_GS
 #else
-	#ifdef	USE_DX10
+#ifdef USE_DX10
 		mapMatrixVS::TNode*			Nvs		= map.insert		(&*pass.vs);
+#else  // USE_DX10
+		mapMatrixVS::TNode*			Nvs		= map.insert		(pass.vs->vs);
+#endif // USE_DX10
+	#ifdef	HAS_GS
 		mapMatrixGS::TNode*			Ngs		= Nvs->val.insert	(pass.gs->gs);
 		mapMatrixPS::TNode*			Nps		= Ngs->val.insert	(pass.ps->ps);
-	#else	//	USE_DX10
-		mapMatrixVS::TNode*			Nvs		= map.insert		(pass.vs->vs);
+	#else	//	HAS_GS
 		mapMatrixPS::TNode*			Nps		= Nvs->val.insert	(pass.ps->ps);
-	#endif	//	USE_DX10
+	#endif	//	HAS_GS
 #endif
 
 		mapMatrixCS::TNode*			Ncs		= Nps->val.insert	(pass.constants._get());
@@ -199,15 +202,15 @@ void R_dsgraph_structure::r_dsgraph_insert_dynamic	(dxRender_Visual *pVisual, Fv
 		if (SSA>Nstate->val.ssa)	{ Nstate->val.ssa = SSA;
 		if (SSA>Ncs->val.ssa)		{ Ncs->val.ssa = SSA;
 		if (SSA>Nps->val.ssa)		{ Nps->val.ssa = SSA;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 		if (SSA>Ngs->val.ssa)		{ Ngs->val.ssa = SSA;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 		if (SSA>Nvs->val.ssa)		{ Nvs->val.ssa = SSA;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 		} } } } } }
-#else	//	USE_DX10
+#else	//	HAS_GS
 		} } } } }
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	}
 
 #if RENDER!=R_R1
@@ -314,23 +317,26 @@ void R_dsgraph_structure::r_dsgraph_insert_static	(dxRender_Visual *pVisual)
 //#endif
 
 #ifdef USE_RESOURCE_DEBUGGER
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 		mapNormalVS::TNode*			Nvs		= map.insert		(pass.vs);
 		mapNormalGS::TNode*			Ngs		= Nvs->val.insert	(pass.gs);
 		mapNormalPS::TNode*			Nps		= Ngs->val.insert	(pass.ps);
-#else	//	USE_DX10
+#else	//	HAS_GS
 		mapNormalVS::TNode*			Nvs		= map.insert		(pass.vs);
 		mapNormalPS::TNode*			Nps		= Nvs->val.insert	(pass.ps);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 #else
-#ifdef	USE_DX10
+#ifdef USE_DX10
 		mapNormalVS::TNode*			Nvs		= map.insert		(&*pass.vs);
+#else  // USE_DX10
+		mapNormalVS::TNode*			Nvs		= map.insert		(pass.vs->vs);
+#endif // USE_DX10
+#ifdef	HAS_GS
 		mapNormalGS::TNode*			Ngs		= Nvs->val.insert	(pass.gs->gs);
 		mapNormalPS::TNode*			Nps		= Ngs->val.insert	(pass.ps->ps);
-#else	//	USE_DX10
-		mapNormalVS::TNode*			Nvs		= map.insert		(pass.vs->vs);
+#else	//	HAS_GS
 		mapNormalPS::TNode*			Nps		= Nvs->val.insert	(pass.ps->ps);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 #endif
 
 		mapNormalCS::TNode*			Ncs		= Nps->val.insert	(pass.constants._get());
@@ -347,15 +353,15 @@ void R_dsgraph_structure::r_dsgraph_insert_static	(dxRender_Visual *pVisual)
 		if (SSA>Nps->val.ssa)		{ Nps->val.ssa = SSA;
 //	if (SSA>Nvs->val.ssa)		{ Nvs->val.ssa = SSA;
 //	} } } } }
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 		if (SSA>Ngs->val.ssa)		{ Ngs->val.ssa = SSA;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 		if (SSA>Nvs->val.ssa)		{ Nvs->val.ssa = SSA;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 		} } } } } }
-#else	//	USE_DX10
+#else	//	HAS_GS
 		} } } } }
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	}
 
 #if RENDER!=R_R1

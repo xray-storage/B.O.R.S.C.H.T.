@@ -77,9 +77,9 @@ struct	  ECORE_API		SPass			: public xr_resource_flagged									{
 	ref_state							state;		// Generic state, like Z-Buffering, samplers, etc
 	ref_ps								ps;			// may be NULL = FFP, in that case "state" must contain TSS setup
 	ref_vs								vs;			// may be NULL = FFP, in that case "state" must contain RS setup, *and* FVF-compatible declaration must be used
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	ref_gs								gs;			// may be NULL = don't use geometry shader at all
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	ref_ctable							constants;	// may be NULL
 
 	ref_texture_list					T;
@@ -89,11 +89,11 @@ struct	  ECORE_API		SPass			: public xr_resource_flagged									{
 #endif
 
 						~SPass			();
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	BOOL				equal			(ref_state& _state, ref_ps& _ps, ref_vs& _vs, ref_gs& _gs, ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C);
-#else	//	USE_DX10
+#else	//	HAS_GS
 	BOOL				equal			(ref_state& _state, ref_ps& _ps, ref_vs& _vs, ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 };
 typedef	resptr_core<SPass,resptr_base<SPass> >												ref_pass;
 

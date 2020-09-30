@@ -45,7 +45,7 @@ struct ECORE_API SPS : public xr_resource_named
 };
 typedef	resptr_core<SPS,resptr_base<SPS> > ref_ps;
 
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 //////////////////////////////////////////////////////////////////////////
 struct ECORE_API SGS : public xr_resource_named
 {
@@ -54,7 +54,7 @@ struct ECORE_API SGS : public xr_resource_named
 	~SGS			();
 };
 typedef	resptr_core<SGS,resptr_base<SGS> > ref_gs;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 
 //////////////////////////////////////////////////////////////////////////
 struct ECORE_API SState : public xr_resource_flagged

@@ -39,11 +39,12 @@ SVS::~SVS()
 //	SPS
 SPS::~SPS								()			{	_RELEASE(ps);		DEV->_DeletePS			(this);	}
 
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 ///////////////////////////////////////////////////////////////////////
 //	SGS
 SGS::~SGS								()			{	_RELEASE(gs);		DEV->_DeleteGS			(this);	}
-
+#endif
+#ifdef USE_DX10
 ///////////////////////////////////////////////////////////////////////
 //	SInputSignature
 SInputSignature::SInputSignature(ID3DBlob* pBlob)	{ VERIFY(pBlob); signature=pBlob; signature->AddRef();};

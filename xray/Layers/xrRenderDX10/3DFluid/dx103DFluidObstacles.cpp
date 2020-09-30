@@ -11,6 +11,8 @@
 #include "dx103DFluidData.h"
 #include "dx103DFluidGrid.h"
 
+#ifdef HAS_3DFLUID
+
 /*
 #ifdef	DEBUG
 #include "../../xrRender/dxDebugRender.h"
@@ -420,3 +422,5 @@ void dx103DFluidObstacles::RenderDynamicOOBB( const IPhysicsGeometry &Geometry, 
 
 	m_pGrid->DrawSlices();
 }
+
+#endif // HAS_3DFLUID

@@ -72,6 +72,7 @@ ICF void CBackend::set_PS(ID3DPixelShader* _ps, LPCSTR _n)
 	}
 }
 
+#ifdef	HAS_GS
 ICF void CBackend::set_GS(ID3DGeometryShader* _gs, LPCSTR _n)
 {
 	if (gs!=_gs)
@@ -86,6 +87,7 @@ ICF void CBackend::set_GS(ID3DGeometryShader* _gs, LPCSTR _n)
 #endif
 	}
 }
+#endif
 
 ICF void CBackend::set_VS(ID3DVertexShader* _vs, LPCSTR _n)
 {

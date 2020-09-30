@@ -203,9 +203,7 @@ BOOL R_constant_table::parseConstants(ID3D11ShaderReflectionConstantBuffer* pTab
 			C->destination		=	destination;
 			C->type				=	type;
 			//R_constant_load& L	=	(destination&1)?C->ps:C->vs;
-			R_constant_load& L	=	((destination&RC_dest_pixel)
-									? C->ps : (destination&RC_dest_vertex)
-									? C->vs : C->gs);
+			R_constant_load& L	=	C->get_load(destination);
 			L.index				=	r_index;
 			L.cls				=	r_type;
 			table.push_back		(C);
@@ -213,9 +211,7 @@ BOOL R_constant_table::parseConstants(ID3D11ShaderReflectionConstantBuffer* pTab
 			C->destination		|=	destination;
 			VERIFY	(C->type	==	type);
 			//R_constant_load& L	=	(destination&1)?C->ps:C->vs;
-			R_constant_load& L	=	((destination&RC_dest_pixel)
-									? C->ps : (destination&RC_dest_vertex)
-									? C->vs : C->gs);
+			R_constant_load& L	=	C->get_load(destination);
 			L.index				=	r_index;
 			L.cls				=	r_type;
 		}
@@ -299,15 +295,11 @@ BOOL	R_constant_table::parse	(void* _desc, u16 destination)
 			{
 				//	Encode buffer index into destination
 				u16	updatedDest = destination;
-				updatedDest |= iBuf << ((destination&RC_dest_pixel)
-					? RC_dest_pixel_cb_index_shift : (destination&RC_dest_vertex)
-					? RC_dest_vertex_cb_index_shift : RC_dest_geometry_cb_index_shift);
+				updatedDest |= iBuf << (get_shift(destination));
 
 				//	Encode bind dest (pixel/vertex buffer) and bind point index
 				u32	uiBufferIndex = iBuf;
-				uiBufferIndex |= (destination&RC_dest_pixel) 
-					? CB_BufferPixelShader : (destination&RC_dest_vertex)
-					? CB_BufferVertexShader : CB_BufferGeometryShader;
+				uiBufferIndex |= get_buffer_offset(destination);
 
 				parseConstants(pTable,updatedDest);
 				ref_cbuffer	tempBuffer = dxRenderDeviceRender::Instance().Resources->_CreateConstantBuffer(pTable);

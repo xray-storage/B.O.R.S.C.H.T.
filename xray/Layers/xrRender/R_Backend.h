@@ -46,23 +46,18 @@ struct	R_statistics			{
 class  ECORE_API CBackend
 {
 public:
-#ifdef	USE_DX10
 	enum	MaxTextures
 	{
-		//	Actually these values are 128
 		mtMaxPixelShaderTextures = 16,
 		mtMaxVertexShaderTextures = 4,
+#ifdef HAS_GS
 		mtMaxGeometryShaderTextures = 16
+#endif
 	};
+#ifdef	USE_DX10
 	enum
 	{
 		MaxCBuffers	= 14
-	};
-#else	//	USE_DX10
-	enum	MaxTextures
-	{
-		mtMaxPixelShaderTextures = 16,
-		mtMaxVertexShaderTextures = 4,
 	};
 #endif	//	USE_DX10
 	
@@ -111,16 +106,16 @@ private:
 	ID3DState*						state;
 	ID3DPixelShader*				ps;
 	ID3DVertexShader*				vs;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	ID3DGeometryShader*				gs;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 
 #ifdef DEBUG
 	LPCSTR							ps_name;
 	LPCSTR							vs_name;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	LPCSTR							gs_name;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 #endif
 	u32								stencil_enable;
 	u32								stencil_func;
@@ -145,9 +140,9 @@ private:
 	CTexture*						textures_ps	[mtMaxPixelShaderTextures];	// stages
 	//CTexture*						textures_vs	[5	];	// dmap + 4 vs
 	CTexture*						textures_vs	[mtMaxVertexShaderTextures];	// 4 vs
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	CTexture*						textures_gs	[mtMaxGeometryShaderTextures];	// 4 vs
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 #ifdef _EDITOR
 	CMatrix*						matrices	[8	];	// matrices are supported only for FFP
 #endif
@@ -181,12 +176,12 @@ public:
 	{
 		if (stage<CTexture::rstVertex)			return textures_ps[stage];
 		else if (stage<CTexture::rstGeometry)	return textures_vs[stage-CTexture::rstVertex];
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 		else									return textures_gs[stage-CTexture::rstGeometry];
-#else	//	USE_DX10
+#else	//	HAS_GS
 		VERIFY(!"Invalid texture stage");
 		return 0;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	}
 
 #ifdef	USE_DX10
@@ -239,10 +234,10 @@ public:
 	ICF void						set_PS				(ID3DPixelShader* _ps, LPCSTR _n=0);
 	ICF void						set_PS				(ref_ps& _ps)						{ set_PS(_ps->ps,_ps->cName.c_str());				}
 
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	ICF void						set_GS				(ID3DGeometryShader* _gs, LPCSTR _n=0);
 	ICF void						set_GS				(ref_gs& _gs)						{ set_GS(_gs->gs,_gs->cName.c_str());				}
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 
 	ICF void						set_VS				(ref_vs& _vs);
 #ifdef	USE_DX10

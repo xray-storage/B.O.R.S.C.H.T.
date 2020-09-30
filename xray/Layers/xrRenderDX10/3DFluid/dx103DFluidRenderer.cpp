@@ -6,6 +6,8 @@
 #include "dx103DFluidData.h"
 #include "../../../xrEngine/Environment.h"
 
+#ifdef HAS_3DFLUID
+
 struct VsInput
 {
 	D3DXVECTOR3 pos;  
@@ -929,3 +931,5 @@ void dx103DFluidRenderer::CalculateLighting(const dx103DFluidData &FluidData, Fo
 	//LightData.m_vLightIntencity.set( 1.0f, 0.5f, 0.0f);
 	//LightData.m_vLightIntencity.set( 1.0f, 1.0f, 1.0f);
 }
+
+#endif // HAS_3DFLUID

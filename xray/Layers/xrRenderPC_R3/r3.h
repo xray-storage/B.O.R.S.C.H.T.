@@ -175,7 +175,9 @@ private:
 	void							LoadPortals					(IReader	*fs);
 	void							LoadSectors					(IReader	*fs);
 	void							LoadSWIs					(CStreamReader	*fs);
+#ifdef HAS_3DFLUID
 	void							Load3DFluid					();
+#endif
 
 	BOOL							add_Dynamic					(dxRender_Visual*pVisual, u32 planes);		// normal processing
 	void							add_Static					(dxRender_Visual*pVisual, u32 planes);

@@ -17,6 +17,18 @@
 
 //R_constant_table::~R_constant_table	()	{	dxRenderDeviceRender::Instance().Resources->_DeleteConstantTable(this);	}
 
+R_constant_load& R_constant::get_load(u16 destination)
+{
+    if (destination & RC_dest_pixel)
+        return ps;
+    if (destination & RC_dest_vertex)
+        return vs;
+#ifdef HAS_GS
+    if (destination & RC_dest_geometry)
+        return gs;
+#endif
+    NODEFAULT;
+}
 
 R_constant_table::~R_constant_table	()	
 {	
@@ -254,4 +266,30 @@ BOOL R_constant_table::equal(R_constant_table& C)
 	}
 
 	return TRUE;
+}
+
+int R_constant_table::get_shift(u16 destination)
+{
+    if (destination & RC_dest_pixel)
+        return RC_dest_pixel_cb_index_shift;
+    if (destination & RC_dest_vertex)
+        return RC_dest_vertex_cb_index_shift;
+#ifdef HAS_GS
+    if (destination & RC_dest_geometry)
+        return RC_dest_geometry_cb_index_shift;
+#endif // HAS_GS
+    NODEFAULT;
+}
+
+u32 R_constant_table::get_buffer_offset(u16 destination)
+{
+    if (destination & RC_dest_pixel)
+        return CB_BufferPixelShader;
+    if (destination & RC_dest_vertex)
+        return CB_BufferVertexShader;
+#ifdef HAS_GS
+    if (destination & RC_dest_geometry)
+        return CB_BufferGeometryShader;
+#endif
+    NODEFAULT;
 }

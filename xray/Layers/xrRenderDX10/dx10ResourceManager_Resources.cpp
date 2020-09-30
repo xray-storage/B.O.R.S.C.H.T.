@@ -94,10 +94,19 @@ void		CResourceManager::_DeleteState		(const SState* state)
 }
 
 //--------------------------------------------------------------------------------------------------------------
-SPass*		CResourceManager::_CreatePass			(ref_state& _state, ref_ps& _ps, ref_vs& _vs, ref_gs& _gs, ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C)
+
+SPass*		CResourceManager::_CreatePass			(ref_state& _state, ref_ps& _ps, ref_vs& _vs,
+#ifdef	HAS_GS
+	ref_gs& _gs,
+#endif
+	ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C)
 {
 	for (u32 it=0; it<v_passes.size(); it++)
-		if (v_passes[it]->equal(_state,_ps,_vs,_gs,_ctable,_T,_M,_C))
+		if (v_passes[it]->equal(_state,_ps,_vs,
+#ifdef HAS_GS
+			_gs,
+#endif
+			_ctable,_T,_M,_C))
 			return v_passes[it];
 
 	SPass*	P					=	xr_new<SPass>();
@@ -105,7 +114,9 @@ SPass*		CResourceManager::_CreatePass			(ref_state& _state, ref_ps& _ps, ref_vs&
 	P->state					=	_state;
 	P->ps						=	_ps;
 	P->vs						=	_vs;
+#ifdef HAS_GS
 	P->gs						=	_gs;
+#endif
 	P->constants				=	_ctable;
 	P->T						=	_T;
 #ifdef _EDITOR
@@ -418,6 +429,7 @@ void	CResourceManager::_DeletePS			(const SPS* ps)
 }
 
 //--------------------------------------------------------------------------------------------------------------
+#ifdef	HAS_GS
 SGS*	CResourceManager::_CreateGS			(LPCSTR name)
 {
 	LPSTR N				= LPSTR(name);
@@ -528,7 +540,7 @@ void	CResourceManager::_DeleteGS			(const SGS* gs)
 	}
 	Msg	("! ERROR: Failed to find compiled geometry shader '%s'",*gs->cName);
 }
-
+#endif
 //--------------------------------------------------------------------------------------------------------------
 static BOOL	dcl_equal			(D3DVERTEXELEMENT9* a, D3DVERTEXELEMENT9* b)
 {

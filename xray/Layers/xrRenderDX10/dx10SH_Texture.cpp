@@ -240,11 +240,13 @@ void CTexture::Apply(u32 dwStage)
 		//HW.pDevice->VSSetShaderResources(dwStage-rstVertex, 1, &m_pSRView);
 		SRVSManager.SetVSResource(dwStage-rstVertex, m_pSRView);
 	}
+#ifdef HAS_GS
 	else	//	Geometry shader stage resources
 	{
 		//HW.pDevice->GSSetShaderResources(dwStage-rstGeometry, 1, &m_pSRView);
 		SRVSManager.SetGSResource(dwStage-rstGeometry, m_pSRView);
 	}
+#endif
 }
 
 void CTexture::apply_theora(u32 dwStage)

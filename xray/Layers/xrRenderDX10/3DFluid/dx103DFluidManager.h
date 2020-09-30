@@ -2,6 +2,8 @@
 #define	dx103DFluidManager_included
 #pragma once
 
+#ifdef HAS_3DFLUID
+
 class dx103DFluidData;
 class dx103DFluidGrid;
 class dx103DFluidObstacles;
@@ -148,5 +150,7 @@ private:
 };
 
 extern dx103DFluidManager	FluidManager;
+
+#endif  // HAS_3DFLUID
 
 #endif	//	dx103DFluidManager_included

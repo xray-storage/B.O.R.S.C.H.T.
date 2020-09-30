@@ -10,6 +10,8 @@
 #include "dx103DFluidObstacles.h"
 #include "dx103DFluidEmitters.h"
 
+#ifdef HAS_3DFLUID
+
 dx103DFluidManager	FluidManager;
 
 namespace
@@ -818,3 +820,5 @@ void dx103DFluidManager::UpdateProfiles()
 }
 
 #endif	//	DEBUG
+
+#endif  //  HAS_3DFLUID

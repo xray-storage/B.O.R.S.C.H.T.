@@ -76,7 +76,9 @@ void CBackend::Invalidate	()
 	state						= NULL;
 	ps							= NULL;
 	vs							= NULL;
-DX10_ONLY(gs					= NULL);
+#ifdef HAS_GS
+	gs							= NULL;
+#endif
 	ctable						= NULL;
 
 	T							= NULL;
@@ -118,10 +120,11 @@ DX10_ONLY(gs					= NULL);
 	StateManager.UnmapConstants();
 	SSManager.ResetDeviceState();
 	SRVSManager.ResetDeviceState();
-
-	for (u32 gs_it =0; gs_it < mtMaxGeometryShaderTextures;)	textures_gs	[gs_it++]	= 0;
 #endif	//	USE_DX10
 
+#ifdef	HAS_GS
+	for (u32 gs_it =0; gs_it < mtMaxGeometryShaderTextures;)	textures_gs	[gs_it++]	= 0;
+#endif
 	for (u32 ps_it =0; ps_it < mtMaxPixelShaderTextures;)	textures_ps	[ps_it++]	= 0;
 	for (u32 vs_it =0; vs_it < mtMaxVertexShaderTextures;)	textures_vs	[vs_it++]	= 0;
 #ifdef _EDITOR
@@ -308,7 +311,7 @@ void CBackend::set_Textures			(STextureList* _T)
 #endif	//	USE_DX10
 	}
 
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	// clear remaining stages (VS)
 	for (++_last_gs; _last_gs<mtMaxGeometryShaderTextures; _last_gs++)
 	{
@@ -322,7 +325,7 @@ void CBackend::set_Textures			(STextureList* _T)
 		//HW.pDevice->GSSetShaderResources(_last_gs, 1, &pRes);
 		SRVSManager.SetGSResource(_last_gs, pRes);
 	}
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 }
 #else
 

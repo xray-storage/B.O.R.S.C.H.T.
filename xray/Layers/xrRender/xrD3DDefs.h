@@ -26,6 +26,11 @@ typedef	dx10State				ID3DState;
 
 #define DX10_ONLY(expr)			expr
 
+#define HAS_GS
+#ifdef HAS_GS
+#define HAS_3DFLUID
+#endif
+
 #else	//	USE_DX10
 
 typedef	IDirect3DVertexShader9	ID3DVertexShader;

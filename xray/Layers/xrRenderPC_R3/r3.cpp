@@ -391,15 +391,19 @@ void					CRender::create					()
 
 	xrRender_apply_tf			();
 	::PortalTraverser.initialize();
+#ifdef HAS_3DFLUID
 	FluidManager.Initialize( 70, 70, 70 );
 //	FluidManager.Initialize( 100, 100, 100 );
 	FluidManager.SetScreenSize(Device.dwWidth, Device.dwHeight);
+#endif // HAS_3DFLUID
 }
 
 void					CRender::destroy				()
 {
 	m_bMakeAsyncSS				= false;
+#ifdef HAS_3DFLUID
 	FluidManager.Destroy();
+#endif
 	::PortalTraverser.destroy	();
 	//_RELEASE					(q_sync_point[1]);
 	//_RELEASE					(q_sync_point[0]);
@@ -472,7 +476,9 @@ void CRender::reset_end()
 	}
 
 	xrRender_apply_tf			();
+#ifdef HAS_3DFLUID
 	FluidManager.SetScreenSize(Device.dwWidth, Device.dwHeight);
+#endif // HAS_3DFLUID
 }
 /*
 void CRender::OnFrame()
