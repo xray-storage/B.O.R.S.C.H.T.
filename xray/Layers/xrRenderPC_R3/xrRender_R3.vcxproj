@@ -177,7 +177,7 @@
       <AdditionalIncludeDirectories>pch;$(SolutionDir)3rd_party\WildMagic;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party/luajit/src;$(SolutionDir)3rd_party/luabind/include;$(SolutionDir)3rd_party/imdexlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;d3d9.lib;dxgi.lib;nvapi.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxguid.lib;d3d9.lib;dxgi.lib;nvapi.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
       <MapFileName />
@@ -207,7 +207,7 @@
       <AdditionalIncludeDirectories>pch;$(SolutionDir)3rd_party\WildMagic;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party/luajit/src;$(SolutionDir)3rd_party/luabind/include;$(SolutionDir)3rd_party/imdexlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;d3d9.lib;dxgi.lib;nvapi.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxguid.lib;d3d9.lib;dxgi.lib;nvapi.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
       <MapFileName>
@@ -237,7 +237,7 @@
       <AdditionalIncludeDirectories>pch;$(SolutionDir)3rd_party\WildMagic;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party/luajit/src;$(SolutionDir)3rd_party/luabind/include;$(SolutionDir)3rd_party/imdexlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;d3d9.lib;dxgi.lib;nvapi64.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxguid.lib;d3d9.lib;dxgi.lib;nvapi64.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
       <MapFileName>
@@ -268,7 +268,7 @@
       <AdditionalOptions>-Wno-c++11-narrowing %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;d3d9.lib;dxgi.lib;nvapi64.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxguid.lib;d3d9.lib;dxgi.lib;nvapi64.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
       <MapFileName>
@@ -306,7 +306,7 @@
       <AdditionalIncludeDirectories>pch;$(SolutionDir)3rd_party\WildMagic;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party/luajit/src;$(SolutionDir)3rd_party/luabind/include;$(SolutionDir)3rd_party/imdexlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;d3d9.lib;dxgi.lib;nvapi.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxguid.lib;d3d9.lib;dxgi.lib;nvapi.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <MapFileName />
       <SubSystem>NotSet</SubSystem>
       <LargeAddressAware>true</LargeAddressAware>
@@ -345,7 +345,7 @@
       <AdditionalIncludeDirectories>pch;$(SolutionDir)3rd_party\WildMagic;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party/luajit/src;$(SolutionDir)3rd_party/luabind/include;$(SolutionDir)3rd_party/imdexlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;d3d9.lib;dxgi.lib;nvapi64.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxguid.lib;d3d9.lib;dxgi.lib;nvapi64.lib;D3dcompiler.lib;$(TargetDir)xrEngine.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <MapFileName>
       </MapFileName>
       <SubSystem>NotSet</SubSystem>
@@ -382,7 +382,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;dxgi.lib;nvapi.lib;atimgpud_mtdll_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxguid.lib;dxgi.lib;nvapi.lib;atimgpud_mtdll_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\sdk\libraries;..\..\..\..\libraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
@@ -420,7 +420,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;dxgi.lib;nvapi.lib;atimgpud_mtdll_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxguid.lib;dxgi.lib;nvapi.lib;atimgpud_mtdll_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\sdk\libraries;..\..\..\..\libraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
@@ -482,7 +482,7 @@
     <ClInclude Include="..\xrRenderDX10\dx10r_constants_cache.h" />
     <ClInclude Include="..\xrRenderDX10\dx10StateUtils.h" />
     <ClInclude Include="..\xrRenderDX10\dx10TextureUtils.h" />
-    <ClInclude Include="..\xrRenderDX10\imgui_impl_dx10.h" />
+    <ClInclude Include="..\xrRenderDX10\imgui_impl_dx11.h" />
     <ClInclude Include="..\xrRenderDX10\MSAA\dx10MSAABlender.h" />
     <ClInclude Include="..\xrRenderDX10\StateManager\dx10SamplerStateCache.h" />
     <ClInclude Include="..\xrRenderDX10\StateManager\dx10ShaderResourceStateCache.h" />
@@ -658,12 +658,14 @@
     <ClCompile Include="..\xrRenderDX10\dx10StateUtils.cpp" />
     <ClCompile Include="..\xrRenderDX10\dx10Texture.cpp" />
     <ClCompile Include="..\xrRenderDX10\dx10TextureUtils.cpp" />
-    <ClCompile Include="..\xrRenderDX10\imgui_impl_dx10.cpp">
+    <ClCompile Include="..\xrRenderDX10\imgui_impl_dx11.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-LLVM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-LLVM|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Mixed|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\xrRenderDX10\MSAA\dx10MSAABlender.cpp" />

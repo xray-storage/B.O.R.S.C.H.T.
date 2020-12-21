@@ -4,6 +4,8 @@
 #include "dx103DFluidManager.h"
 #include "dx103DFluidRenderer.h"
 
+#ifdef HAS_3DFLUID
+
 namespace
 {
 // Volume texture width
@@ -452,3 +454,5 @@ void CBlender_fluid_raycast::Compile(CBlender_Compile& C)
 	//	Constants must be bound before r_End()
 	C.r_End		();
 }
+
+#endif // HAS_3DFLUID

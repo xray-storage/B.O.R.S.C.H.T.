@@ -25,9 +25,9 @@ void CRenderTarget::DoAsyncScreenshot()
 
 
 		//HW.pDevice->CopyResource( t_ss_async, pTex );
-		ID3D10Texture2D*	pBuffer;
-		hr = HW.m_pSwapChain->GetBuffer( 0, __uuidof( ID3D10Texture2D ), (LPVOID*)&pBuffer );
-		HW.pDevice->CopyResource( t_ss_async, pBuffer );
+		ID3D11Texture2D*	pBuffer;
+		hr = HW.m_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)&pBuffer );
+		HW.pContext->CopyResource( t_ss_async, pBuffer );
 		
 
 		RImplementation.m_bMakeAsyncSS = false;
@@ -66,8 +66,8 @@ void	CRenderTarget::phase_combine	()
    else
    {
       FLOAT ColorRGBA[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-      HW.pDevice->ClearRenderTargetView(rt_Generic_0->pRT, ColorRGBA);
-      HW.pDevice->ClearRenderTargetView(rt_Generic_1->pRT, ColorRGBA);
+      HW.pContext->ClearRenderTargetView(rt_Generic_0->pRT, ColorRGBA);
+      HW.pContext->ClearRenderTargetView(rt_Generic_1->pRT, ColorRGBA);
       u_setrt				( rt_Generic_0,rt_Generic_1,0,RImplementation.Target->rt_MSAADepth->pZRT );
    }
 	RCache.set_CullMode	( CULL_NONE );
@@ -272,8 +272,8 @@ void	CRenderTarget::phase_combine	()
    if( RImplementation.o.dx10_msaa )
    {
       // we need to resolve rt_Generic_1 into rt_Generic_1_r
-      HW.pDevice->ResolveSubresource( rt_Generic_1_r->pTexture->surface_get(), 0, rt_Generic_1->pTexture->surface_get(), 0, DXGI_FORMAT_R8G8B8A8_UNORM );
-      HW.pDevice->ResolveSubresource( rt_Generic_0_r->pTexture->surface_get(), 0, rt_Generic_0->pTexture->surface_get(), 0, DXGI_FORMAT_R8G8B8A8_UNORM );
+      HW.pContext->ResolveSubresource( rt_Generic_1_r->pTexture->surface_get(), 0, rt_Generic_1->pTexture->surface_get(), 0, DXGI_FORMAT_R8G8B8A8_UNORM );
+      HW.pContext->ResolveSubresource( rt_Generic_0_r->pTexture->surface_get(), 0, rt_Generic_0->pTexture->surface_get(), 0, DXGI_FORMAT_R8G8B8A8_UNORM );
    }
 
    // for msaa we need a resolved color buffer - Holger
@@ -299,7 +299,7 @@ void	CRenderTarget::phase_combine	()
 			RCache.set_ColorWriteEnable	();
 			//CHK_DX(HW.pDevice->Clear	( 0L, NULL, D3DCLEAR_TARGET, color_rgba(127,127,0,127), 1.0f, 0L));
 			FLOAT ColorRGBA[4] = { 127.0f/255.0f, 127.0f/255.0f, 0.0f, 127.0f/255.0f};
-			HW.pDevice->ClearRenderTargetView( rt_Generic_1->pRT, ColorRGBA);
+			HW.pContext->ClearRenderTargetView( rt_Generic_1->pRT, ColorRGBA);
 			RImplementation.r_dsgraph_render_distort	();
 			if (g_pGamePersistent)	g_pGamePersistent->OnRenderPPUI_PP()	;	// PP-UI
 		}

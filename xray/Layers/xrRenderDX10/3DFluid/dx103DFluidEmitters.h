@@ -2,6 +2,8 @@
 #define	dx103DFluidEmitters_included
 #pragma once
 
+#ifdef HAS_3DFLUID
+
 class dx103DFluidGrid;
 class dx103DFluidData;
 
@@ -69,5 +71,7 @@ private:
 
 	dx103DFluidGrid*	m_pGrid;
 };
+
+#endif  // HAS_3DFLUID
 
 #endif	//	dx103DFluidEmitters_included

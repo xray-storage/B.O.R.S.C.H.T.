@@ -23,6 +23,7 @@ dx10ConstantBuffer& R_constants::GetCBuffer(R_constant* C, BufferType BType)
 		VERIFY(RCache.m_aVertexConstants[iBufferIndex]);
 		return *RCache.m_aVertexConstants[iBufferIndex];
 	}
+#ifdef HAS_GS
 	else //if (BType==BT_GeometryBuffer)
 	{
 		//	Decode index
@@ -32,6 +33,7 @@ dx10ConstantBuffer& R_constants::GetCBuffer(R_constant* C, BufferType BType)
 		VERIFY(RCache.m_aGeometryConstants[iBufferIndex]);
 		return *RCache.m_aGeometryConstants[iBufferIndex];
 	}
+#endif // HAS_GS
 }
 
 void R_constants::flush_cache()

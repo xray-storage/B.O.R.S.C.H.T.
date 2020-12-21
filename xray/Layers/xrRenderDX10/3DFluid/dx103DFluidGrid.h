@@ -2,6 +2,8 @@
 #define	dx103DFluidGrid_included
 #pragma once
 
+#ifdef HAS_3DFLUID
+
 struct VS_INPUT_FLUIDSIM_STRUCT;
 
 class dx103DFluidGrid
@@ -39,15 +41,17 @@ private:
 	ref_geom		m_GeomBoundarySlices;
 	ref_geom		m_GeomBoundaryLines;
 
-	ID3D10Buffer*	m_pRenderQuadBuffer;
-	ID3D10Buffer*	m_pSlicesBuffer;
-	ID3D10Buffer*	m_pBoundarySlicesBuffer;
-	ID3D10Buffer*	m_pBoundaryLinesBuffer;
+	ID3D11Buffer*	m_pRenderQuadBuffer;
+	ID3D11Buffer*	m_pSlicesBuffer;
+	ID3D11Buffer*	m_pBoundarySlicesBuffer;
+	ID3D11Buffer*	m_pBoundaryLinesBuffer;
 
 	int			m_iNumVerticesRenderQuad;
 	int			m_iNumVerticesSlices;
 	int			m_iNumVerticesBoundarySlices;
 	int			m_iNumVerticesBoundaryLines;
 };
+
+#endif  // HAS_3DFLUID
 
 #endif	//	dx103DFluidGrid_included

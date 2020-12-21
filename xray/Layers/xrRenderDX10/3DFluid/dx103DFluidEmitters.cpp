@@ -5,6 +5,8 @@
 #include "dx103DFluidData.h"
 #include "dx103DFluidGrid.h"
 
+#ifdef HAS_3DFLUID
+
 namespace
 {
 	shared_str	strImpulseSize("size");
@@ -173,3 +175,5 @@ void dx103DFluidEmitters::ApplyVelocity( const CEmitter &Emitter)
 
 	m_pGrid->DrawSlices();
 }
+
+#endif // HAS_3DFLUID

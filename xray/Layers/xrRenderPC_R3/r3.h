@@ -175,7 +175,9 @@ private:
 	void							LoadPortals					(IReader	*fs);
 	void							LoadSectors					(IReader	*fs);
 	void							LoadSWIs					(CStreamReader	*fs);
+#ifdef HAS_3DFLUID
 	void							Load3DFluid					();
+#endif
 
 	BOOL							add_Dynamic					(dxRender_Visual*pVisual, u32 planes);		// normal processing
 	void							add_Static					(dxRender_Visual*pVisual, u32 planes);
@@ -249,7 +251,7 @@ public:
 	virtual	GenerationLevel			get_generation			()	{ return IRender_interface::GENERATION_R2; }
 
 	virtual bool					is_sun_static			()	{ return o.sunstatic;}
-	virtual DWORD					get_dx_level			()	{ return HW.pDevice1?0x000A0001:0x000A0000; }
+	virtual DWORD					get_dx_level			()	{ return 0x000A0001; } // HW.pDevice1?0x000A0001:0x000A0000; }
 
 	// Loading / Unloading
 	virtual void					create						();

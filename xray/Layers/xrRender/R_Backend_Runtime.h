@@ -95,9 +95,9 @@ IC void CBackend::set_Element			(ShaderElement* S, u32	pass)
 	set_States		(P.state);
 	set_PS			(P.ps);
 	set_VS			(P.vs);
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	set_GS			(P.gs);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	set_Constants	(P.constants);
 	set_Textures	(P.T);
 #ifdef _EDITOR

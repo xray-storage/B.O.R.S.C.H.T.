@@ -45,7 +45,7 @@ struct ECORE_API SPS : public xr_resource_named
 };
 typedef	resptr_core<SPS,resptr_base<SPS> > ref_ps;
 
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 //////////////////////////////////////////////////////////////////////////
 struct ECORE_API SGS : public xr_resource_named
 {
@@ -54,7 +54,7 @@ struct ECORE_API SGS : public xr_resource_named
 	~SGS			();
 };
 typedef	resptr_core<SGS,resptr_base<SGS> > ref_gs;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 
 //////////////////////////////////////////////////////////////////////////
 struct ECORE_API SState : public xr_resource_flagged
@@ -70,8 +70,8 @@ struct ECORE_API SDeclaration : public xr_resource_flagged
 {
 #ifdef	USE_DX10
 	//	Maps input signature to input layout
-	xr_map<ID3DBlob*, ID3D10InputLayout*>	vs_to_layout;
-	xr_vector<D3D10_INPUT_ELEMENT_DESC>		dx10_dcl_code;
+	xr_map<ID3DBlob*, ID3D11InputLayout*>	vs_to_layout;
+	xr_vector<D3D11_INPUT_ELEMENT_DESC>		dx10_dcl_code;
 #else	//	USE_DX10	//	Don't need it: use ID3D10InputLayout instead
 					//	which is per ( declaration, VS input layout) pair
 	IDirect3DVertexDeclaration9*		dcl;

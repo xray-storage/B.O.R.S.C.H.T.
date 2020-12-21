@@ -20,7 +20,7 @@ dx10SamplerStateCache::~dx10SamplerStateCache()
 	ClearStateArray();
 }
 
-dx10SamplerStateCache::SHandle dx10SamplerStateCache::GetState( D3D10_SAMPLER_DESC& desc )
+dx10SamplerStateCache::SHandle dx10SamplerStateCache::GetState( StateDecs& desc )
 {
 	SHandle	hResult;
 
@@ -87,7 +87,7 @@ void dx10SamplerStateCache::ClearStateArray()
 
 void dx10SamplerStateCache::PrepareSamplerStates(
 	HArray &samplers, 
-	ID3D10SamplerState	*pSS[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT],
+	ID3D11SamplerState	*pSS[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT],
 	SHandle pCurrentState[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT],
 	u32	&uiMin,
 	u32	&uiMax
@@ -111,29 +111,29 @@ void dx10SamplerStateCache::PrepareSamplerStates(
 
 void dx10SamplerStateCache::VSApplySamplers(HArray &samplers)
 {
-	ID3D10SamplerState	*pSS[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT];
+	ID3D11SamplerState	*pSS[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT];
 	u32 uiMin;
 	u32 uiMax;
 	PrepareSamplerStates( samplers, pSS, m_aVSSamplers, uiMin, uiMax);
-	HW.pDevice->VSSetSamplers(uiMin, uiMax-uiMin+1, &pSS[uiMin]);
+	HW.pContext->VSSetSamplers(uiMin, uiMax-uiMin+1, &pSS[uiMin]);
 }
 
 void dx10SamplerStateCache::PSApplySamplers(HArray &samplers)
 {
-	ID3D10SamplerState	*pSS[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT];
+	ID3D11SamplerState	*pSS[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT];
 	u32 uiMin;
 	u32 uiMax;
 	PrepareSamplerStates( samplers, pSS, m_aPSSamplers, uiMin, uiMax);
-	HW.pDevice->PSSetSamplers(uiMin, uiMax-uiMin+1, &pSS[uiMin]);
+	HW.pContext->PSSetSamplers(uiMin, uiMax-uiMin+1, &pSS[uiMin]);
 }
 
 void dx10SamplerStateCache::GSApplySamplers(HArray &samplers)
 {
-	ID3D10SamplerState	*pSS[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT];
+	ID3D11SamplerState	*pSS[D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT];
 	u32 uiMin;
 	u32 uiMax;
 	PrepareSamplerStates( samplers, pSS, m_aGSSamplers, uiMin, uiMax);
-	HW.pDevice->GSSetSamplers(uiMin, uiMax-uiMin+1, &pSS[uiMin]);
+	HW.pContext->GSSetSamplers(uiMin, uiMax-uiMin+1, &pSS[uiMin]);
 }
 
 void dx10SamplerStateCache::SetMaxAnisotropy( UINT uiMaxAniso)

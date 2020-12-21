@@ -2,6 +2,8 @@
 #define	dx103DFluidRenderer_included
 #pragma once
 
+#ifdef HAS_3DFLUID
+
 class dx103DFluidData;
 
 class dx103DFluidRenderer
@@ -108,5 +110,7 @@ private:
 	//	TODO: DX10: Reserve memory on object creation
 	xr_vector<ISpatial*>		m_lstRenderables;
 };
+
+#endif  // HAS_3DFLUID
 
 #endif	//	dx103DFluidRenderer_included

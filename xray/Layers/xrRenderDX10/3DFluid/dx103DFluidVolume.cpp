@@ -3,6 +3,8 @@
 
 #include "dx103DFluidManager.h"
 
+#ifdef HAS_3DFLUID
+
 dx103DFluidVolume::dx103DFluidVolume()
 {
 }
@@ -188,3 +190,5 @@ void dx103DFluidVolume::Release()
 {
 	dxRender_Visual::Release();
 }
+
+#endif // HAS_3DFLUID
