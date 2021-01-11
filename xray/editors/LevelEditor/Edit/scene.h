@@ -28,6 +28,7 @@ struct UndoItem {
 #pragma pack( pop )
 
 class TProperties;
+class IM_PropertiesWnd;
 
 struct st_LevelOptions{
 	shared_str		m_FNLevelPath;
@@ -80,7 +81,7 @@ protected:
 	xr_deque<UndoItem> m_UndoStack;
 	xr_deque<UndoItem> m_RedoStack;
 
-	TProperties* m_SummaryInfo;
+	IM_PropertiesWnd* m_SummaryInfo;
 
     ObjectList		m_ESO_SnapObjects; // временно здесь а вообще нужно перенести в ESceneTools
 protected:
@@ -208,12 +209,14 @@ public:
 	int 			FrustumSelect       (int flag, ObjClassID classfilter=OBJCLASS_DUMMY);
 	void			SelectObjects       (bool flag, ObjClassID classfilter=OBJCLASS_DUMMY);
 	void 			ShowObjects         (bool flag, ObjClassID classfilter=OBJCLASS_DUMMY, bool bAllowSelectionFlag=false, bool bSelFlag=true);
+	int 			LockObjects         (bool flag, ObjClassID classfilter=OBJCLASS_DUMMY, bool bAllowSelectionFlag=false, bool bSelFlag=true);
 	void			InvertSelection     (ObjClassID classfilter);
 	int 			SelectionCount      (bool testflag, ObjClassID classfilter);
 	void			RemoveSelection     (ObjClassID classfilter);
 	void 			CutSelection        (ObjClassID classfilter);
 	void			CopySelection       (ObjClassID classfilter);
 	void			PasteSelection      ();
+	void			DuplicateSelection	(ObjClassID classfilter);
 
 	void 			SelectLightsForObject(CCustomObject* obj);
 
@@ -237,18 +240,6 @@ public:
 
 public:
 	int  			GetQueryObjects		(ObjectList& objset, ObjClassID classfilter, int iSel=1, int iVis=1, int iLock=0);
-    template <class Predicate>
-    int  GetQueryObjects_if			(ObjectList& dest, ObjClassID classfilter, Predicate cmp){
-        for(ObjectPairIt it=FirstClass(); it!=LastClass(); it++){
-            ObjectList& lst = it->second;
-            if ((classfilter==OBJCLASS_DUMMY)||(classfilter==it->first)){
-                for(ObjectIt _F = lst.begin();_F!=lst.end();_F++){
-        			if (cmp(_F)) dest.push_back(*_F);
-                }
-            }
-        }
-        return dest.size();
-    }
 public:
 
 	void 			OnCreate		();

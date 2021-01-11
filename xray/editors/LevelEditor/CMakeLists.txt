@@ -6,11 +6,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE -DNO_VCL -D_EDITOR -D_LEVEL_E
 target_include_directories(${PROJECT_NAME} PRIVATE
 	../..
 	.)
+target_precompile_headers(${PROJECT_NAME} PRIVATE stdafx.h)
 target_sources(${PROJECT_NAME} PRIVATE
-#	Edit/AppendObjectInfoForm.cpp
+	Edit/AppendObjectInfoForm.cpp
 #	Edit/AppendObjectInfoForm.ddp
 #	Edit/AppendObjectInfoForm.dfm
-#	Edit/AppendObjectInfoForm.h
+	Edit/AppendObjectInfoForm.h
 	Edit/Builder.cpp
 	Edit/Builder.h
 	Edit/BuilderCF.cpp
@@ -205,6 +206,10 @@ target_sources(${PROJECT_NAME} PRIVATE
 	ImGui/IM_LeftBar.h
 	ImGui/IM_TopBar.cpp
 	ImGui/IM_TopBar.h
+	ImGui/IM_ContextMenu.cpp
+	ImGui/IM_ContextMenu.h
+	ImGui/IM_Manipulator.cpp
+	ImGui/IM_Manipulator.h
 	framework.h
 	iniStreamImpl.cpp
 	iniStreamImpl.h

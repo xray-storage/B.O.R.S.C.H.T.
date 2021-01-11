@@ -14,13 +14,12 @@
 #include "EParticlesObject.h"
 #include "ui_leveltools.h"
 #include "../ECore/Engine/guid_generator.h"
+#include "../ECore/ImGui/IM_PropertyTree.h"
 
 #include "ESceneAIMapTools.h"
 #include "ESceneDOTools.h"
 #include "ESceneLightTools.h"
-#ifndef NO_VCL
 #include "AppendObjectInfoForm.h"
-#endif
 //----------------------------------------------------
 EScene* Scene;
 //----------------------------------------------------
@@ -78,18 +77,15 @@ EScene::EScene()
 // 	Build options
     m_SummaryInfo	= 0;
     //ClearSnapList	(false);
-#ifndef NO_VCL
-   g_frmConflictLoadObject 		= xr_new<TfrmAppendObjectInfo>((TComponent*)NULL);
-#endif
 
+    g_frmConflictLoadObject 		= xr_new<TfrmAppendObjectInfo>((TComponent*)NULL);
 }
 
 EScene::~EScene()
 {
-#ifndef NO_VCL
-	xr_delete(g_frmConflictLoadObject);
-#endif
-	VERIFY( m_Valid == false );
+    xr_delete(g_frmConflictLoadObject);
+
+    VERIFY( m_Valid == false );
     m_ESO_SnapObjects.clear	();
 }
 
@@ -103,16 +99,16 @@ void EScene::OnCreate()
 	m_Valid 				= true;
     m_RTFlags.zero			();
     ExecCommand				(COMMAND_UPDATE_CAPTION);
-#ifndef NO_VCL
-	m_SummaryInfo 			= TProperties::CreateForm("Level Summary Info", 0, alNone, 0,0,0, TProperties::plFolderStore|TProperties::plItemFolders);
-#endif
+
+	m_SummaryInfo       = xr_new<IM_PropertiesWnd>("Level Summary Info");
+	UI->AddIMWindow     (m_SummaryInfo);
 }
 
 void EScene::OnDestroy()
 {
-#ifndef NO_VCL
-	TProperties::DestroyForm(m_SummaryInfo);
-#endif
+	UI->RemoveIMWindow  (m_SummaryInfo);
+	xr_delete           (m_SummaryInfo);
+
     Unload					(FALSE);
     UndoClear				();
 	ELog.Msg				( mtInformation, "Scene: cleared" );
@@ -234,9 +230,7 @@ void EScene::Unload		(BOOL bEditableOnly)
 {
 	m_LastAvailObject 	= 0;
 	Clear				(bEditableOnly);
-#ifndef NO_VCL
-	if (m_SummaryInfo) 	m_SummaryInfo->HideProperties();
-#endif
+	if (m_SummaryInfo) 	m_SummaryInfo->Close();
 }
 
 void EScene::Clear(BOOL bEditableToolsOnly)

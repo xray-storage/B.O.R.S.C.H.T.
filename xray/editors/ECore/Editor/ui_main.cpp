@@ -23,6 +23,8 @@
 #include "..\ImGui\IM_Window.h"
 #include "..\ImGui\IM_Log.h"
 
+#include "..\ImGui\ImGuizmo.h"
+
 static void ImGui_Init(HWND hwnd, IDirect3DDevice9 *d3ddevice)
 {
 	ImGui::CreateContext();
@@ -127,17 +129,19 @@ bool __fastcall TUI::KeyDown (WORD Key, TShiftState Shift)
 //	m_ShiftState = Shift;
 //	Log("Dn  ",Shift.Contains(ssShift)?"1":"0");
 
+	if(Key < 256)
+		ImGui::GetIO().KeysDown[Key] = true;
+
 	if (ImGui::GetIO().WantCaptureKeyboard)
 	{
-		ImGui::GetIO().KeysDown[Key] = true;
 		RedrawScene();
 		return true;
 	}
 
 	if (Device.m_Camera.KeyDown(Key,Shift))
-    	return true;
+		return true;
 
-    return Tools->KeyDown(Key, Shift);
+	return Tools->KeyDown(Key, Shift);
 }
 
 bool __fastcall TUI::KeyUp   (WORD Key, TShiftState Shift)
@@ -145,31 +149,33 @@ bool __fastcall TUI::KeyUp   (WORD Key, TShiftState Shift)
 	if (!m_bReady) return false;
 //	m_ShiftState = Shift;
 
+	if(Key < 256)
+		ImGui::GetIO().KeysDown[Key] = false;
+
 	if (ImGui::GetIO().WantCaptureKeyboard)
 	{
-		ImGui::GetIO().KeysDown[Key] = false;
 		RedrawScene();
 		return false;
 	}
 
 	if (Device.m_Camera.KeyUp(Key,Shift))
-    	return true;
+		return true;
 
-    return Tools->KeyUp(Key, Shift);
+	return Tools->KeyUp(Key, Shift);
 }
 
 bool __fastcall TUI::KeyPress(WORD Key, TShiftState Shift)
 {
 	if (!m_bReady) return false;
 
-    if (ImGui::GetIO().WantCaptureKeyboard)
-    {
-		ImGui::GetIO().AddInputCharacter(Key);
+	ImGui::GetIO().AddInputCharacter(Key);
+	if (ImGui::GetIO().WantCaptureKeyboard)
+	{
 		RedrawScene();
-        return true;
-    }
+		return true;
+	}
 
-    return Tools->KeyPress(Key, Shift);
+	return Tools->KeyPress(Key, Shift);
 }
 //----------------------------------------------------
 
@@ -462,6 +468,8 @@ void TUI::PrepareRedraw()
 
         ImGui_ImplDX9_NewFrame();
         ImGui::GetIO().DisplaySize = ImVec2(Device.dwWidth, Device.dwHeight);
+        
+        ImGuizmo::BeginFrame();
 
     	if(show_demo_window)
     		ImGui::ShowDemoWindow(&show_demo_window);
