@@ -13,9 +13,11 @@ static const char* h_str =
 	"The following keys are supported / required:\n"
 	"-? or -h   == this help\n"
 	"-o         == modify build options\n"
+	"-f<NAME>   == compile level in gamedata\\levels\\<NAME>\\\n"
 	"-norgb     == disable common lightmap calculating\n"
 	"-nosun     == disable sun-lighting\n"
-	"-f<NAME>   == compile level in gamedata\\levels\\<NAME>\\\n"
+	"-thread <COUNT> == number of threads for lighting calculation\n"
+	"-silent    == supress congratulation message\n"
 	"\n"
 	"NOTE: The last key is required for any functionality\n";
 
@@ -78,6 +80,14 @@ void Startup(LPSTR     lpCmdLine)
 	if (strstr(cmd,"-o"))								bModifyOptions = TRUE;
 	if (strstr(cmd, "-norgb"))							gl_data.b_norgb = true;
 	if (strstr(cmd, "-nosun"))							gl_data.b_nosun = true;
+	const char* threadOption = strstr(cmd, "-thread");
+	u32 numThread = 0;
+	if (threadOption)
+		sscanf(threadOption + strlen("-thread"), "%lu", &numThread);
+	if (numThread == 0 || numThread > 256) {
+		numThread = CPU::ID.threadCount;
+	}
+	gl_data.numThread = numThread;
 
 	// Give a LOG-thread a chance to startup
 	InitCommonControls	();

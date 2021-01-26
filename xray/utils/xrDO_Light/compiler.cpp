@@ -6,8 +6,6 @@
 #include "global_calculation_data.h"
 #include "lightthread.h"
 
-#define NUM_THREADS		3
-
 void	xrLight			()
 {
 	u32	range				= gl_data.slots_data.size_z();
@@ -16,10 +14,10 @@ void	xrLight			()
 	CThreadManager		Threads;
 	CTimer				start_time;
 	start_time.Start();
-	u32	stride			= range/NUM_THREADS;
-	u32	last			= range-stride*	(NUM_THREADS-1);
-	for (u32 thID=0; thID<NUM_THREADS; thID++)	{
-		CThread*	T		= xr_new<LightThread> (thID,thID*stride,thID*stride+((thID==(NUM_THREADS-1))?last:stride));
+	u32	stride			= range/gl_data.numThread;
+	u32	last			= range-stride*	(gl_data.numThread-1);
+	for (u32 thID=0; thID<gl_data.numThread; thID++)	{
+		CThread*	T		= xr_new<LightThread> (thID,thID*stride,thID*stride+((thID==(gl_data.numThread-1))?last:stride));
 		T->thMessages		= FALSE;
 		T->thMonitor		= FALSE;
 		Threads.start		(T);

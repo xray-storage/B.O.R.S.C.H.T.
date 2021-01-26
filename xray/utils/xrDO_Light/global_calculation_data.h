@@ -30,6 +30,8 @@ struct global_claculation_data
 
 	bool							b_norgb;
 	bool							b_nosun;
+	u32								numThread;
+
 ///////////////////////////////////////////////////////////////////
 			global_claculation_data		(): g_shaders_xrlc( 0 ), b_norgb(false), b_nosun(false) {}
 	void	xrLoad						( );
