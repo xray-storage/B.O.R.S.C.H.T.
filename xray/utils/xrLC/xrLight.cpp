@@ -265,7 +265,7 @@ public:
 			{
 				base_color_c		vC, old;
 				V->C._get			(old);
-				LightPoint			(&DB, lc_global_data()->RCAST_Model(), vC, V->P, V->N, pBuild->L_static(), LP_dont_hemi | global_light_flags(), 0);
+				LightPoint			(&DB, lc_global_data()->RCAST_Model(), vC, V->P, V->N, pBuild->L_static(), LP_dont_hemi | global_light_flags(), 0, RCID_VertexLight);
 				vC._tmp_			= v_trans;
 				vC.mul				(.5f);
 				vC.hemi				= old.hemi;			// preserve pre-calculated hemisphere

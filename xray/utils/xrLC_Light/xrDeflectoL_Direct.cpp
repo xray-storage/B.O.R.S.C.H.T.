@@ -54,7 +54,7 @@ void CDeflector::L_Direct_Edge (CDB::COLLIDER_Work* DB, base_lighting* LightsSel
 		VERIFY(inlc_global_data());
 		VERIFY(inlc_global_data()->RCAST_Model());
 
-		LightPoint	(DB, inlc_global_data()->RCAST_Model(), C, P, N, *LightsSelected, LP_DEFAULT | global_light_flags(), skip);
+		LightPoint	(DB, inlc_global_data()->RCAST_Model(), C, P, N, *LightsSelected, LP_DEFAULT | global_light_flags(), skip, RCID_DirectEdge);
 		
 		C.mul		(.5f);
 		lm.surface	[_y*lm.width+_x]._set	(C);
@@ -126,7 +126,7 @@ void CDeflector::L_Direct	(CDB::COLLIDER_Work* DB, base_lighting* LightsSelected
 								VERIFY(inlc_global_data());
 								VERIFY(inlc_global_data()->RCAST_Model());
 								LightPoint	(DB, inlc_global_data()->RCAST_Model(), C, wP, wN, 
-									*LightsSelected, LP_UseFaceDisable | global_light_flags(), F); //.
+									*LightsSelected, LP_UseFaceDisable | global_light_flags(), F, RCID_L_Direct); //.
 								Fcount		+= 1;
 							} catch (...) {
 								clMsg("* ERROR (CDB). Recovered. ");

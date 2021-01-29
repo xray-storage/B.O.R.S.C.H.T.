@@ -9,6 +9,7 @@
 #include "light_point.h"
 #include "xrface.h"
 #include "net_task.h"
+#include <atomic>
 //const	u32	rms_discard			= 8;
 //extern	BOOL		gl_linear	;
 
@@ -171,7 +172,32 @@ float getLastRP_Scale(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, R_Light& L, 
 	return scale;
 }
 
-float rayTrace	(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, R_Light& L, Fvector& P, Fvector& D, float R, Face* skip, BOOL bUseFaceDisable)
+std::atomic<unsigned long long> counters[RCID_Count] = {};
+
+const char* counterNames[RCID_Count] = {
+    "DirectEdge:",
+    "L_Direct:",
+    "Implicit:",
+    "VertexLight:",
+    "BaseHemi:",
+    "AdaptiveHT:",
+    "MU_Model:",
+};
+
+void LogCounters()
+{
+    Msg("\nProcessed rays:");
+    unsigned long long total = 0;
+    int i = 0;
+    const char* fmt = "%-12s%20llu";
+    for (const auto& c : counters) {
+        Msg(fmt, counterNames[i++], c.load());
+        total += c;
+    }
+    Msg(fmt, "Total:", total);  
+}
+
+float rayTrace	(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, R_Light& L, Fvector& P, Fvector& D, float R, Face* skip, BOOL bUseFaceDisable, int counter)
 {
 	R_ASSERT	(DB);
 
@@ -185,6 +211,8 @@ float rayTrace	(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, R_Light& L, Fvecto
 	// 2. Polygon doesn't pick - real database query
 	DB->ray_query	(MDL,P,D,R);
 
+    ++counters[counter];
+
 	// 3. Analyze polygons and cache nearest if possible
 	if (0==DB->r_count()) {
 		return 1;
@@ -194,7 +222,7 @@ float rayTrace	(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, R_Light& L, Fvecto
 	return 0;
 }
 
-void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, Fvector &P, Fvector &N, base_lighting& lights, u32 flags, Face* skip)
+void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, Fvector &P, Fvector &N, base_lighting& lights, u32 flags, Face* skip, int counter)
 {
 	Fvector		Ldir,Pnew;
 	Pnew.mad	(P,N,0.01f);
@@ -217,7 +245,7 @@ void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, F
 					if( D <=0 ) continue;
 
 					// Trace Light
-					float scale	=	D*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,1000.f,skip,bUseFaceDisable);
+					float scale	=	D*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,1000.f,skip,bUseFaceDisable, counter);
 					C.rgb.x		+=	scale * L->diffuse.x; 
 					C.rgb.y		+=	scale * L->diffuse.y;
 					C.rgb.z		+=	scale * L->diffuse.z;
@@ -237,7 +265,7 @@ void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, F
 
 					// Trace Light
 					float R		= _sqrt(sqD);
-					float scale = D*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,R,skip,bUseFaceDisable);
+					float scale = D*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,R,skip,bUseFaceDisable, counter);
 					float A		;
 					if ( inlc_global_data()->gl_linear() )
 						A	= 1-R/L->range;
@@ -275,7 +303,7 @@ void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, F
 					Fvector	Psave	= L->position, Pdir;
 					L->position.mad	(Pdir.random_dir(L->direction,PI_DIV_4),.05f);
 					float R			= _sqrt(sqD);
-					float scale		= powf(D, 1.f/8.f)*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,R,skip,bUseFaceDisable);
+					float scale		= powf(D, 1.f/8.f)*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,R,skip,bUseFaceDisable, counter);
 					float A			= scale * (1-R/L->range);
 					L->position		= Psave;
 
@@ -300,7 +328,7 @@ void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, F
 				if( D <=0 ) continue;
 
 				// Trace Light
-				float scale	=	L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,1000.f,skip,bUseFaceDisable);
+				float scale	=	L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,1000.f,skip,bUseFaceDisable, counter);
 				C.sun		+=	scale;
 			} else {
 				// Distance
@@ -315,7 +343,7 @@ void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, F
 
 				// Trace Light
 				float R		=	_sqrt(sqD);
-				float scale =	D*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,R,skip,bUseFaceDisable);
+				float scale =	D*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,R,skip,bUseFaceDisable, counter);
 				float A		=	scale / (L->attenuation0 + L->attenuation1*R + L->attenuation2*sqD);
 
 				C.sun		+=	A;
@@ -335,7 +363,7 @@ void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, F
 
 				// Trace Light
 				Fvector		PMoved;	PMoved.mad	(Pnew,Ldir,0.001f);
-				float scale	=	L->energy*rayTrace(DB,MDL, *L,PMoved,Ldir,1000.f,skip,bUseFaceDisable);
+				float scale	=	L->energy*rayTrace(DB,MDL, *L,PMoved,Ldir,1000.f,skip,bUseFaceDisable, counter);
 				C.hemi		+=	scale;
 			}else{
 				// Distance
@@ -350,7 +378,7 @@ void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, F
 
 				// Trace Light
 				float R		=	_sqrt(sqD);
-				float scale =	D*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,R,skip,bUseFaceDisable);
+				float scale =	D*L->energy*rayTrace(DB,MDL, *L,Pnew,Ldir,R,skip,bUseFaceDisable, counter);
 				float A		=	scale / (L->attenuation0 + L->attenuation1*R + L->attenuation2*sqD);
 
 				C.hemi		+=	A;

@@ -150,7 +150,7 @@ virtual	void Execute()
 			
 			R_ASSERT( V );
 			V->normalFromAdj	();
-			LightPoint			(&DB, lc_global_data()->RCAST_Model(), vC, V->P, V->N, pBuild->L_static(), LP_dont_rgb+LP_dont_sun,0);
+			LightPoint			(&DB, lc_global_data()->RCAST_Model(), vC, V->P, V->N, pBuild->L_static(), LP_dont_rgb+LP_dont_sun,0, RCID_PrecalcBaseHemi);
 			vC.mul				(0.5f);
 			V->C._set			(vC);
 		}
@@ -203,7 +203,7 @@ void CBuild::xrPhase_AdaptiveHT	()
                         Vertex* V = vertices[i];
                         V->normalFromAdj();
                         LightPoint(&DB, lc_global_data()->RCAST_Model(), vC, V->P, V->N, pBuild->L_static(),
-                            LP_dont_rgb + LP_dont_sun, 0);
+                            LP_dont_rgb + LP_dont_sun, 0, RCID_AdaptiveHT);
                         vC.mul(0.5f);
                         V->C._set(vC);
                     }

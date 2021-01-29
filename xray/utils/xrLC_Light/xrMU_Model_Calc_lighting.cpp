@@ -5,14 +5,13 @@
 #include "xrMU_Model.h"
 //#include "xrLC_GlobalData.h"
 #include "light_point.h"
-//#include "xrDeflector.h"
+#include "xrDeflector.h"
 #include "../../xrcdb/xrcdb.h"
 #include "../shader_xrlc.h"
 #include "mu_model_face.h"
 #include "xrface.h"
 #include "xrLC_GlobalData.h"
 
-void LightPoint(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, Fvector &P, Fvector &N, base_lighting& lights, u32 flags, Face* skip);
 union var
 {
 	int		i;
@@ -109,7 +108,7 @@ void xrMU_Model::calc_lighting	(xr_vector<base_color>& dest, Fmatrix& xform, CDB
 			Fvector				P,N;
 			N.random_dir		(vN,deg2rad(30.f));
 			P.mad				(vP,N,a);
-			LightPoint			(&DB, MDL, vC, P, N, lights, flags, 0);
+			LightPoint			(&DB, MDL, vC, P, N, lights, flags, 0, RCID_MU_Model);
 		}
 		vC.scale				(n_samples);
 		vC._tmp_				=	v_trans;

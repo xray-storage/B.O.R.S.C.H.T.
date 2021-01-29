@@ -5,6 +5,7 @@
 #include "build.h"
 #include "../xrLC_Light/xrLC_GlobalData.h"
 #include "cl_log.h"
+#include "../xrLC_Light/xrDeflector.h"
 
 #define PROTECTED_BUILD
 
@@ -90,6 +91,13 @@ void compute_build_id()
 }
 
 typedef int __cdecl xrOptions(b_params* params, u32 version, bool bRunBuild);
+
+void logParams(const b_params& param)
+{
+    Msg("light_pixel_per_meter = %.1f", param.m_lm_pixels_per_meter);
+    Msg("light_jitter_samples  = %lu", param.m_lm_jitter_samples);
+    Msg("light_quality         = %u", param.m_quality);
+}
 
 void Startup(LPSTR     lpCmdLine)
 {
@@ -180,6 +188,8 @@ void Startup(LPSTR     lpCmdLine)
 		sscanf(quality + sz, "%f", &Params.m_lm_pixels_per_meter);
 	}
 
+	logParams(Params);
+
 	// Show options if needed
 	if (bModifyOptions)		
 	{
@@ -207,13 +217,17 @@ void Startup(LPSTR     lpCmdLine)
 	FS.update_path			(lfn,_game_levels_,name);
 	pBuild->Run				(lfn);
 	xr_delete				(pBuild);
-	clMsg					("Build succesful!\n\nPhase times:");
 
 	// Show statistic
+	Msg						("Phase times:");
 	LogPhaseTimes			();
+    LogCounters				();
+	Msg						("");
+
 	u32	dwEndTime			= dwStartupTime.GetElapsed_ms();
 	sprintf					(inf,"Time elapsed: %s",make_time(dwEndTime/1000).c_str());
 	Msg						("------------------------------------------\n%s",inf);
+	Msg						("Build succesful!");
 
 	if (!strstr(cmd,"-silent"))
 		MessageBox			(logWindow,inf,"Congratulation!",MB_OK|MB_ICONINFORMATION);

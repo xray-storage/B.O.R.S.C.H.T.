@@ -74,7 +74,7 @@ extern XRLC_LIGHT_API void		blit			(lm_layer& dst, u32 ds_x, u32 ds_y, lm_layer&
 extern void		blit_r			(u32* dest,		u32 ds_x, u32 ds_y, u32* src,		u32 ss_x, u32 ss_y, u32 px, u32 py, u32 aREF);
 extern XRLC_LIGHT_API void		blit_r			(lm_layer& dst, u32 ds_x, u32 ds_y, lm_layer& src,	u32 ss_x, u32 ss_y, u32 px, u32 py, u32 aREF);
 extern void		lblit			(lm_layer& dst, lm_layer& src, u32 px, u32 py, u32 aREF);
-extern XRLC_LIGHT_API void		LightPoint		(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, Fvector &P, Fvector &N, base_lighting& lights, u32 flags, Face* skip);
+extern XRLC_LIGHT_API void		LightPoint		(CDB::COLLIDER_Work* DB, CDB::MODEL_Work* MDL, base_color_c &C, Fvector &P, Fvector &N, base_lighting& lights, u32 flags, Face* skip, int counter);
 extern XRLC_LIGHT_API BOOL		ApplyBorders	(lm_layer &lm, u32 ref);
 extern XRLC_LIGHT_API void		DumpDeflctor	( u32 id );
 extern XRLC_LIGHT_API void		DumpDeflctor	( CDeflector &d );
@@ -93,3 +93,16 @@ extern	tread_deflectors	*read_deflectors	;
 extern	twrite_deflectors	*write_deflectors	;
 
 u32 XRLC_LIGHT_API global_light_flags();
+
+enum RayCounerIds {
+	RCID_DirectEdge,
+	RCID_L_Direct,
+	RCID_Implicit,
+	RCID_VertexLight,
+	RCID_PrecalcBaseHemi,
+	RCID_AdaptiveHT,
+	RCID_MU_Model,
+
+	RCID_Count
+};
+extern XRLC_LIGHT_API void LogCounters();
