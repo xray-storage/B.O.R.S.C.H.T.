@@ -104,7 +104,7 @@ void saveWeather(shared_str name, const xr_vector<CEnvDescriptor*>& env)
         f.w_float(el->m_identifier.c_str(), "sun_longitude", rad2deg(el->sun_dir.getP()));
     }
     string_path fileName;
-    FS.update_path(fileName, "$game_weathers$", name.c_str());
+    FS.update_path(fileName, "$game_weathers$", (GamePersistent().Environment().weathersSubDir() + name.c_str()).c_str());
     strconcat(sizeof(fileName), fileName, fileName, ".ltx");
     f.save_as(fileName);
 }
@@ -259,11 +259,8 @@ void ShowWeatherEditor(bool& show)
     }
     if (ImGui::ColorEdit3("ambient_color", (float*)&cur->ambient))
         changed = true;
-    // Fvector4 temp1;
-    // temp1 = convert(cur->clouds_color);
     if (ImGui::ColorEdit4("clouds_color", (float*)&cur->clouds_color, ImGuiColorEditFlags_AlphaBar))
         changed = true;
-    // cur->clouds_color = convert(temp1);
     char buf[100];
     if (editTexture("clouds_texture", cur->clouds_texture_name)) {
         cur->on_device_create();
@@ -283,12 +280,8 @@ void ShowWeatherEditor(bool& show)
         changed = true;
     if (ImGui::ColorEdit3("rain_color", (float*)&cur->rain_color))
         changed = true;
-
-    Fvector temp;
-    temp = convert(cur->sky_color);
-    if (ImGui::ColorEdit3("sky_color", (float*)&temp))
+    if (ImGui::ColorEdit3("sky_color", (float*)&cur->sky_color))
         changed = true;
-    cur->sky_color = convert(temp);
     if (ImGui::SliderFloat("sky_rotation", &cur->sky_rotation, 0.0f, 6.28318f))
         changed = true;
     if (editTexture("sky_texture", cur->sky_texture_name)) {

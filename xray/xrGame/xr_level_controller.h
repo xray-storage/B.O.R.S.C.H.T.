@@ -91,6 +91,8 @@ enum	EGameActions
 	kQUICK_LOAD,
 	kALIFE_CMD,
 
+	kEDITOR,
+
 	kLASTACTION,
 	kNOTBINDED,
 	kFORCEDWORD		= u32(-1)
@@ -120,7 +122,6 @@ struct _action
 };
 
 LPCSTR			dik_to_keyname			(int _dik);
-int				keyname_to_dik			(LPCSTR _name);
 _keyboard*		keyname_to_ptr			(LPCSTR _name);
 _keyboard*		dik_to_ptr				(int _dik, bool bSafe);
 
