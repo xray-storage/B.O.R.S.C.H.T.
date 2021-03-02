@@ -110,7 +110,8 @@ void showSeEditor(bool& show)
             if (!el)
                 continue;
             for (const auto& pass : el->passes)
-                pss.insert(pass->ps);
+                if (pass->ps->cName != "null")
+                    pss.insert(pass->ps);
         }
     xr_vector<ref_ps> psList(pss.size());
     int selected = -1;
@@ -122,7 +123,8 @@ void showSeEditor(bool& show)
         i++;
     }
     ImGui::Text("Pixel shaders(%d):", pss.size());
-    if (ImGui::ListBox("", &selected,
+    if (ImGui::ListBox(
+            "", &selected,
             [](void* data, int idx, const char** out_text) -> bool {
                 xr_vector<ref_ps>* psList = (xr_vector<ref_ps>*)data;
                 *out_text = (*psList)[idx]->cName.c_str();
@@ -161,6 +163,5 @@ void showSourceEditor()
     if (wnd.Collapsed)
         return;
     editor.Render("", ImVec2(-1.0f, -20.0f), true);
-    if (ImGui::Button("Compile")) {
-    }
+    if (ImGui::Button("Compile")) { }
 }
