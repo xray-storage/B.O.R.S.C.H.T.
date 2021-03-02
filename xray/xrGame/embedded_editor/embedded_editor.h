@@ -5,18 +5,19 @@
 /// Список редакторов
 enum class Editors {
     None,
-    Details, ///< Редактор маски травы
-    PpList, ///< Список постпроцессов
-    PpEdit, ///< Редактор постпроцесса
-    EnvModList, ///< Список Env Mod
-    EnvModEdit, ///< Редактор Env Mod
+    Details, //!< Редактор маски травы
+    PpList, //!< Список постпроцессов
+    PpEdit, //!< Редактор постпроцесса
+    EnvModList, //!< Список Env Mod
+    EnvModEdit, //!< Редактор Env Mod
+    Infoportions, //!< Инфопорции, полученные ГГ
 };
 
 struct Editor {
 public:
     Editors type() { return m_type; }
 
-    virtual ~Editor() = 0 {}
+    virtual ~Editor() = 0 { }
 
     virtual bool draw() = 0;
 

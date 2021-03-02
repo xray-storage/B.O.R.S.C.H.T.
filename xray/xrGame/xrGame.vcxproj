@@ -4602,6 +4602,7 @@
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(ProjectName)_script.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(ProjectName)_script.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
+    <ClCompile Include="embedded_editor\infoportions.cpp" />
     <ClCompile Include="embedded_editor\render\editor_render.cpp" />
     <ClCompile Include="embedded_editor\render\editor_render_ai_map.cpp" />
     <ClCompile Include="embedded_editor\render\editor_render_spawn_element.cpp" />

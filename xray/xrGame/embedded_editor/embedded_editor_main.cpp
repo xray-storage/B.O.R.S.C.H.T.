@@ -64,7 +64,7 @@ void ShowMain()
     if (ImGui::Button("Properties"))
         show_prop_window ^= 1;
     if (ImGui::Button("Infoportions"))
-        show_info_window ^= 1;
+        switchEditor(Editors::Infoportions);
     if (ImGui::Button("Restrictors"))
         show_restr_window ^= 1;
     if (ImGui::Button("Shaders"))

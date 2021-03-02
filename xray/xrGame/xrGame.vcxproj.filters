@@ -11237,6 +11237,9 @@
     <ClCompile Include="..\Include\ai_sounds.cpp">
       <Filter>Include</Filter>
     </ClCompile>
+    <ClCompile Include="embedded_editor\infoportions.cpp">
+      <Filter>Embedded editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="graph_abstract.h">
