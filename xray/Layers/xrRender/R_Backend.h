@@ -284,6 +284,7 @@ public:
 	ICF	void						set_c				(R_constant* C, float A)											{ if (C)		constants.set(C,A);					}
 	ICF	void						set_c				(R_constant* C, int A)												{ if (C)		constants.set(C,A);					}
 #endif	//	USE_DX10
+	ICF	void						set_c				(R_constant* C, bool b)												{ if (C)		constants.set(C,b);					}
 
 
 	// constants - LPCSTR (slow)

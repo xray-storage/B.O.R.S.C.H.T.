@@ -93,6 +93,8 @@ void ShowMain()
     bool full = stage == EditorStage::Full;
     if (ImGui::Checkbox("Active", &full))
         stage = full ? EditorStage::Full : EditorStage::Light;
+    ImGui::Checkbox("Use Diffuse", &Device.useDiffuse);
+
     ImGui::Text(
         "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 }

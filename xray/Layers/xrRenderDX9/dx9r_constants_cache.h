@@ -78,6 +78,14 @@ public:
 		c_f.dirty	(L.index,L.index+1);
 	}
 
+	void					set		(R_constant* C, R_constant_load& L, bool b)
+	{
+		VERIFY		(RC_float	== C->type);
+		VERIFY		(RC_1x1		== L.cls);
+		c_f.access	(L.index)->x = b ? 1.0f : 0.0f;
+		c_f.dirty	(L.index,L.index+1);
+	}
+
 	void					seta	(R_constant* C, R_constant_load& L, u32 e, const Fmatrix& A)
 	{
 		VERIFY		(RC_float == C->type);
@@ -162,6 +170,11 @@ public:
 	ICF void				seta	(R_constant* C, u32 e, float x, float y, float z, float w)	{
 		Fvector4 data;		data.set(x,y,z,w);
 		seta				(C,e,data);
+	}
+
+	ICF void				set		(R_constant* C, bool b)		{
+		if (C->destination&1)		{ a_pixel.set	(C,C->ps,b); a_pixel.b_dirty=TRUE;		}
+		if (C->destination&2)		{ a_vertex.set	(C,C->vs,b); a_vertex.b_dirty=TRUE;		}
 	}
 
 	//

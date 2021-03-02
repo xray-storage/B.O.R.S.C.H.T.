@@ -111,6 +111,8 @@ public:
 	Fmatrix									mInvFullTransform;
 	float									fFOV;
 	float									fASPECT;
+
+	bool									useDiffuse = true;
 	
 	CRenderDevice			()
 		:
