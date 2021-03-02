@@ -518,9 +518,12 @@ MaskEditModes CDetailManager::maskEditMode() const { return m_maskEditMode; }
 u32* CDetailManager::sampleMask(const Fvector& p) const
 {
     const Fbox& bb = g_pGameLevel->ObjectSpace.GetBoundingVolume();
-    size_t u = (p.x - bb.x1) / (bb.x2 - bb.x1) * m_mask._get()->get_Width();
-    size_t v = m_mask._get()->get_Height() - ((p.z - bb.z1) / (bb.z2 - bb.z1) * m_mask._get()->get_Height());
-    u32* mask = m_maskData + u + v * m_mask._get()->get_Width();
+    const u32 width = m_mask._get()->get_Width(), height = m_mask._get()->get_Height();
+    u32 u = (p.x - bb.x1) / (bb.x2 - bb.x1) * width;
+    u32 v = height - (p.z - bb.z1) / (bb.z2 - bb.z1) * height;
+	if (u >= width || v >= height)
+        return m_maskData;
+    u32* mask = m_maskData + u + v * width;
     return mask;
 }
 #endif
