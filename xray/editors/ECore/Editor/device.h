@@ -160,8 +160,10 @@ public:
     { return TimerGlobal.GetElapsed_ms();}
 	IC u32	 				TimerAsync_MMT	(void)
     { return TimerAsync()+Timer_MM_Delta; }
+
 public:
     Shader_xrLC_LIB			ShaderXRLC;
+	bool					useDiffuse = true;
 };
 
 extern ECORE_API CRenderDevice Device;
