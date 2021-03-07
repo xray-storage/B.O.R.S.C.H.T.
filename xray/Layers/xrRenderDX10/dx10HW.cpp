@@ -574,6 +574,13 @@ void CHW::selectResolution( u32 &dwWidth, u32 &dwHeight, BOOL bWindowed )
 	{
 		dwWidth		= psCurrentVidMode[0];
 		dwHeight	= psCurrentVidMode[1];
+
+		int maxWidth = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+		int maxHeight = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+		if (dwWidth > maxWidth)
+			dwWidth = maxWidth;
+		if (dwHeight > maxHeight)
+			dwHeight = maxHeight;
 	}
 	else //check
 	{
