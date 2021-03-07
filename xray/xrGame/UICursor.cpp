@@ -44,6 +44,14 @@ void CUICursor::InitInternal()
 
 	m_static->SetWndSize		(sz);
 	m_static->SetStretchTexture	(true);
+
+	if (psDeviceFlags.is(rsFullscreen)) {
+		maxPos.x = GetSystemMetrics(SM_CXSCREEN);
+		maxPos.y = GetSystemMetrics(SM_CYSCREEN);
+	} else{
+		maxPos.x = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+		maxPos.y = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+	}
 }
 
 //--------------------------------------------------------------------
@@ -88,15 +96,14 @@ Fvector2 CUICursor::GetCursorPositionDelta()
 
 void CUICursor::UpdateCursorPosition()
 {
+    POINT p;
+    BOOL r = GetCursorPos(&p);
+    R_ASSERT(r);
 
-	POINT		p;
-	BOOL r		= GetCursorPos(&p);
-	R_ASSERT	(r);
+    vPrevPos = vPos;
 
-	vPrevPos = vPos;
-
-	vPos.x			= (float)p.x * (UI_BASE_WIDTH/(float)Device.dwWidth);
-	vPos.y			= (float)p.y * (UI_BASE_HEIGHT/(float)Device.dwHeight);
+    vPos.x = (float)p.x * (UI_BASE_WIDTH / maxPos.x);
+    vPos.y = (float)p.y * (UI_BASE_HEIGHT / maxPos.y);
 	clamp			(vPos.x, 0.f, UI_BASE_WIDTH);
 	clamp			(vPos.y, 0.f, UI_BASE_HEIGHT);
 }
@@ -105,8 +112,8 @@ void CUICursor::SetUICursorPosition(Fvector2 pos)
 {
 	vPos		= pos;
 	POINT		p;
-	p.x			= iFloor(vPos.x / (UI_BASE_WIDTH/(float)Device.dwWidth));
-	p.y			= iFloor(vPos.y / (UI_BASE_HEIGHT/(float)Device.dwHeight));
+	p.x			= iFloor(vPos.x / (UI_BASE_WIDTH/maxPos.x));
+	p.y			= iFloor(vPos.y / (UI_BASE_HEIGHT/maxPos.y));
 
 	SetCursorPos(p.x, p.y);
 }

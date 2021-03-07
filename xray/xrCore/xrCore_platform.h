@@ -25,7 +25,7 @@
 #endif
 
 #define NOGDICAPMASKS
-#define NOSYSMETRICS
+//#define NOSYSMETRICS
 #define NOMENUS
 #define NOICONS
 #define NOKEYSTATES

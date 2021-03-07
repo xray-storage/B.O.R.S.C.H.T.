@@ -10,6 +10,7 @@ class CUICursor:public pureRender
 	bool			bVisible;
 	Fvector2		vPos;
 	Fvector2		vPrevPos;
+	Fvector2		maxPos;
 
 	CUIStatic*		m_static;
 	void			InitInternal	();
