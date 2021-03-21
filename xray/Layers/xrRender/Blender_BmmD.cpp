@@ -21,6 +21,8 @@ CBlender_BmmD::CBlender_BmmD	()
 	strcpy_s				(oG_Name,	"detail\\detail_grnd_asphalt");	//"$null");
 	strcpy_s				(oB_Name,	"detail\\detail_grnd_earth");	//"$null");
 	strcpy_s				(oA_Name,	"detail\\detail_grnd_yantar");	//"$null");
+	strcpy_s				(oR2_Name,	"detail\\detail_grnd_leaves");	//"$null");
+	strcpy_s				(oG2_Name,	"detail\\detail_grnd_yantar");	//"$null");
 }
 
 CBlender_BmmD::~CBlender_BmmD	()
@@ -139,23 +141,30 @@ void	CBlender_BmmD::Compile	(CBlender_Compile& C)
 	// codepath is the same, only the shaders differ
 	// ***only pixel shaders differ***
 	string256				mask;
-	strconcat				(sizeof(mask),mask,C.L_textures[0].c_str(),"_mask");
+
 	switch(C.iElement) 
 	{
 	case SE_R2_NORMAL_HQ: 		// deffer
 		uber_deffer		(C, true,	"impl","impl",false,oT2_Name[0]?oT2_Name:0,true);
+		strconcat		(sizeof(mask),mask,C.L_textures[0].c_str(),"_mask");
 		C.r_Sampler		("s_mask",	mask);
+		strconcat		(sizeof(mask),mask,C.L_textures[0].c_str(),"_mask2");
+		C.r_Sampler		("s_mask2",	mask);
 		C.r_Sampler		("s_lmap",	C.L_textures[1]);
 
 		C.r_Sampler		("s_dt_r",	oR_Name,	false,	D3DTADDRESS_WRAP,	D3DTEXF_ANISOTROPIC,D3DTEXF_LINEAR,	D3DTEXF_ANISOTROPIC);
 		C.r_Sampler		("s_dt_g",	oG_Name,	false,	D3DTADDRESS_WRAP,	D3DTEXF_ANISOTROPIC,D3DTEXF_LINEAR,	D3DTEXF_ANISOTROPIC);
 		C.r_Sampler		("s_dt_b",	oB_Name,	false,	D3DTADDRESS_WRAP,	D3DTEXF_ANISOTROPIC,D3DTEXF_LINEAR,	D3DTEXF_ANISOTROPIC);
 		C.r_Sampler		("s_dt_a",	oA_Name,	false,	D3DTADDRESS_WRAP,	D3DTEXF_ANISOTROPIC,D3DTEXF_LINEAR,	D3DTEXF_ANISOTROPIC);
+		C.r_Sampler		("s_dt_r2",	oR2_Name,	false,	D3DTADDRESS_WRAP,	D3DTEXF_ANISOTROPIC,D3DTEXF_LINEAR,	D3DTEXF_ANISOTROPIC);
+		C.r_Sampler		("s_dt_g2",	oG2_Name,	false,	D3DTADDRESS_WRAP,	D3DTEXF_ANISOTROPIC,D3DTEXF_LINEAR,	D3DTEXF_ANISOTROPIC);
 
 		C.r_Sampler		("s_dn_r",	strconcat(sizeof(mask),mask,oR_Name,"_bump")	);
 		C.r_Sampler		("s_dn_g",	strconcat(sizeof(mask),mask,oG_Name,"_bump") );
 		C.r_Sampler		("s_dn_b",	strconcat(sizeof(mask),mask,oB_Name,"_bump") );
 		C.r_Sampler		("s_dn_a",	strconcat(sizeof(mask),mask,oA_Name,"_bump") );
+		C.r_Sampler		("s_dn_r2",	strconcat(sizeof(mask),mask,oR2_Name,"_bump") );
+		C.r_Sampler		("s_dn_g2",	strconcat(sizeof(mask),mask,oG2_Name,"_bump") );
 
 		C.r_End			();
 		break;

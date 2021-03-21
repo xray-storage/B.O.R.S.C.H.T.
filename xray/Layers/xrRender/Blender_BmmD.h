@@ -15,6 +15,8 @@ public:
 	string64	oG_Name	;	//. задел на будущее
 	string64	oB_Name	;	//. задел на будущее
 	string64	oA_Name	;	//. задел на будущее
+	string64	oR2_Name;	// 5-ая детальная текстура
+	string64	oG2_Name;	// 6-ая детальная текстура
 public:
 	virtual		LPCSTR		getComment()	{ return "LEVEL: Implicit**detail";	}
 	virtual		BOOL		canBeDetailed()	{ return TRUE; }
