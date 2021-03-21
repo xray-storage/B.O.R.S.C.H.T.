@@ -221,7 +221,7 @@ void CDetailManager::Load		()
 	swing_desc[1].rot2	= pSettings->r_float("details","swing_fast_rot2");
 	swing_desc[1].speed	= pSettings->r_float("details","swing_fast_speed");
 
-	m_mask.create("mask");
+	m_mask.create("level_detail_mask");
 	m_mask._get()->Load();
 	m_mask._get()->convert(D3DFMT_A8R8G8B8);
 	m_maskData = (u32*)m_mask._get()->getData();
@@ -444,7 +444,7 @@ void CDetailManager::saveMask()
 
     m_mask._get()->releaseData();
     string_path fileName;
-    FS.update_path(fileName, "$level$", "mask.png");
+    FS.update_path(fileName, "$level$", "level_detail_mask.png");
     m_mask._get()->save(fileName);
     m_maskData = (u32*)m_mask._get()->getData();
     m_maskChanged = false;
