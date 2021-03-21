@@ -24,6 +24,11 @@ typedef ID3D10Buffer			ID3DIndexBuffer;
 typedef	ID3D10Texture3D			ID3DTexture3D;
 typedef	dx10State				ID3DState;
 
+typedef D3DX10_IMAGE_FILE_FORMAT D3D_IMAGE_FILE_FORMAT;
+const D3D_IMAGE_FILE_FORMAT D3DIFF_TGA = D3DX10_IFF_BMP;
+const D3D_IMAGE_FILE_FORMAT D3DIFF_PNG = D3DX10_IFF_PNG;
+const D3D_IMAGE_FILE_FORMAT D3DIFF_JPG = D3DX10_IFF_JPG;
+
 #define DX10_ONLY(expr)			expr
 
 #else	//	USE_DX10
@@ -44,6 +49,11 @@ typedef IDirect3DVertexBuffer9	ID3DVertexBuffer;
 typedef IDirect3DIndexBuffer9	ID3DIndexBuffer;
 typedef	IDirect3DVolumeTexture9	ID3DTexture3D;
 typedef	IDirect3DStateBlock9	ID3DState;
+
+typedef D3DXIMAGE_FILEFORMAT	D3D_IMAGE_FILE_FORMAT;
+const D3D_IMAGE_FILE_FORMAT D3DIFF_TGA = D3DXIFF_TGA;
+const D3D_IMAGE_FILE_FORMAT D3DIFF_PNG = D3DXIFF_PNG;
+const D3D_IMAGE_FILE_FORMAT D3DIFF_JPG = D3DXIFF_JPG;
 
 #define DX10_ONLY(expr)			do {} while (0)
 

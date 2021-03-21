@@ -39,6 +39,29 @@ IC void MouseRayFromPoint	( Fvector& direction, int x, int y, Fmatrix& m_CamMat 
 #define SM_FOR_SEND_WIDTH 640
 #define SM_FOR_SEND_HEIGHT 480
 
+void saveScreenshot(ID3DBlob* saved, const char* ext)
+{
+    string_path buf;
+    string64 t_stemp;
+    sprintf_s(buf, sizeof(buf), "ss_%s_%s_(%s).%s", Core.UserName, timestamp(t_stemp),
+        (g_pGameLevel) ? g_pGameLevel->name().c_str() : "mainmenu", ext);
+    IWriter* fs = FS.w_open("$screenshots$", buf);
+    R_ASSERT(fs);
+    fs->w(saved->GetBufferPointer(), (u32)saved->GetBufferSize());
+    FS.w_close(fs);
+}
+
+using ScreenshotFormatPredicate = bool (*)();
+struct {
+    D3D_IMAGE_FILE_FORMAT format;
+    const char* ext;
+    ScreenshotFormatPredicate pred;
+} screenshotFormats[] = {
+    { D3DIFF_TGA, "tga", []() -> bool { return strstr(Core.Params, "-ss_tga"); } },
+    { D3DIFF_PNG, "png", []() -> bool { return strstr(Core.Params, "-ss_png"); } },
+    { D3DIFF_JPG, "jpg", []() -> bool { return !strstr(Core.Params, "-ss_tga") && !strstr(Core.Params, "-ss_png"); } },
+};
+
 #ifdef	USE_DX10
 void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* memory_writer)
 {
@@ -139,29 +162,14 @@ void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* m
 			}
 			break;
 		case IRender_interface::SM_NORMAL:
-			{
-				string64			t_stemp;
-				string_path			buf;
-				sprintf_s			(buf,sizeof(buf),"ss_%s_%s_(%s).jpg",Core.UserName,timestamp(t_stemp),(g_pGameLevel)?g_pGameLevel->name().c_str():"mainmenu");
-				ID3DBlob			*saved	= 0;
-				CHK_DX				(D3DX10SaveTextureToMemory( pSrcTexture, D3DX10_IFF_JPG, &saved, 0));
-				IWriter*		fs	= FS.w_open	("$screenshots$",buf); R_ASSERT(fs);
-				fs->w				(saved->GetBufferPointer(),(u32)saved->GetBufferSize());
-				FS.w_close			(fs);
-				_RELEASE			(saved);
-
-				if (strstr(Core.Params,"-ss_tga"))	
-				{ // hq
-					sprintf_s			(buf,sizeof(buf),"ssq_%s_%s_(%s).tga",Core.UserName,timestamp(t_stemp),(g_pGameLevel)?g_pGameLevel->name().c_str():"mainmenu");
-					ID3DBlob*		saved	= 0;
-					CHK_DX				(D3DX10SaveTextureToMemory( pSrcTexture, D3DX10_IFF_BMP, &saved, 0));
-					//		CHK_DX				(D3DXSaveSurfaceToFileInMemory (&saved,D3DXIFF_TGA,pFB,0,0));
-					IWriter*		fs	= FS.w_open	("$screenshots$",buf); R_ASSERT(fs);
-					fs->w				(saved->GetBufferPointer(),(u32)saved->GetBufferSize());
-					FS.w_close			(fs);
-					_RELEASE			(saved);
-				}
-			}
+            for (auto&& [format, ext, pred] : screenshotFormats) {
+                if (!pred())
+                    continue;
+                ID3DBlob* saved = 0;
+                CHK_DX(D3DX10SaveTextureToMemory(pSrcTexture, format, &saved, 0));
+                saveScreenshot(saved, ext);
+                _RELEASE(saved);
+            }
 			break;
 		case IRender_interface::SM_FOR_LEVELMAP:
 		case IRender_interface::SM_FOR_CUBEMAP:
@@ -337,26 +345,13 @@ void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* m
 
 			}break;
 		case IRender_interface::SM_NORMAL:
-			{
-				string64			t_stemp;
-				string_path			buf;
-				D3DXIMAGE_FILEFORMAT format = D3DXIFF_JPG;
-				char* ext = ".jpg";
-				if (strstr(Core.Params, "-ss_tga")) {
-					format = D3DXIFF_TGA;
-					ext = ".tga";
-				}
-				else if (strstr(Core.Params, "-ss_png")) {
-					format = D3DXIFF_PNG;
-					ext = ".png";
-				}
-				sprintf_s			(buf,sizeof(buf),"ss_%s_%s_(%s)%s",Core.UserName,timestamp(t_stemp),(g_pGameLevel)?g_pGameLevel->name().c_str():"mainmenu", ext);
-				ID3DBlob*		saved	= 0;
-				CHK_DX				(D3DXSaveSurfaceToFileInMemory (&saved, format,pFB,0,0));
-				IWriter*		fs	= FS.w_open	("$screenshots$",buf); R_ASSERT(fs);
-				fs->w				(saved->GetBufferPointer(),saved->GetBufferSize());
-				FS.w_close			(fs);
-				_RELEASE			(saved);
+			for (auto&& [format, ext, pred] : screenshotFormats) {
+				if (!pred())
+					continue;
+				ID3DBlob* saved = 0;
+				CHK_DX(D3DXSaveSurfaceToFileInMemory(&saved, format, pFB, 0, 0));
+				saveScreenshot(saved, ext);
+				_RELEASE(saved);
 			}
 			break;
 		case IRender_interface::SM_FOR_LEVELMAP:
