@@ -686,6 +686,11 @@ HRESULT	CRender::shader_compile			(
 	def_it							++;
 	R_ASSERT						(def_it<128);
 
+	if (0==xr_strcmp(pFunctionName,"main"))	{
+		if ('v'==pTarget[0])			pTarget = D3DXGetVertexShaderProfile	(HW.pDevice);
+		else							pTarget = D3DXGetPixelShaderProfile		(HW.pDevice);
+	}
+
 	LPD3DXINCLUDE                   pInclude		= (LPD3DXINCLUDE)		_pInclude;
 	LPD3DXBUFFER*                   ppShader		= (LPD3DXBUFFER*)		_ppShader;
 	LPD3DXBUFFER*                   ppErrorMsgs		= (LPD3DXBUFFER*)		_ppErrorMsgs;
