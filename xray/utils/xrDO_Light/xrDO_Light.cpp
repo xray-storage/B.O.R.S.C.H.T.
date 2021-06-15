@@ -16,6 +16,7 @@ static const char* h_str =
 	"-f<NAME>   == compile level in gamedata\\levels\\<NAME>\\\n"
 	"-norgb     == disable common lightmap calculating\n"
 	"-nosun     == disable sun-lighting\n"
+	"-nohemi    == disable hemi-lighting\n"
 	"-thread <COUNT> == number of threads for lighting calculation\n"
 	"-silent    == supress congratulation message\n"
 	"\n"
@@ -80,6 +81,7 @@ void Startup(LPSTR     lpCmdLine)
 	if (strstr(cmd,"-o"))								bModifyOptions = TRUE;
 	if (strstr(cmd, "-norgb"))							gl_data.b_norgb = true;
 	if (strstr(cmd, "-nosun"))							gl_data.b_nosun = true;
+	if (strstr(cmd, "-nohemi"))							gl_data.b_nohemi = true;
 	const char* threadOption = strstr(cmd, "-thread");
 	u32 numThread = 0;
 	if (threadOption)

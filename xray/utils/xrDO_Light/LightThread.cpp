@@ -287,6 +287,12 @@ void LightPoint(CDB::COLLIDER* DB, base_color &C, Fvector &P, Fvector &N, base_l
 
 void	LightThread::	Execute()
 	{
+
+		u32 flags = 0;
+		if (gl_data.b_norgb) flags |= LP_dont_rgb;
+		if (gl_data.b_nosun) flags |= LP_dont_sun;
+		if (gl_data.b_nohemi) flags |= LP_dont_hemi;
+
 //		DetailSlot::verify	();
 		CDB::COLLIDER		DB;
 		DB.ray_options		( CDB::OPT_CULL	);
@@ -362,11 +368,6 @@ void	LightThread::	Execute()
 						if (P.y<BB.min.y) continue;
 						
 						// light point
-						u32 flags = 0;
-						if (gl_data.b_norgb)
-							flags |= LP_dont_rgb;
-						if (gl_data.b_nosun)
-							flags |= LP_dont_sun;
 						LightPoint(&DB, amount, P, t_n, Selected, flags);
 						count			+= 1;
 					}

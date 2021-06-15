@@ -26,13 +26,29 @@ void	xrLight			()
 	Msg						("%d seconds elapsed.",(start_time.GetElapsed_ms())/1000);
 }
 
+void xrLightStubHemi()
+{
+    for (u32 _z = 0, zend = gl_data.slots_data.size_z(); _z < zend; _z++) {
+        for (u32 _x = 0, xend = gl_data.slots_data.size_x(); _x < xend; _x++) {
+            DetailSlot& DS = gl_data.slots_data.get_slot(_x, _z);
+            DS.c_hemi = 15;
+        }
+    }
+}
+
 void xrCompiler()
 {
 	Phase		("Loading level...");
 	gl_data.xrLoad	();
 
-	Phase		("Lighting nodes...");
-	xrLight		();
+	bool noLighting = gl_data.b_norgb && gl_data.b_nosun && gl_data.b_nohemi;
+    if (!noLighting) {
+		Phase		("Lighting nodes...");
+		xrLight		();
+    } else {
+        Phase("Stub hemi...");
+        xrLightStubHemi();
+    }
 
 	gl_data.slots_data.Free();
 	

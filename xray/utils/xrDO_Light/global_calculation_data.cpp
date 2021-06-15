@@ -32,6 +32,14 @@ extern void		Surface_Init	();
 
 void global_claculation_data::xrLoad()
 {
+    {
+        slots_data.Load();
+    }
+
+	bool noLighting = b_norgb && b_nosun && b_nohemi;
+    if (noLighting)
+        return;
+
 	string_path					N;
 	FS.update_path				( N, "$game_data$", "shaders_xrlc.xr" );
 	g_shaders_xrlc				= xr_new<Shader_xrLC_LIB> ();
@@ -58,10 +66,7 @@ void global_claculation_data::xrLoad()
 
 		LevelBB.set			(H.aabb);
 	}
-	
-	{
-		slots_data.Load( );
-	}
+
 	// Lights
 	{
 		IReader*			fs = FS.r_open("$level$","build.lights");
