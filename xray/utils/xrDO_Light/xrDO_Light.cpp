@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "process.h"
 #include "global_calculation_data.h"
+#include "cl_log.h"
 
 extern void	xrCompiler			();
 extern void logThread			(void *dummy);
@@ -111,12 +112,13 @@ void Startup(LPSTR     lpCmdLine)
 	xrCompiler			();
 
 	// Show statistic
-	char	stats[256];
-	extern	std::string make_time(u32 sec);
-	sprintf				(stats,"Time elapsed: %s",make_time((dwStartupTime.GetElapsed_ms())/1000).c_str());
+	u32 dwEndTime = dwStartupTime.GetElapsed_ms();
+	sprintf(temp, "Time elapsed: %s", make_time(dwEndTime / 1000).c_str());
+	Msg("------------------------------------------\n%s", temp);
+	Msg("Build succesful!");
 
 	if (!strstr(cmd,"-silent"))
-		MessageBox		(logWindow,stats,"Congratulation!",MB_OK|MB_ICONINFORMATION);
+		MessageBox		(logWindow,temp,"Congratulation!",MB_OK|MB_ICONINFORMATION);
 
 	bClose				= TRUE;
 	Sleep				(500);
