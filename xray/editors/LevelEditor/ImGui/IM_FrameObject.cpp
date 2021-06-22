@@ -34,7 +34,7 @@ LPCSTR _CopyVal ( LPCSTR src, AnsiString& dst, char separator )
 	p			= strchr	( src, separator );
 	n			= p ? (p-src) : xr_strlen(src);
 	dst			= src;
-	dst			= dst.substr(n);
+	dst			= dst.substr(0, n);
 	return		dst.c_str();
 }
 
