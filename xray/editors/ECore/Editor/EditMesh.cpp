@@ -413,16 +413,23 @@ void CEditableMesh::GetFacePT(u32 fid, const Fvector* pt[3])
     	pt[k] = &m_Vertices[F.pv[k].pindex];
 }
 
-int CEditableMesh::GetFaceCount(bool bMatch2Sided){
-	int f_cnt = 0;
-    for (SurfFacesPairIt sp_it=m_SurfFaces.begin(); sp_it!=m_SurfFaces.end(); sp_it++){
-    	if (bMatch2Sided){
-	    	if (sp_it->first->m_Flags.is(CSurface::sf2Sided))	f_cnt+=sp_it->second.size()*2;
-    	    else												f_cnt+=sp_it->second.size();
-        }else{
-        	f_cnt+=sp_it->second.size();
+int CEditableMesh::GetFaceCount(bool bMatch2Sided, bool bIgnoreOCC)
+{
+    int f_cnt = 0;
+    for (SurfFacesPairIt sp_it = m_SurfFaces.begin(); sp_it != m_SurfFaces.end(); sp_it++) {
+        CSurface* S = sp_it->first;
+        if (S->m_GameMtlName == "materials\\occ" && bIgnoreOCC)
+            continue;
+
+        if (bMatch2Sided) {
+            if (S->m_Flags.is(CSurface::sf2Sided))
+                f_cnt += sp_it->second.size() * 2;
+            else
+                f_cnt += sp_it->second.size();
+        } else {
+            f_cnt += sp_it->second.size();
         }
-	}
+    }
     return f_cnt;
 }
 

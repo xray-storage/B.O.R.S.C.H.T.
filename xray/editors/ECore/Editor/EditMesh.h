@@ -335,7 +335,7 @@ public:
 	void 			RenderEdge				(const Fmatrix& parent, CSurface* s, u32 color);
 
     // statistics methods
-    int 			GetFaceCount			(bool bMatch2Sided=true);
+    int 			GetFaceCount			(bool bMatch2Sided=true, bool bIgnoreOCC=true);
 	int 			GetVertexCount			(){return m_VertCount;}
     int 			GetSurfFaceCount		(CSurface* surf, bool bMatch2Sided=true);
     float			CalculateSurfaceArea	(CSurface* surf, bool bMatch2Sided);

@@ -550,6 +550,9 @@ BOOL SceneBuilder::BuildMesh(	const Fmatrix& parent,
     for (SurfFacesPairIt sp_it=mesh->m_SurfFaces.begin(); sp_it!=mesh->m_SurfFaces.end(); sp_it++){
 		IntVec& face_lst = sp_it->second;
         CSurface* surf 		= sp_it->first;
+        if(surf->m_GameMtlName=="materials\\occ")
+			continue;
+
         int m_id			= BuildMaterial(surf,sect_num,!object->IsMUStatic());
 		int gm_id			= surf->_GameMtl();
         if (m_id<0)			{
