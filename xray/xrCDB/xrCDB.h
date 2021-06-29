@@ -345,12 +345,8 @@ namespace CDB
 #if 1
 			VERIFY(faces.size() < 65536);
 			const u32						edge_count = faces.size() * 3;
-#ifdef _EDITOR
 			xr_vector<edge> _edges(edge_count);
-			edge 							*edges = &*_edges.begin();
-#else
-			edge							*edges = (edge*)_alloca(edge_count * sizeof(edge));
-#endif
+			edge 							*edges = &_edges[0];
 			edge							*i = edges;
 			typename xr_vector<Face>::const_iterator	B = faces.begin(), I = B;
 			typename xr_vector<Face>::const_iterator	E = faces.end();
