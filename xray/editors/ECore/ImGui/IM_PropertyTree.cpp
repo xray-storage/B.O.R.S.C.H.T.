@@ -1405,6 +1405,11 @@ void IM_PropertiesWnd::Close()
 		OnClose();
 }
 
+void IM_PropertiesWnd::SetFocus()
+{
+	ImGui::SetWindowFocus(Caption.c_str());
+}
+
 IM_PropertyTree& IM_PropertiesWnd::Props()
 {
 	return m_props;
