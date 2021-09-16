@@ -19,6 +19,7 @@
 
 #include "../../ECore/ImGui/IM_PropertyTree.h"
 #include "../ImGui/IM_Manipulator.h"
+#include "../ImGui/IM_ObjectListWnd.h"
 
 #define DETACH_FRAME(a) 	if (a){ (a)->Hide(); 	(a)->Parent = NULL; }
 #define ATTACH_FRAME(a,b)	if (a){ (a)->Parent=(b);(a)->Show(); 		}
@@ -513,6 +514,9 @@ void CLevelTool::ShowObjectList()
 {
 #ifndef NO_VCL
 	if (pObjectListForm) pObjectListForm->ShowObjectList();
+#else
+    auto wnd = xr_new<IM_ObjectListWnd>();
+    UI->AddIMWindow(wnd);
 #endif
 }
 //---------------------------------------------------------------------------

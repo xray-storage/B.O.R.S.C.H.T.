@@ -243,6 +243,7 @@
     <ClInclude Include="ImGui\IM_FrameWayPoint.h" />
     <ClInclude Include="ImGui\IM_LeftBar.h" />
     <ClInclude Include="ImGui\IM_Manipulator.h" />
+    <ClInclude Include="ImGui\IM_ObjectListWnd.h" />
     <ClInclude Include="ImGui\IM_TopBar.h" />
     <ClInclude Include="iniStreamImpl.h" />
     <ClInclude Include="LevelEditor.h" />
@@ -376,6 +377,7 @@
     <ClCompile Include="ImGui\IM_FrameWayPoint.cpp" />
     <ClCompile Include="ImGui\IM_LeftBar.cpp" />
     <ClCompile Include="ImGui\IM_Manipulator.cpp" />
+    <ClCompile Include="ImGui\IM_ObjectListWnd.cpp" />
     <ClCompile Include="ImGui\IM_TopBar.cpp" />
     <ClCompile Include="iniStreamImpl.cpp" />
     <ClCompile Include="LevelEditor.cpp" />
