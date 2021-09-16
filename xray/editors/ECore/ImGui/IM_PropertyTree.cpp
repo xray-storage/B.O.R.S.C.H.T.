@@ -787,7 +787,7 @@ void IM_PropertyTree::RenderFlag(PropItem* item)
 		}
 	}
 	else
-		modified = ImGui::Checkbox("", &value);
+		modified = ImGui::Checkbox(" ", &value);
 
 	bool disabled = item->m_Flags.is(PropItem::flDisabled);
 
