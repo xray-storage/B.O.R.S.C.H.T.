@@ -114,6 +114,8 @@ public:
 
 	BOOL 					Begin			();
 	void 					End				();
+	void 					End2_0			();
+	void 					End2_1			();
 
 	void 					Initialize		(void);
 	void 					ShutDown		(void);
