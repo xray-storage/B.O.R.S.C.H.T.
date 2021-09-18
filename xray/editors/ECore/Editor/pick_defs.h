@@ -140,7 +140,7 @@ class CCustomObject;
 		Fvector     		pt;
 		SRayPickInfo		(){Reset();}
 		IC void Reset		(){ ZeroMemory(this,sizeof(SRayPickInfo));inf.range = 5000;}
-		IC void SetRESULT	(ETOOLS::Model* M, ETOOLS::Result* R){inf=*R;/*inf.id=(M->get_tris()+inf.id)->dummy;*/}
+		IC void SetRESULT	(ETOOLS::Model* M, ETOOLS::Result* R){inf=*R;inf.id=(M->get_tris()+inf.id)->data;}
 	};
     DEFINE_VECTOR(ETOOLS::Result,BPInfVec,BPInfIt);
 	struct SBoxPickInfo{
@@ -150,7 +150,7 @@ class CCustomObject;
 		CEditableMesh*		e_mesh;
 		SBoxPickInfo		(){Reset();}
 		IC void Reset		(){ZeroMemory(this,sizeof(SBoxPickInfo));}
-		IC void AddRESULT	(ETOOLS::Model* M, ETOOLS::Result* R){inf.push_back(*R); /*inf.back().id=(M->get_tris()+inf.back().id)->dummy;*/}
+		IC void AddRESULT	(ETOOLS::Model* M, ETOOLS::Result* R){inf.push_back(*R); inf.back().id=(M->get_tris()+inf.back().id)->data;}
 	};
 	DEFINE_VECTOR(SBoxPickInfo,SBoxPickInfoVec,SBoxPickInfoIt);
 #endif
