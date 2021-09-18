@@ -256,6 +256,8 @@ void EScene::Clear(BOOL bEditableToolsOnly)
     m_CreateTime			= time(NULL);
 
     m_SaveCache.free		();
+
+	m_CountByName.clear		();
 }
 //----------------------------------------------------
 
