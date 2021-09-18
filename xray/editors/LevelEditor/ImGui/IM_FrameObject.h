@@ -13,7 +13,6 @@ class IM_FrameObject : public IM_Window
     ESceneObjectTool* m_parent_tool;
     IM_Tree m_objects_tree;
 
-    bool m_random_append;
     int m_select_percent;
 
     bool m_show_commands;
@@ -23,7 +22,6 @@ class IM_FrameObject : public IM_Window
 	public:
     IM_FrameObject()
     	: m_parent_tool(NULL),
-          m_random_append(false),
           m_select_percent(0),
           m_show_commands(true),
           m_show_refselect(true),
