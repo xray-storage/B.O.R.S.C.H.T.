@@ -30,21 +30,29 @@ bool CCustom2DProjector::LoadImage(LPCSTR nm)
 void CCustom2DProjector::CreateRMFromObjects(const Fbox& box, ObjectList& lst)
 {
 	geom.destroy();
-    mesh.clear	();
+
+    size_t faceCount = 0;
+	for (ObjectIt it=lst.begin(); it!=lst.end(); it++){
+    	CSceneObject*	 S = (CSceneObject*)(*it);
+    	CEditableObject* O = S->GetReference(); VERIFY(O);
+        for (EditMeshIt m_it = O->FirstMesh(); m_it != O->LastMesh(); m_it++)
+            faceCount   += (*m_it)->GetFCount();
+    }
+    mesh.resize	(faceCount * 3);
+    size_t vertIdx = 0;
 	for (ObjectIt it=lst.begin(); it!=lst.end(); it++){
     	CSceneObject*	 S = (CSceneObject*)(*it);
     	CEditableObject* O = S->GetReference(); VERIFY(O);
 
         Fmatrix T; S->GetFullTransformToWorld(T);
-        mesh.reserve	(mesh.size()+S->GetFaceCount()*3);
         for (EditMeshIt m_it=O->FirstMesh(); m_it!=O->LastMesh(); m_it++){
 	        for (u32 f_id=0; f_id!=(*m_it)->GetFCount(); f_id++){
-            	FVF::V v;
                 for (int k=0; k<3; k++){
+                    FVF::V& v = mesh[vertIdx];
                 	T.transform_tiny(v.p,(*m_it)->GetVertices()[(*m_it)->GetFaces()[f_id].pv[k].pindex]);
 					v.t.x = GetUFromX(v.p.x,box);
 					v.t.y = GetVFromZ(v.p.z,box);
-                    mesh.push_back(v);
+                    vertIdx++;
                 }
             }
         }
