@@ -43,9 +43,6 @@ public:
 IC	u8	u8_clr				(float a)	{ s32 _a = iFloor(a*255.f); clamp(_a,0,255); return u8(_a);		};
 
 
-//-----------------------------------------------------------------------------------------------------------------
-const int	LIGHT_Count				=	7;
-
 //-----------------------------------------------------------------
 __declspec(thread)		u64			t_start	= 0;
 __declspec(thread)		u64			t_time	= 0;
@@ -333,14 +330,14 @@ void	LightThread::	Execute()
 				// lighting itself
 				base_color		amount;
 				u32				count	= 0;
-				float coeff		= DETAIL_SLOT_SIZE_2/float(LIGHT_Count);
+				float coeff		= gl_data.sampleCount ? (DETAIL_SLOT_SIZE_2/float(gl_data.sampleCount)) : 1;
 				FPU::m64r		();
-				for (int x=-LIGHT_Count; x<=LIGHT_Count; x++) 
+				for (int x=-gl_data.sampleCount; x<=gl_data.sampleCount; x++) 
 				{
 					Fvector		P;
 					P.x			= bbC.x + coeff*float(x);
 
-					for (int z=-LIGHT_Count; z<=LIGHT_Count; z++) 
+					for (int z = -gl_data.sampleCount; z <= gl_data.sampleCount; z++) 
 					{
 						// compute position
 						Fvector t_n;	t_n.set(0,1,0);

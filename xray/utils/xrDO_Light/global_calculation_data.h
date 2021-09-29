@@ -32,6 +32,7 @@ struct global_claculation_data
 	bool							b_nosun;
 	bool							b_nohemi;
 	u32								numThread;
+	int								sampleCount;
 
 ///////////////////////////////////////////////////////////////////
 			global_claculation_data		(): g_shaders_xrlc( 0 ), b_norgb(false), b_nosun(false), b_nohemi(false) {}

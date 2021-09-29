@@ -15,10 +15,11 @@ static const char* h_str =
 	"-? or -h   == this help\n"
 	"-o         == modify build options\n"
 	"-f<NAME>   == compile level in gamedata\\levels\\<NAME>\\\n"
-	"-norgb     == disable common lightmap calculating\n"
-	"-nosun     == disable sun-lighting\n"
-	"-nohemi    == disable hemi-lighting\n"
-	"-thread <COUNT> == number of threads for lighting calculation\n"
+	"-norgb     == disable common lightmap calculating. Default: false\n"
+	"-nosun     == disable sun-lighting. Default: false\n"
+	"-nohemi    == disable hemi-lighting. Default: false\n"
+	"-thread <COUNT> == number of threads for lighting calculation. Default: number of processor cores\n"
+	"-samples <COUNT> == number of samples for detail slot. Calculated as (2*<COUNT> + 1)^2. Default: 7\n"
 	"-silent    == supress congratulation message\n"
 	"\n"
 	"NOTE: The last key is required for any functionality\n";
@@ -47,6 +48,13 @@ void Startup(LPSTR     lpCmdLine)
 		numThread = CPU::ID.threadCount;
 	}
 	gl_data.numThread = numThread;
+	const char* sampleOption = strstr(cmd, "-samples");
+	gl_data.sampleCount = 0;
+	if (sampleOption)
+		sscanf(sampleOption + strlen("-samples"), "%d", &gl_data.sampleCount);
+	if (gl_data.sampleCount < 0 || gl_data.sampleCount > 7) {
+		gl_data.sampleCount = 7;
+	}
 
 	// Give a LOG-thread a chance to startup
 	InitCommonControls	();
