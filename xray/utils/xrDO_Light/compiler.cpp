@@ -31,7 +31,8 @@ void xrLightStubHemi()
     for (u32 _z = 0, zend = gl_data.slots_data.size_z(); _z < zend; _z++) {
         for (u32 _x = 0, xend = gl_data.slots_data.size_x(); _x < xend; _x++) {
             DetailSlot& DS = gl_data.slots_data.get_slot(_x, _z);
-            DS.c_hemi = 15;
+            DS.c_hemi = 5;
+            DS.c_dir = 10;
         }
     }
 }
