@@ -654,6 +654,11 @@ bool ESceneAIMapTool::GenerateMap(bool bFromSelectedOnly)
     //.			        SGameMtl* mtl 		= GMLib.GetMaterialByID(surf->_GameMtl());
     //.					if (mtl->Flags.is(SGameMtl::flPassable))continue;
 
+						xr_vector<u16>::iterator start = m_ignored_materials.begin();
+						xr_vector<u16>::iterator end = m_ignored_materials.end();
+						if(std::find(start, end, surf->_GameMtl()) != end)
+							continue;
+
                         Shader_xrLC* c_sh	= Device.ShaderXRLC.Get(surf->_ShaderXRLCName());
                         if (!c_sh->flags.bCollision) 			continue;
                         // collect tris
@@ -678,10 +683,10 @@ bool ESceneAIMapTool::GenerateMap(bool bFromSelectedOnly)
             ETOOLS::destroy_collector(CL);
     	}
 
-        // building
+		// building
         Scene->lock			();
-CTimer tm;
-tm.Start();
+		CTimer tm;
+		tm.Start();
         BuildNodes			(bFromSelectedOnly);
 tm.GetElapsed_sec();
         Scene->unlock		();
