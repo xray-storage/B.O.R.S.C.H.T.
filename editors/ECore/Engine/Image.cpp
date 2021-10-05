@@ -200,11 +200,19 @@ bool CImage::LoadTGA(LPCSTR name)
 	TGA().r(&hdr,sizeof(TGAHeader));
 
 	if (!((hdr.imgtype==2)||(hdr.imgtype==10))){
-    	Msg("Unsupported texture format (%s)",name);
+#ifdef _EDITOR
+		ELog.DlgMsg(mtError, "Unsupported texture format (%s)",name);
+#else
+		Msg("Unsupported texture format (%s)",name);
+#endif
         return false;
     }
 	if (!((hdr.pixsize==24)||(hdr.pixsize==32))){
-    	Msg("Texture (%s) - invalid pixsize: %d",name,hdr.pixsize);
+#ifdef _EDITOR
+		ELog.DlgMsg(mtError, "Texture (%s) - invalid pixsize: %d",name,hdr.pixsize);
+#else
+		Msg("Texture (%s) - invalid pixsize: %d",name,hdr.pixsize);
+#endif
         return false;
     }
 #ifndef _EDITOR
