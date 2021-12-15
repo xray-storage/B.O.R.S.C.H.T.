@@ -166,7 +166,7 @@ void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* m
                 if (!pred())
                     continue;
                 ID3DBlob* saved = 0;
-                CHK_DX(D3DX10SaveTextureToMemory(pSrcTexture, format, &saved, 0));
+                CHK_DX(D3DX11SaveTextureToMemory(HW.pContext, pSrcTexture, format, &saved, 0));
                 saveScreenshot(saved, ext);
                 _RELEASE(saved);
             }
