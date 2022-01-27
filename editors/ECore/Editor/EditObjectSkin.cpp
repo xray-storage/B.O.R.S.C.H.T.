@@ -110,23 +110,32 @@ void CEditableObject::RenderSkeletonSingle(const Fmatrix& parent)
     RenderBones(parent);
 }
 
-void CEditableObject::RenderBones(const Fmatrix& parent)
+void CEditableObject::RenderBones(const Fmatrix& _parent)
 {
+	Fvector scale;
+	Fmatrix parent = _parent;
+
+	scale.x = parent.i.normalize_magn();
+	scale.y = parent.j.normalize_magn();
+	scale.z = parent.k.normalize_magn();
+
 	if (IsSkeleton()){
         // render
 		BoneVec& lst = m_Bones;
         for(BoneIt b_it=lst.begin(); b_it!=lst.end(); b_it++){
-	        Device.SetShader(Device.m_WireShader);    
+			Device.SetShader(Device.m_WireShader);
 	        RCache.set_xform_world(parent);
             Fmatrix& M 		= (*b_it)->_LTransform();
-            Fvector p1		= M.c;
+			Fvector p1		= M.c;
+			p1.mul			(scale);
             u32 c_joint		= (*b_it)->flags.is(CBone::flSelected)?color_bone_sel_color:color_bone_norm_color;
             if (EPrefs->object_flags.is(epoDrawJoints))
 	            DU_impl.DrawJoint	(p1,joint_size,c_joint);
             // center of mass
-            if ((*b_it)->shape.type!=SBoneShape::stNone){
-                Fvector cm;
-                M.transform_tiny(cm,(*b_it)->center_of_mass);
+			if ((*b_it)->shape.type!=SBoneShape::stNone){
+				Fvector cm;
+				M.transform_tiny(cm,(*b_it)->center_of_mass);
+				cm.mul			(scale);
                 if ((*b_it)->flags.is(CBone::flSelected)){
                     float sz 	= joint_size*2.f;
                     DU_impl.DrawCross	(cm, sz,sz,sz, sz,sz,sz, 0xFFFFFFFF, false);
@@ -140,27 +149,36 @@ void CEditableObject::RenderBones(const Fmatrix& parent)
 	            M.transform_dir	(d);
     	        p2.mad			(p1,d,(*b_it)->_Length());
         	    DU.DrawLine		(p1,p2,c_joint);
-            }
+			}
 */
-	     	if ((*b_it)->Parent()){
-		        Device.SetShader(Device.m_SelectionShader);
-				Fvector& p2 = (*b_it)->Parent()->_LTransform().c;
-        	    DU_impl.DrawLine	(p1,p2,color_bone_link_color);
+			if ((*b_it)->Parent()){
+				Device.SetShader(Device.m_SelectionShader);
+				Fvector p2 			= (*b_it)->Parent()->_LTransform().c;
+				p2.mul				(scale);
+				DU_impl.DrawLine	(p1,p2,color_bone_link_color);
 			}
 			if (EPrefs->object_flags.is(epoDrawBoneAxis)){
-            	Fmatrix mat; mat.mul(parent,M);
-	          	DU_impl.DrawObjectAxis(mat,0.03f,(*b_it)->flags.is(CBone::flSelected));
-            }
+				Fmatrix mat; mat.mul(parent,M);
+				mat.c.mul(scale);
+				DU_impl.DrawObjectAxis(mat,0.03f,(*b_it)->flags.is(CBone::flSelected));
+			}
 			if (EPrefs->object_flags.is(epoDrawBoneNames)){
-            	parent.transform_tiny(p1);
+				parent.transform_tiny(p1);
             	u32 c = (*b_it)->flags.is(CBone::flSelected)?0xFFFFFFFF:0xFF000000;
             	u32 s = (*b_it)->flags.is(CBone::flSelected)?0xFF000000:0xFF909090;
             	DU_impl.OutText(p1,(*b_it)->Name().c_str(),c,s);
             }
 			if (EPrefs->object_flags.is(epoDrawBoneShapes)){
 		        Device.SetShader(Device.m_SelectionShader);
-                Fmatrix mat	= M;
-                mat.mulA_43	(parent);
+				Fmatrix mat	= M;
+
+				// model scale doesn't affect shapes
+				//mat.mulA_43	(parent);
+				//mat.c.mul	(scale);
+
+				// shapes scaled along with model
+				mat.mulA_43	(_parent);
+
                 u32 c 		= (*b_it)->flags.is(CBone::flSelected)?0x80ffffff:0x300000ff;
                 if ((*b_it)->shape.Valid()){
                     switch ((*b_it)->shape.type){

@@ -302,13 +302,15 @@ void CActorTools::OnFrame()
 	if (m_pEditObject)
     {
     	// update matrix
-        Fmatrix	mTranslate,mRotate;
-        mRotate.setHPB			(m_pEditObject->a_vRotate.y, m_pEditObject->a_vRotate.x, m_pEditObject->a_vRotate.z);
-        mTranslate.translate	(m_pEditObject->a_vPosition);
-        m_AVTransform.mul		(mTranslate,mRotate);
+		Fmatrix	mTranslate,mRotate,mScale;
+		mRotate.setXYZ			(m_pEditObject->a_vRotate);
+		mTranslate.translate	(m_pEditObject->a_vPosition);
+		mScale.scale			(m_pEditObject->a_vScale, m_pEditObject->a_vScale, m_pEditObject->a_vScale);
+		m_AVTransform.mul		(mTranslate,mRotate);
+		m_AVTransform.mulA_43	(mScale);
 
-    	if (m_RenderObject.IsRenderable()&&m_pEditObject->IsSkeleton())
-        	PKinematics(m_RenderObject.m_pVisual)->CalculateBones(1.f);
+		if (m_RenderObject.IsRenderable()&&m_pEditObject->IsSkeleton())
+        	PKinematics(m_RenderObject.m_pVisual)->CalculateBones(TRUE);
 
         if(!fraLeftBar->ebRenderEngineStyle->Down)
     		m_pEditObject->OnFrame();

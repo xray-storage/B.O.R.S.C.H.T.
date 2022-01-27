@@ -780,7 +780,10 @@ void CActorTools::FillObjectProperties(PropItemVec& items, LPCSTR pref, ListItem
     V=PHelper().CreateVector		(items, "Object\\Transform\\Position",		&m_pEditObject->a_vPosition, 	-10000,	10000,0.01,4);
     V->OnChangeEvent.bind			(this,&CActorTools::OnChangeTransform);
     V=PHelper().CreateAngle3		(items, "Object\\Transform\\Rotation",		&m_pEditObject->a_vRotate, 		-10000,	10000,0.1,2);
-    V->OnChangeEvent.bind			(this,&CActorTools::OnChangeTransform);
+	V->OnChangeEvent.bind			(this,&CActorTools::OnChangeTransform);
+	V=PHelper().CreateFloat			(items, "Object\\Transform\\Scale",			&m_pEditObject->a_vScale, 		0.01,	10000,0.01,4);
+	V->OnChangeEvent.bind			(this,&CActorTools::OnChangeTransform);
+	PHelper().CreateBOOL 			(items, "Object\\Transform\\Adjust Mass By Scale", &m_pEditObject->a_vAdjustMass);
 	PHelper().CreateCaption			(items, "Object\\Transform\\BBox Min",		shared_str().sprintf("{%3.2f, %3.2f, %3.2f}",VPUSH(m_pEditObject->GetBox().min)));
 	PHelper().CreateCaption			(items, "Object\\Transform\\BBox Max",		shared_str().sprintf("{%3.2f, %3.2f, %3.2f}",VPUSH(m_pEditObject->GetBox().max)));
 

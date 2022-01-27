@@ -209,9 +209,11 @@ private:
 	// bounding volume
 	Fbox 			m_Box;
 public:
-    // temp variable for actor
+	// temp variable for actor
 	Fvector 		a_vPosition;
-    Fvector			a_vRotate;
+	Fvector			a_vRotate;
+	float 			a_vScale;
+	BOOL 			a_vAdjustMass;
 
     // temp variables for transformation
 	Fvector 		t_vPosition;
@@ -331,7 +333,7 @@ public:
 	void 			Render					(const Fmatrix& parent, int priority, bool strictB2F);
 	void 			RenderSelection			(const Fmatrix& parent, CEditableMesh* m=0, CSurface* s=0, u32 c=0x40E64646);
  	void 			RenderEdge				(const Fmatrix& parent, CEditableMesh* m=0, CSurface* s=0, u32 c=0xFFC0C0C0);
-	void 			RenderBones				(const Fmatrix& parent);
+	void 			RenderBones				(const Fmatrix& _parent);
 	void 			RenderAnimation			(const Fmatrix& parent);
 	void 			RenderSingle			(const Fmatrix& parent);
 	void 			RenderSkeletonSingle	(const Fmatrix& parent);

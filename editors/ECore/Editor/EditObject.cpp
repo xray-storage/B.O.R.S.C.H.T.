@@ -59,7 +59,9 @@ CEditableObject::CEditableObject(LPCSTR name)
     t_vRotate.set  	(0.f,0.f,0.f);
 
 	a_vPosition.set	(0.f,0.f,0.f);
-    a_vRotate.set  	(0.f,0.f,0.f);
+	a_vRotate.set  	(0.f,0.f,0.f);
+	a_vScale 		= 1.f;
+	a_vAdjustMass 	= TRUE;
 
     bOnModified		= false;
 

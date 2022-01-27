@@ -544,8 +544,8 @@ bool CExportSkeleton::PrepareGeometry(u8 influence)
     }
 
     if (m_Source->BoneCount()>64){
-    	ELog.Msg(mtError,"Object cannot handle more than 64 bones.");
-     	return false;
+        ELog.Msg(mtError,"Object cannot handle more than 64 bones.");
+        return false;
     }
 
     // mem active motion
@@ -614,14 +614,17 @@ bool CExportSkeleton::PrepareGeometry(u8 influence)
                         st_SVert& sv 					= MESH->m_SVertices[f_idx*3+k];
                         VERIFY							(sv.bones.size()>0 && (u8)sv.bones.size()<=influence);
 
+						Fvector offs = sv.offs;
+						offs.mul(m_Source->a_vScale);
+
                         if (link_type==1)
                         {
                         	st_SVert::bone 				b[2];
                             b[0].id					    = sv.bones[0].id;
                             b[1].id 				    = sv.bones[0].id;
-                            b[0].w					    = 1.f;
+							b[0].w					    = 1.f;
                             b[1].w					    = 0.f;
-                            v[k].set				    (sv.offs,sv.norm,sv.uv,2,b);
+							v[k].set				    (offs,sv.norm,sv.uv,2,b);
                             tmp_bone_lst.push_back	    (sv.bones[0].id);
                         }else
                         if(link_type==2)
@@ -639,7 +642,7 @@ bool CExportSkeleton::PrepareGeometry(u8 influence)
                             }else
                             */
                             {
-                                v[k].set				(sv.offs,sv.norm,sv.uv,(u8)sv.bones.size(),sv.bones.begin());
+								v[k].set				(offs,sv.norm,sv.uv,(u8)sv.bones.size(),sv.bones.begin());
 
                                 for(u32 i=0; i<sv.bones.size(); ++i)
                                 {
@@ -656,7 +659,7 @@ bool CExportSkeleton::PrepareGeometry(u8 influence)
                         }else
                         if(link_type==4 || link_type==3)
                         {
-                            v[k].set				(sv.offs,sv.norm,sv.uv,(u8)sv.bones.size(),sv.bones.begin());
+							v[k].set				(offs,sv.norm,sv.uv,(u8)sv.bones.size(),sv.bones.begin());
 
                             for(u32 i=0; i<sv.bones.size(); ++i)
                                 tmp_bone_lst.push_back	(sv.bones[i].id);
@@ -682,8 +685,14 @@ bool CExportSkeleton::PrepareGeometry(u8 influence)
                     // find split
                     int mtl_idx 				= FindSplit(surf->m_ShaderName,surf->m_Texture,bone_brk_part);
                     if (mtl_idx<0)
-                    {
-                        m_Splits.push_back					(SSplit(surf,m_Source->GetBox(),bone_brk_part));
+					{
+						Fmatrix mScale;
+						mScale.scale(m_Source->a_vScale, m_Source->a_vScale, m_Source->a_vScale);
+
+						Fbox box;
+						box.xform(m_Source->GetBox(), mScale);
+
+						m_Splits.push_back					(SSplit(surf,box,bone_brk_part));
                         mtl_idx								= m_Splits.size()-1;
                         m_Splits[mtl_idx].m_SkeletonLinkType = 0;
                     }
@@ -787,9 +796,16 @@ bool CExportSkeleton::ExportGeometry(IWriter& F, u8 infl)
         	split_it->MakeStripify();
 
 		SkelVertVec& lst = split_it->getV_Verts();
-	    for (SkelVertIt sv_it=lst.begin(); sv_it!=lst.end(); sv_it++){
-		    bone_points		[sv_it->bones[0].id].push_back						(sv_it->offs);
-            bones			[sv_it->bones[0].id]->_RITransform().transform_tiny(bone_points[sv_it->bones[0].id].back());
+		for (SkelVertIt sv_it=lst.begin(); sv_it!=lst.end(); sv_it++){
+			bone_points[sv_it->bones[0].id].push_back(sv_it->offs);
+
+			Fmatrix xform = bones[sv_it->bones[0].id]->_RTransform();
+			xform.c.mul(m_Source->a_vScale);
+
+			Fmatrix i_xform;
+			i_xform.invert(xform);
+
+			i_xform.transform_tiny(bone_points[sv_it->bones[0].id].back());
         }
         pb->Inc		();
     }
@@ -841,7 +857,7 @@ bool CExportSkeleton::ExportGeometry(IWriter& F, u8 infl)
                     
     F.open_chunk(OGF_S_IKDATA);
     for (bone_it=m_Source->FirstBone(); bone_it!=m_Source->LastBone(); bone_it++,bone_idx++)
-        if (!(*bone_it)->ExportOGF(F)) bRes=false; 
+		if (!(*bone_it)->ExportOGF(F, m_Source->a_vScale, m_Source->a_vAdjustMass)) bRes=false;
     F.close_chunk();
 
     if (m_Source->GetClassScript().size()){
@@ -929,10 +945,10 @@ bool CExportSkeleton::ExportMotionKeys(IWriter& F)
     int smot 				= 1;
 
     // use global transform
-    Fmatrix	mGT,mTranslate,mRotate;
-    mRotate.setHPB			(m_Source->a_vRotate.y, m_Source->a_vRotate.x, m_Source->a_vRotate.z);
-    mTranslate.translate	(m_Source->a_vPosition);
-    mGT.mul					(mTranslate,mRotate);
+	Fmatrix	mGT,mTranslate,mRotate;
+	mRotate.setHPB			(m_Source->a_vRotate.y, m_Source->a_vRotate.x, m_Source->a_vRotate.z);
+	mTranslate.translate	(m_Source->a_vPosition);
+	mGT.mul					(mTranslate,mRotate);
 
     for (SMotionIt motion_it=m_Source->FirstSMotion(); motion_it!=m_Source->LastSMotion(); motion_it++, smot++)
     {
@@ -957,7 +973,7 @@ bool CExportSkeleton::ExportMotionKeys(IWriter& F)
 	        int bone_id 	= 0;
 
             for(BoneIt b_it=b_lst.begin(); b_it!=b_lst.end(); ++b_it, ++bone_id)
-            {
+			{
 	            Fvector 				T,R;
                 if(cur_motion->BoneMotions().size()>bone_id)
                 	cur_motion->_Evaluate	(bone_id,t,T,R);
@@ -986,7 +1002,8 @@ bool CExportSkeleton::ExportMotionKeys(IWriter& F)
                 int	_y 				= int(q.y*KEY_Quant); clamp(_y,-32767,32767); Kr.y =  (s16)_y;
                 int	_z 				= int(q.z*KEY_Quant); clamp(_z,-32767,32767); Kr.z =  (s16)_z;
                 int	_w 				= int(q.w*KEY_Quant); clamp(_w,-32767,32767); Kr.w =  (s16)_w;
-                Kt.set				(mat.c);//B->_Offset());
+				Kt.set				(mat.c);//B->_Offset());
+				Kt.mul				(m_Source->a_vScale);
             }
         }
         // free temp storage

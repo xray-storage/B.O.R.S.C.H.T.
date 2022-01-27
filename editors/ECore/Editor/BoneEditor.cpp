@@ -228,11 +228,11 @@ void CBone::ClampByLimits()
     mLocal.getXYZi		(mot_rotate);
 }
 
-bool CBone::ExportOGF(IWriter& F)
+bool CBone::ExportOGF(IWriter& F, float scale, BOOL adjust_mass)
 {
 	// check valid
 	if (!shape.Valid()){
-        ELog.Msg(mtError,"Bone '%s' has invalid shape.",*Name());
+		ELog.Msg(mtError,"Bone '%s' has invalid shape.",*Name());
     	return false;
     }
     SGameMtl* M			= GMLib.GetMaterial(game_mtl.c_str());
@@ -245,20 +245,36 @@ bool CBone::ExportOGF(IWriter& F)
     	return false;
     }
 
-    F.w_u32		(OGF_IKDATA_VERSION);
-    
-    F.w_stringZ	(game_mtl);	
-    F.w			(&shape,sizeof(SBoneShape));
+	F.w_u32		(OGF_IKDATA_VERSION);
+	F.w_stringZ	(game_mtl);
 
-    IK_data.Export(F);
+	SBoneShape scaled_shape = shape;
+	scaled_shape.box.m_translate.mul(scale);
+	scaled_shape.box.m_halfsize.mul(scale);
+	scaled_shape.sphere.P.mul(scale);
+	scaled_shape.sphere.R *= scale;
+	scaled_shape.cylinder.m_center.mul(scale);
+	scaled_shape.cylinder.m_height *= scale;
+	scaled_shape.cylinder.m_radius *= scale;
+	F.w(&scaled_shape,sizeof(SBoneShape));
+
+	IK_data.Export(F);
 
 //	Fvector xyz;
 //	Fmatrix& R	= _RTransform();
 //	R.getXYZi	(xyz);
 
-    F.w_fvector3(rest_rotate);
-    F.w_fvector3(rest_offset);
-    F.w_float	(mass);
-    F.w_fvector3(center_of_mass);
+	Fvector scaled_offset = rest_offset;
+	scaled_offset.mul(scale);
+
+	Fvector scaled_center_of_mass = center_of_mass;
+	scaled_center_of_mass.mul(scale);
+
+	float scaled_mass = mass * (scale*scale*scale);
+
+	F.w_fvector3(rest_rotate);
+	F.w_fvector3(scaled_offset);
+	F.w_float	(adjust_mass ? scaled_mass : mass);
+	F.w_fvector3(scaled_center_of_mass);
     return true;
 }
