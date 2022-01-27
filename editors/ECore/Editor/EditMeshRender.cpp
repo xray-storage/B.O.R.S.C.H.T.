@@ -297,7 +297,11 @@ void CEditableMesh::RenderSkeleton(const Fmatrix&, CSurface* S)
     	GenerateSVertices(RENDER_SKELETON_LINKS);
 
 	R_ASSERT2(m_SVertices,"SVertices empty!");
-	SurfFacesPairIt sp_it 	= m_SurfFaces.find(S); R_ASSERT(sp_it!=m_SurfFaces.end());
+	SurfFacesPairIt sp_it 	= m_SurfFaces.find(S); //R_ASSERT(sp_it!=m_SurfFaces.end());
+
+	if(sp_it == m_SurfFaces.end())
+    	return;
+
     IntVec& face_lst 		= sp_it->second;
 	_VertexStream*	Stream	= &RCache.Vertex;
 	u32				vBase;
