@@ -41,7 +41,8 @@ class EDetailManager:
     	flBaseTextureDraw		= (1<<31),
         flBaseTextureBlended	= (1<<30),
         flSlotBoxesDraw			= (1<<29),
-        flObjectsDraw			= (1<<28),
+		flObjectsDraw			= (1<<28),
+		flDontMergeTextures     = (1<<27)
     };
     Flags32				m_Flags;
 

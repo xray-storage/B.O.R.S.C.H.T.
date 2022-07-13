@@ -459,7 +459,6 @@ bool EDetailManager::Export(LPCSTR path)
     SPBItem* pb = UI->ProgressStart(5,"Making details...");
 	CMemoryWriter F;
 
-    pb->Inc				("merge textures");
     Fvector2Vec			offsets;
     Fvector2Vec			scales;
     boolVec				rotated;
@@ -476,47 +475,57 @@ bool EDetailManager::Export(LPCSTR path)
         	if (id!=DetailSlot::ID_Empty) {
             	textures_set.insert(((EDetail*)(objects[id]))->GetTextureName());
                 remap_object[id] = 1;
-            }
+			}
         }
-    }
+	}
     textures.assign		(textures_set.begin(),textures_set.end());
 
-    U8It remap_object_it= remap_object.begin();
+	U8It remap_object_it= remap_object.begin();
 
-    u32 new_idx			= 0;
+	u32 new_idx			= 0;
     for (DetailIt d_it=objects.begin(); d_it!=objects.end(); d_it++,remap_object_it++)
     	if ((*remap_object_it==1)&&(textures_set.find(((EDetail*)(*d_it))->GetTextureName())!=textures_set.end()))
-	    	*remap_object_it	= (u8)new_idx++;
+			*remap_object_it	= (u8)new_idx++;
 
-    AnsiString 			do_tex_name = ChangeFileExt(fn,"_details");
-    int res				= ImageLib.CreateMergedTexture(textures,do_tex_name.c_str(),STextureParams::tfDXT3,256,16384,256,16384,offsets,scales,rotated,remap);
-    if (1!=res)			bRes=FALSE;
+	AnsiString 			do_tex_name = ChangeFileExt(fn,"_details");
 
-    pb->Inc				("export geometry");
-    // objects
+	if(!m_Flags.is(flDontMergeTextures)) {
+		pb->Inc			("merge textures");
+		int res			= ImageLib.CreateMergedTexture(textures,do_tex_name.c_str(),STextureParams::tfDXT3,256,16384,256,16384,offsets,scales,rotated,remap);
+		if (1!=res)		bRes=FALSE;
+	}
+
+	pb->Inc				("export geometry");
+	// objects
     int object_idx		= 0;
     if (bRes){
 	    do_tex_name 	= ExtractFileName(do_tex_name);
         F.open_chunk	(DETMGR_CHUNK_OBJECTS);
-        for (DetailIt it=objects.begin(); it!=objects.end(); it++){
-        	if (remap_object[it-objects.begin()]!=u8(-1)){
-                F.open_chunk	(object_idx++);
-                if (!((EDetail*)(*it))->m_pRefs){
-                    ELog.DlgMsg(mtError, "Bad object or object not found '%s'.", ((EDetail*)(*it))->m_sRefs.c_str());
-                    bRes=false;
-                }else{
-                    LPCSTR tex_name = ((EDetail*)(*it))->GetTextureName();
-                    for (u32 t_idx=0; t_idx<textures.size(); t_idx++) 
-                        if (textures[t_idx]==tex_name) break;
-                    VERIFY(t_idx<textures.size());
-                    t_idx = remap[t_idx];
-                    ((EDetail*)(*it))->Export	(F,do_tex_name.c_str(),offsets[t_idx],scales[t_idx],rotated[t_idx]);
+		for (DetailIt it=objects.begin(); it!=objects.end(); it++){
+			EDetail *O = (EDetail*)*it;
+			if (remap_object[it-objects.begin()]!=u8(-1)){
+				F.open_chunk	(object_idx++);
+				if (!O->m_pRefs){
+					ELog.DlgMsg(mtError, "Bad object or object not found '%s'.", O->m_sRefs.c_str());
+					bRes=false;
+				}else{
+					LPCSTR tex_name = O->GetTextureName();
+
+					if(!m_Flags.is(flDontMergeTextures)) {
+						for (u32 t_idx=0; t_idx<textures.size(); t_idx++)
+							if (textures[t_idx]==tex_name) break;
+						VERIFY(t_idx<textures.size());
+						t_idx = remap[t_idx];
+						O->Export(F,do_tex_name.c_str(),offsets[t_idx],scales[t_idx],rotated[t_idx]);
+					} else {
+						O->Export(F,tex_name,Fvector2().set(0.f,0.f),Fvector2().set(1.f,1.f),false);
+					}
                 }
                 F.close_chunk	();
-                if (!bRes) break;
+				if (!bRes) break;
             }
         }
-        F.close_chunk		();
+		F.close_chunk		();
     }
     
     pb->Inc	("export slots");
@@ -524,9 +533,9 @@ bool EDetailManager::Export(LPCSTR path)
     if (bRes){
     	xr_vector<DetailSlot> dt_slots(slot_cnt); dt_slots.assign(dtSlots,dtSlots+slot_cnt);
         for (slot_idx=0; slot_idx<slot_cnt; slot_idx++){
-            DetailSlot& it 	= dt_slots[slot_idx];
+			DetailSlot& it 	= dt_slots[slot_idx];
             // zero colors need lighting
-	        it.c_dir		= 0;
+			it.c_dir		= 0;
 	        it.c_hemi		= 0;
 	        it.c_r			= 0;
 	        it.c_g			= 0;
@@ -577,8 +586,9 @@ void EDetailManager::FillProp(LPCSTR pref, PropItemVec& items)
     P->OnChangeEvent.bind	(this,&EDetailManager::OnBaseTextureChange);
     PHelper().CreateFlag32	(items, PrepareKey(pref,"Common\\Draw objects"),			&m_Flags,	flObjectsDraw);
     PHelper().CreateFlag32	(items, PrepareKey(pref,"Common\\Draw base texture"),		&m_Flags,	flBaseTextureDraw);
-    PHelper().CreateFlag32	(items, PrepareKey(pref,"Common\\Base texture blended"),	&m_Flags,	flBaseTextureBlended);
-    PHelper().CreateFlag32	(items, PrepareKey(pref,"Common\\Draw slot boxes"),			&m_Flags,	flSlotBoxesDraw);
+	PHelper().CreateFlag32	(items, PrepareKey(pref,"Common\\Base texture blended"),	&m_Flags,	flBaseTextureBlended);
+	PHelper().CreateFlag32	(items, PrepareKey(pref,"Common\\Draw slot boxes"),			&m_Flags,	flSlotBoxesDraw);
+	PHelper().CreateFlag32	(items, PrepareKey(pref,"Common\\Don't merge textures"),	&m_Flags,	flDontMergeTextures);
 }
 
 bool EDetailManager::GetSummaryInfo(SSceneSummary* inf)
