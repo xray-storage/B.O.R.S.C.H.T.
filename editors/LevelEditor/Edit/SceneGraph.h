@@ -13,11 +13,12 @@ public:
 	};
 	typedef void __fastcall callback(TNode*);
 private:
-	TNode*		nodes;
-	DWORD		pool;
-	DWORD		limit;
+	TNode*      nodes;
+	DWORD       pool;
+	DWORD       limit;
+	LPCSTR      overflow_err_msg;
 
-	IC TNode*	Alloc(const K& key, const T& val)
+	IC TNode*   Alloc(const K& key, const T& val)
 	{
 		VERIFY(nodes);
 		TNode *node = nodes + pool;
@@ -25,46 +26,48 @@ private:
 		node->val	= val;
 		node->right = node->left = 0;
 		pool++;
-		VERIFY(pool<limit);
+		R_ASSERT2(pool<limit,overflow_err_msg);
 		return node;
 	}
-	IC TNode*	Alloc(const K& key)
+	IC TNode*   Alloc(const K& key)
 	{
 		VERIFY(nodes);
 		TNode *node = nodes + pool;
 		node->key	= key;
 		node->right = node->left = 0;
 		pool++;
-		VERIFY(pool<limit);
+		R_ASSERT2(pool<limit,overflow_err_msg);
 		return node;
 	}
-	IC void		recurseLR	(TNode* N, callback CB)
+	IC void     recurseLR   (TNode* N, callback CB)
 	{
-		if (N->left)	recurseLR(N->left,CB);
+		if (N->left)    recurseLR(N->left,CB);
 		CB(N);
-		if (N->right)	recurseLR(N->right,CB);
+		if (N->right)   recurseLR(N->right,CB);
 	}
-	IC void		recurseRL	(TNode* N, callback CB)
+	IC void     recurseRL   (TNode* N, callback CB)
 	{
-		if (N->right)	recurseRL(N->right,CB);
+		if (N->right)   recurseRL(N->right,CB);
 		CB(N);
-		if (N->left)	recurseRL(N->left,CB);
+		if (N->left)    recurseRL(N->left,CB);
 	}
 public:
 	FixedMAP() {
 		nodes	= 0;
 		pool	= 0;
 		limit	= 0;
+		overflow_err_msg = "";
 	}
 	~FixedMAP() {
 		delete [] nodes;
 	}
-	IC void		init	(int maxnodes)
+	IC void	    init    (int maxnodes, LPCSTR overflow_msg)
 	{
 		limit	= maxnodes;
 		nodes	= new TNode[limit];
+		overflow_err_msg = overflow_msg;
 	}
-	IC TNode*	insert(const K& k, const T& v)
+	IC TNode*   insert(const K& k, const T& v)
 	{
 		if (pool) {
 			TNode*	node = nodes;
@@ -94,7 +97,7 @@ public:
 			return Alloc(k,v);
 		}
 	}
-	IC TNode*	insertInAnyWay(const K& k, const T& v)
+	IC TNode*   insertInAnyWay(const K& k, const T& v)
 	{
 		if (pool) {
 			TNode*	node = nodes;
@@ -124,7 +127,7 @@ public:
 			return Alloc(k,v);
 		}
 	}
-	IC TNode*	insert(const K& k) {
+	IC TNode*   insert(const K& k) {
 		if (pool) {
 			TNode*	node = nodes;
 
@@ -153,7 +156,7 @@ public:
 			return Alloc(k);
 		}
 	}
-	IC TNode*	insertInAnyWay(const K& k) {
+	IC TNode*   insertInAnyWay(const K& k) {
 		if (pool) {
 			TNode*	node = nodes;
 
@@ -181,23 +184,23 @@ public:
 			return Alloc(k);
 		}
 	}
-	IC void		clear() { pool=0;				}
-	IC TNode*	begin() { return nodes;			}
-	IC TNode*	end()	{ return nodes+pool;	}
-	IC TNode*	last()	{ return nodes+limit;	}	// for setup only
-	IC TNode*	size()	{ return pool;			}
-	IC TNode&	operator[] (int v) { return nodes[v]; }
+	IC void     clear() { pool=0;               }
+	IC TNode*   begin() { return nodes;         }
+	IC TNode*   end()   { return nodes+pool;    }
+	IC TNode*   last()  { return nodes+limit;   }	// for setup only
+	IC TNode*   size()  { return pool;          }
+	IC TNode&   operator[] (int v) { return nodes[v]; }
 
-	IC void		traverseLR	(callback CB)
+	IC void     traverseLR  (callback CB)
 	{ if (pool) recurseLR(nodes,CB);  }
-	IC void		traverseRL	(callback CB)
+	IC void	    traverseRL  (callback CB)
 	{ if (pool) recurseRL(nodes,CB);  }
-	IC void		traverseANY	(callback CB) {
-		TNode*	_end = end();
+	IC void     traverseANY (callback CB) {
+		TNode*  _end = end();
 		for (TNode* cur = begin(); cur!=_end; cur++)
 			CB(cur);
 	}
-	IC void		setup(callback CB) {
+	IC void     setup(callback CB) {
 		for (int i=0; i<limit; i++)
 			CB(nodes+i);
 	}

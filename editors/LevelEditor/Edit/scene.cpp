@@ -62,23 +62,23 @@ void st_LevelOptions::SetHighQuality()
 //------------------------------------------------------------------------------
 
 
-#define MAX_VISUALS 16384
+#define MAX_VISUALS 65536
 
 EScene::EScene()
 {
 	m_Valid = false;
 	m_Locked = 0;
 
-    for (int i=0; i<OBJCLASS_COUNT; i++)
-        m_SceneTools.insert(mk_pair((ObjClassID)i,(ESceneToolBase*)NULL));
+	for (int i=0; i<OBJCLASS_COUNT; i++)
+		m_SceneTools.insert(mk_pair((ObjClassID)i,(ESceneToolBase*)NULL));
 
-    // first init scene graph for objects
-    mapRenderObjects.init(MAX_VISUALS);
-// 	Build options
-    m_SummaryInfo	= 0;
-    //ClearSnapList	(false);
-   g_frmConflictLoadObject 		= xr_new<TfrmAppendObjectInfo>((TComponent*)NULL);
+	// first init scene graph for objects
+	mapRenderObjects.init(MAX_VISUALS, "Too many objects to render");
 
+	// 	Build options
+	m_SummaryInfo	= 0;
+	//ClearSnapList	(false);
+	g_frmConflictLoadObject = xr_new<TfrmAppendObjectInfo>((TComponent*)NULL);
 }
 
 EScene::~EScene()
