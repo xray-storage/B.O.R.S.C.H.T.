@@ -11,6 +11,7 @@
 #include "ESceneObjectTools.h"
 #include "../ECore/Editor/EThumbnail.h"
 #include "Scene.h"
+#include "EGarbageGenerator.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "multi_edit"
@@ -261,7 +262,15 @@ void __fastcall TfraObject::ExtBtn8Click(TObject *Sender)
 
 void __fastcall TfraObject::ExtBtn9Click(TObject *Sender)
 {
-	RefreshList();	
+	RefreshList();
+}
+//---------------------------------------------------------------------------
+void __fastcall TfraObject::ebGenerateGarbageClick(TObject *Sender)
+{
+	ObjectList ol;
+	ParentTools->GetQueryObjects(ol,1,1,0);
+	if(ol.size() == 1)
+		EGarbageGenerator().Generate((CSceneObject*)ol.front());
 }
 //---------------------------------------------------------------------------
 

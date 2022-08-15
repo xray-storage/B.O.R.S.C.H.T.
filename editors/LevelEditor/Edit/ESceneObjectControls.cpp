@@ -54,7 +54,6 @@ bool TUI_ControlObjectAdd::Start(TShiftState Shift)
         }
 */
         if (ot->IsAppendRandomActive()){
-            Fvector S;
             if (ot->IsAppendRandomRotationActive()){
             	Fvector p;
 				p.set(	::Random.randF(ot->m_AppendRandomMinRotation.x,ot->m_AppendRandomMaxRotation.x),

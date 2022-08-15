@@ -4,7 +4,7 @@
     <ProjectGuid>{9e89f806-45b6-4b9d-a811-25320e2bb82f}</ProjectGuid>
     <ProjectType>CppVCLApplication</ProjectType>
     <MainSource>LevelEditor.cpp</MainSource>
-    <Config Condition="'$(Config)'==''">Release Build</Config>
+    <Config Condition="'$(Config)'==''">Debug Build</Config>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
     <Base>true</Base>
@@ -83,14 +83,14 @@
     <ILINK_BpiLibOutputDir>X:\stalker_addon\libraries</ILINK_BpiLibOutputDir>
     <TASM_IncludePath>..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BDS)\Projects;$(BDS)\include\vcl;$(BDS)\include;X:\SDK\Components\alexmx;X:\SDK\Components\ElPack\Code;X:\SDK\Components\ElPack\Code\Source;..\..\xrCore;..\..\xrEngine;..\..\utils\ETools;X:\SDK\include\freemagic;$(BDS)\include\dinkumware</TASM_IncludePath>
     <AllPackageLibs>bcbsmp.lib;xmlrtl.lib;vclactnband.lib;rtl.lib;vcl.lib;bcbsmp.lib;vclx.lib;editorB.lib;xmlrtl.lib;vclactnband.lib;lmdrtelcore.lib;lmdrtrtlx.lib;lmdrtl.lib;dcleditorB.lib</AllPackageLibs>
-    <ILINK_LibraryPath>X:\SDK\components\AlexMX;X:\SDK\components\LMD2018\lib\d11;$(BDS)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</ILINK_LibraryPath>
     <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
-    <BCC_Defines>NO_STRICT;_EDITOR;_LEVEL_EDITOR</BCC_Defines>
-    <Multithreaded>true</Multithreaded>
-    <BRCC_Defines>_EDITOR;_LEVEL_EDITOR;_DEBUG</BRCC_Defines>
+    <ILINK_LibraryPath>X:\SDK\components\AlexMX;X:\SDK\components\LMD2018\lib\d11;$(BDS)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</ILINK_LibraryPath>
     <TASM_Defines>_EDITOR _LEVEL_EDITOR _DEBUG</TASM_Defines>
-    <TASM_Debugging>None</TASM_Debugging>
+    <BRCC_Defines>_EDITOR;_LEVEL_EDITOR;_DEBUG</BRCC_Defines>
+    <Multithreaded>true</Multithreaded>
+    <BCC_Defines>NO_STRICT;_EDITOR;_LEVEL_EDITOR</BCC_Defines>
     <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+    <TASM_Debugging>None</TASM_Debugging>
     <BCC_CallingConvention>stdcall</BCC_CallingConvention>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -99,8 +99,8 @@
     <BCC_OutputDir>x:\intermediate_ed\le\Debug</BCC_OutputDir>
     <BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
     <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
-    <DCC_DebugInformation>true</DCC_DebugInformation>
     <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+    <DCC_DebugInformation>true</DCC_DebugInformation>
     <IntermediateOutputDir>x:\intermediate_ed\le\Debug</IntermediateOutputDir>
     <TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
     <BCC_StackFrames>true</BCC_StackFrames>
@@ -119,59 +119,59 @@
     <Borland.Personality>CPlusPlusBuilder.Personality</Borland.Personality>
     <Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
     <BorlandProject>
-<BorlandProject><CPlusPlusBuilder.Personality><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">2</VersionInfo><VersionInfo Name="Build">161</VersionInfo><VersionInfo Name="Debug">True</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1033</VersionInfo><VersionInfo Name="CodePage">1252</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.2.161</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><ExcludedPackages><ExcludedPackages Name="f:\program files\borland\cbuilder6\Bin\bcb2kaxserver60.bpl">Borland C++Builder COM Server Components Sample Package</ExcludedPackages></ExcludedPackages><HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Count">13</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item0">..\..\Layers\xrRender;..\..\xrEngine;Edit;..\..\xrServerEntities</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item1">..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;X:\SDK\Components\alexmx;X:\SDK\Components\ElPack\Code;X:\SDK\Components\ElPack\Code\Source;..\..\xrCore;..\..\xrEngine;..\..\utils\ETools;X:\SDK\include\freemagic</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item2">..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;$(ETOOLS_DIR);X:\SDK\include\freemagic</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item3">..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;$(ETOOLS_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item4">..\..\xrServerEntities;..\..\Layers\xrRender;..\..\xrEngine\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrRender;$(MAGIC_SW_DIR);$(ETOOLS_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item5">..\..\xrEngine\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrRender;$(MAGIC_SW_DIR);$(ETOOLS_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item6">..\..\xrEngine\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrRender;$(MAGIC_SW_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item7">$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrRender;$(MAGIC_SW_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item8">$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrEngine/xrRender;$(MAGIC_SW_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item9">$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrEngine/xrRender</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item10">Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(DXSDK_DIR)\Include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrEngine/xrRender</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item11">Edit;H:\RAD\Borland\CBuilder6\Projects;"R:\SDK\Microsoft DirectX 9.0 SDK (April 2005)\Include"Edit;Engine;r:\borland\components6\alexmx;$(BCB)\include;$(BCB)\include\vcl;R:\SDK\MagicFM_Borland\Sdk\Include;R:\Borland\Components6\ElPack\Code;R:\Borland\Components6\ElPack\Code\Source;P:\xrCore;..\ECore;..\ECore\Editor;..\ECore\Engine;..\ECore\Engine\blenders;..\ECore\Engine\visuals;..\xrEProps;P:\xrSound</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item12">H:\RAD\Borland\CBuilder6\Projects;R:\SDK\Microsoft DirectX 9.0 SDK (April 2005)\Include;Engine\Game;Edit;Engine;r:\borland\components6\alexmx;$(BCB)\include;$(BCB)\include\vcl;R:\SDK\MagicFM_Borland\Sdk\Include;R:\Borland\Components6\ElPack\Code;R:\Borland\Components6\ElPack\Code\Source;P:\xrCore;..\ECore;..\ECore\Editor;..\ECore\Engine;..\ECore\Engine\blenders;..\ECore\Engine\visuals;..\xrEProps;P:\xrSound</HistoryLists_hlIncludePath></HistoryLists_hlIncludePath><HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Count">15</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item0">X:\SDK\components\AlexMX;X:\SDK\components\ElPack\Code;$(BCB)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item1">X:\SDK\components\AlexMX;X:\SDK\components\ElPack\Code;$(BCB)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item2">X:\SDK\components\AlexMX;X:\SDK\components\ElPack\Code;$(BCB)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item3">$(BCB)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item4">..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item5">..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item6">$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item7">..\..\xrServerEntities;..\..\Layers\xrRender;..\..\..\SDK\components\ElPack\Code;..\..\xrEngine\xrRender;..\..\xrRender;..\..\xrEngine;Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item8">..\..\xrEngine\xrRender;..\..\xrRender;..\..\xrEngine;Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item9">..\..\xrRender;..\..\xrEngine;Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item10">..\..\xrEngine\xrRender;..\..\xrEngine;Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;x:\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item11">Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;x:\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item12">$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;x:\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item13">H:\RAD\Borland\CBuilder6\Projects;Edit;Engine;C:\Rad\Borland\CBuilder6\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;r:\borland\components6\alexmx;R:\Borland\Components6\ElPack\Code;R:\Borland\Components6\ElPack\Code\Source;..\lib\dx;..\lib;x:\;..\ECore;..\ECore\Editor</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item14">H:\RAD\Borland\CBuilder6\Projects;Engine\Game;Edit;Engine;C:\Rad\Borland\CBuilder6\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;r:\borland\components6\alexmx;R:\Borland\Components6\ElPack\Code;R:\Borland\Components6\ElPack\Code\Source;..\lib\dx;..\lib;x:\;..\ECore;..\ECore\Editor</HistoryLists_hlLibraryPath></HistoryLists_hlLibraryPath><HistoryLists_hlDebugSourcePath><HistoryLists_hlDebugSourcePath Name="Count">2</HistoryLists_hlDebugSourcePath><HistoryLists_hlDebugSourcePath Name="Item0">X:\stalker_addon\sources\engine\editors\ECore\Editor\</HistoryLists_hlDebugSourcePath><HistoryLists_hlDebugSourcePath Name="Item1">c:\rad\borland\cbuilder5\source\vcl;R:\Borland\Components6\AlexMX\</HistoryLists_hlDebugSourcePath></HistoryLists_hlDebugSourcePath><HistoryLists_hlConditionals><HistoryLists_hlConditionals Name="Count">2</HistoryLists_hlConditionals><HistoryLists_hlConditionals Name="Item0">_EDITOR;_LEVEL_EDITOR;_DEBUG</HistoryLists_hlConditionals><HistoryLists_hlConditionals Name="Item1">_EDITOR;_LEVEL_EDITOR</HistoryLists_hlConditionals></HistoryLists_hlConditionals><HistoryLists_hlIntOutputDir><HistoryLists_hlIntOutputDir Name="Count">2</HistoryLists_hlIntOutputDir><HistoryLists_hlIntOutputDir Name="Item0">x:\intermediate_ed\le</HistoryLists_hlIntOutputDir><HistoryLists_hlIntOutputDir Name="Item1">intermediate</HistoryLists_hlIntOutputDir></HistoryLists_hlIntOutputDir><HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Count">5</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item0">x:\stalker_addon\binaries</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item1">x:\stalker_addon\binaries\</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item2">x:\binaries\</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item3">x:\binaries</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item4">x:\</HistoryLists_hlFinalOutputDir></HistoryLists_hlFinalOutputDir><HistoryLists_hIBPIOutputDir><HistoryLists_hIBPIOutputDir Name="Count">2</HistoryLists_hIBPIOutputDir><HistoryLists_hIBPIOutputDir Name="Item0">X:\stalker_addon\libraries</HistoryLists_hIBPIOutputDir><HistoryLists_hIBPIOutputDir Name="Item1">x:\libraries</HistoryLists_hIBPIOutputDir></HistoryLists_hIBPIOutputDir><Debugging><Debugging Name="DebugSourceDirs">X:\stalker_addon\sources\engine\editors\ECore\Editor\;X:\src\editors\xrEProps\</Debugging></Debugging><Parameters><Parameters Name="RunParams">dont_remember_last_folder -hw_skin -editor -hq</Parameters><Parameters Name="Launcher"></Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="DebugCWD">F:\BORSCHT</Parameters><Parameters Name="HostApplication">x:\stalker_addon\binaries\LevelEditor.exe</Parameters><Parameters Name="RemoteHost"></Parameters><Parameters Name="RemotePath"></Parameters><Parameters Name="RemoteLauncher"></Parameters><Parameters Name="RemoteCWD"></Parameters><Parameters Name="RemoteDebug">False</Parameters><Parameters Name="RemoteParams"></Parameters><Parameters Name="UseRemoteLauncher">False</Parameters><Parameters Name="Debug Symbols Search Path"></Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><Compiler><Compiler Name="ShowInfoMsgs">0</Compiler><Compiler Name="LinkDebugVcl">0</Compiler><Compiler Name="LinkCGLIB">0</Compiler></Compiler><CORBA><CORBA Name="AddServerUnit">1</CORBA><CORBA Name="AddClientUnit">1</CORBA><CORBA Name="PrecompiledHeaders">1</CORBA></CORBA><Linker><Linker Name="LibPrefix"></Linker><Linker Name="LibSuffix"></Linker><Linker Name="LibVersion"></Linker></Linker><ProjectProperties><ProjectProperties Name="AutoShowDeps">False</ProjectProperties><ProjectProperties Name="ManagePaths">True</ProjectProperties><ProjectProperties Name="VerifyPackages">True</ProjectProperties></ProjectProperties><Source><Source Name="MainSource">LevelEditor.cpp</Source></Source><HistoryLists_hlILINK_LibraryPath><HistoryLists_hlILINK_LibraryPath Name="Count">1</HistoryLists_hlILINK_LibraryPath><HistoryLists_hlILINK_LibraryPath Name="Item0">X:\SDK\components\AlexMX;X:\SDK\components\LMD2018\lib\d11;$(BDS)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</HistoryLists_hlILINK_LibraryPath><HistoryLists_hlILINK_LibraryPath Name="Item1">$(BDS)\lib\debug;X:\SDK\components\AlexMX;X:\SDK\components\LMD2018\lib\d11;$(BDS)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</HistoryLists_hlILINK_LibraryPath></HistoryLists_hlILINK_LibraryPath><HistoryLists_hlIntermediateOutputDir><HistoryLists_hlIntermediateOutputDir Name="Count">1</HistoryLists_hlIntermediateOutputDir><HistoryLists_hlIntermediateOutputDir Name="Item0">x:\intermediate_ed\le</HistoryLists_hlIntermediateOutputDir><HistoryLists_hlIntermediateOutputDir Name="Item1">x:\intermediate_ed\le\Debug</HistoryLists_hlIntermediateOutputDir></HistoryLists_hlIntermediateOutputDir><HistoryLists_hlILINK_BpiLibOutputDir><HistoryLists_hlILINK_BpiLibOutputDir Name="Count">1</HistoryLists_hlILINK_BpiLibOutputDir><HistoryLists_hlILINK_BpiLibOutputDir Name="Item0">X:\stalker_addon\libraries</HistoryLists_hlILINK_BpiLibOutputDir></HistoryLists_hlILINK_BpiLibOutputDir><HistoryLists_hlBCC_MaxIdentifierLength><HistoryLists_hlBCC_MaxIdentifierLength Name="Count">1</HistoryLists_hlBCC_MaxIdentifierLength><HistoryLists_hlBCC_MaxIdentifierLength Name="Item0">250</HistoryLists_hlBCC_MaxIdentifierLength></HistoryLists_hlBCC_MaxIdentifierLength><HistoryLists_hlBCC_IncludePath><HistoryLists_hlBCC_IncludePath Name="Count">1</HistoryLists_hlBCC_IncludePath><HistoryLists_hlBCC_IncludePath Name="Item0">..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BDS)\Projects;$(BDS)\include\vcl;$(BDS)\include;X:\SDK\Components\alexmx;X:\SDK\components\LMD2018\lib\d11;..\..\xrCore;..\..\xrEngine;..\..\utils\ETools;X:\SDK\include\freemagic;$(BDS)\include\dinkumware</HistoryLists_hlBCC_IncludePath></HistoryLists_hlBCC_IncludePath><HistoryLists_hlBCC_Defines><HistoryLists_hlBCC_Defines Name="Count">2</HistoryLists_hlBCC_Defines><HistoryLists_hlBCC_Defines Name="Item0">NO_STRICT;_EDITOR;_LEVEL_EDITOR</HistoryLists_hlBCC_Defines><HistoryLists_hlBCC_Defines Name="Item1">NDEBUG;NO_STRICT;_EDITOR;_LEVEL_EDITOR</HistoryLists_hlBCC_Defines></HistoryLists_hlBCC_Defines><HistoryLists_hlBCC_OutputDir><HistoryLists_hlBCC_OutputDir Name="Count">2</HistoryLists_hlBCC_OutputDir><HistoryLists_hlBCC_OutputDir Name="Item0">x:\intermediate_ed\le\</HistoryLists_hlBCC_OutputDir><HistoryLists_hlBCC_OutputDir Name="Item1">x:\intermediate_ed\le\Release</HistoryLists_hlBCC_OutputDir></HistoryLists_hlBCC_OutputDir><HistoryLists_hlILINK_MaxErrors><HistoryLists_hlILINK_MaxErrors Name="Count">1</HistoryLists_hlILINK_MaxErrors><HistoryLists_hlILINK_MaxErrors Name="Item0">0</HistoryLists_hlILINK_MaxErrors></HistoryLists_hlILINK_MaxErrors><HistoryLists_hlILINK_AdditionalOptions><HistoryLists_hlILINK_AdditionalOptions Name="Count">1</HistoryLists_hlILINK_AdditionalOptions><HistoryLists_hlILINK_AdditionalOptions Name="Item0"> -GC-GF:LARGEADDRESSAWARE</HistoryLists_hlILINK_AdditionalOptions></HistoryLists_hlILINK_AdditionalOptions><HistoryLists_hlILINK_FileAlignment><HistoryLists_hlILINK_FileAlignment Name="Count">1</HistoryLists_hlILINK_FileAlignment><HistoryLists_hlILINK_FileAlignment Name="Item0">0x200</HistoryLists_hlILINK_FileAlignment></HistoryLists_hlILINK_FileAlignment><HistoryLists_hlILINK_ObjectAlignment><HistoryLists_hlILINK_ObjectAlignment Name="Count">1</HistoryLists_hlILINK_ObjectAlignment><HistoryLists_hlILINK_ObjectAlignment Name="Item0">4096</HistoryLists_hlILINK_ObjectAlignment></HistoryLists_hlILINK_ObjectAlignment><HistoryLists_hlILINK_BaseAddress><HistoryLists_hlILINK_BaseAddress Name="Count">1</HistoryLists_hlILINK_BaseAddress><HistoryLists_hlILINK_BaseAddress Name="Item0">0x00400000</HistoryLists_hlILINK_BaseAddress></HistoryLists_hlILINK_BaseAddress><HistoryLists_hlILINK_HeapCommitSize><HistoryLists_hlILINK_HeapCommitSize Name="Count">1</HistoryLists_hlILINK_HeapCommitSize><HistoryLists_hlILINK_HeapCommitSize Name="Item0">0x00001000</HistoryLists_hlILINK_HeapCommitSize></HistoryLists_hlILINK_HeapCommitSize><HistoryLists_hlILINK_HeapReserveSize><HistoryLists_hlILINK_HeapReserveSize Name="Count">1</HistoryLists_hlILINK_HeapReserveSize><HistoryLists_hlILINK_HeapReserveSize Name="Item0">0x00100000</HistoryLists_hlILINK_HeapReserveSize></HistoryLists_hlILINK_HeapReserveSize><HistoryLists_hlILINK_StackCommitSize><HistoryLists_hlILINK_StackCommitSize Name="Count">1</HistoryLists_hlILINK_StackCommitSize><HistoryLists_hlILINK_StackCommitSize Name="Item0">0x00002000</HistoryLists_hlILINK_StackCommitSize></HistoryLists_hlILINK_StackCommitSize><HistoryLists_hlILINK_StackReserveSize><HistoryLists_hlILINK_StackReserveSize Name="Count">2</HistoryLists_hlILINK_StackReserveSize><HistoryLists_hlILINK_StackReserveSize Name="Item0">0x00200000</HistoryLists_hlILINK_StackReserveSize><HistoryLists_hlILINK_StackReserveSize Name="Item1">0x00100000</HistoryLists_hlILINK_StackReserveSize></HistoryLists_hlILINK_StackReserveSize><HistoryLists_hlILINK_IntermediateOutputPath><HistoryLists_hlILINK_IntermediateOutputPath Name="Count">1</HistoryLists_hlILINK_IntermediateOutputPath><HistoryLists_hlILINK_IntermediateOutputPath Name="Item0">x:\intermediate_ed\le</HistoryLists_hlILINK_IntermediateOutputPath></HistoryLists_hlILINK_IntermediateOutputPath><HistoryLists_hlDCC_IncludePath><HistoryLists_hlDCC_IncludePath Name="Count">1</HistoryLists_hlDCC_IncludePath><HistoryLists_hlDCC_IncludePath Name="Item0">.\;$(BDS)\lib;$(BDS)\lib\obj</HistoryLists_hlDCC_IncludePath></HistoryLists_hlDCC_IncludePath><HistoryLists_hlDCC_ObjOutput><HistoryLists_hlDCC_ObjOutput Name="Count">1</HistoryLists_hlDCC_ObjOutput><HistoryLists_hlDCC_ObjOutput Name="Item0">x:\intermediate_ed\le\</HistoryLists_hlDCC_ObjOutput></HistoryLists_hlDCC_ObjOutput><DebugSymbolTables><DebugSymbolTables Name="xrCoreB.dll">'X:\stalker_addon\binaries'</DebugSymbolTables></DebugSymbolTables></CPlusPlusBuilder.Personality></BorlandProject></BorlandProject>
+<BorlandProject><CPlusPlusBuilder.Personality><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">2</VersionInfo><VersionInfo Name="Build">161</VersionInfo><VersionInfo Name="Debug">True</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1033</VersionInfo><VersionInfo Name="CodePage">1252</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.2.161</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><ExcludedPackages><ExcludedPackages Name="f:\program files\borland\cbuilder6\Bin\bcb2kaxserver60.bpl">Borland C++Builder COM Server Components Sample Package</ExcludedPackages></ExcludedPackages><HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Count">13</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item0">..\..\Layers\xrRender;..\..\xrEngine;Edit;..\..\xrServerEntities</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item1">..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;X:\SDK\Components\alexmx;X:\SDK\Components\ElPack\Code;X:\SDK\Components\ElPack\Code\Source;..\..\xrCore;..\..\xrEngine;..\..\utils\ETools;X:\SDK\include\freemagic</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item2">..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;$(ETOOLS_DIR);X:\SDK\include\freemagic</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item3">..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;$(ETOOLS_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item4">..\..\xrServerEntities;..\..\Layers\xrRender;..\..\xrEngine\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrRender;$(MAGIC_SW_DIR);$(ETOOLS_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item5">..\..\xrEngine\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrRender;$(MAGIC_SW_DIR);$(ETOOLS_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item6">..\..\xrEngine\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrRender;$(MAGIC_SW_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item7">$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrRender;$(MAGIC_SW_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item8">$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrEngine/xrRender;$(MAGIC_SW_DIR)</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item9">$(DXSDK_DIR)\Include;Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrEngine/xrRender</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item10">Edit;Engine;$(BCB)\Projects;$(BCB)\include\vcl;$(BCB)\include;$(DXSDK_DIR)\Include;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;$(CORE_DIR);../../xrEngine;../../xrEngine/xrRender</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item11">Edit;H:\RAD\Borland\CBuilder6\Projects;"R:\SDK\Microsoft DirectX 9.0 SDK (April 2005)\Include"Edit;Engine;r:\borland\components6\alexmx;$(BCB)\include;$(BCB)\include\vcl;R:\SDK\MagicFM_Borland\Sdk\Include;R:\Borland\Components6\ElPack\Code;R:\Borland\Components6\ElPack\Code\Source;P:\xrCore;..\ECore;..\ECore\Editor;..\ECore\Engine;..\ECore\Engine\blenders;..\ECore\Engine\visuals;..\xrEProps;P:\xrSound</HistoryLists_hlIncludePath><HistoryLists_hlIncludePath Name="Item12">H:\RAD\Borland\CBuilder6\Projects;R:\SDK\Microsoft DirectX 9.0 SDK (April 2005)\Include;Engine\Game;Edit;Engine;r:\borland\components6\alexmx;$(BCB)\include;$(BCB)\include\vcl;R:\SDK\MagicFM_Borland\Sdk\Include;R:\Borland\Components6\ElPack\Code;R:\Borland\Components6\ElPack\Code\Source;P:\xrCore;..\ECore;..\ECore\Editor;..\ECore\Engine;..\ECore\Engine\blenders;..\ECore\Engine\visuals;..\xrEProps;P:\xrSound</HistoryLists_hlIncludePath></HistoryLists_hlIncludePath><HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Count">15</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item0">X:\SDK\components\AlexMX;X:\SDK\components\ElPack\Code;$(BCB)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item1">X:\SDK\components\AlexMX;X:\SDK\components\ElPack\Code;$(BCB)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item2">X:\SDK\components\AlexMX;X:\SDK\components\ElPack\Code;$(BCB)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item3">$(BCB)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item4">..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item5">..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item6">$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item7">..\..\xrServerEntities;..\..\Layers\xrRender;..\..\..\SDK\components\ElPack\Code;..\..\xrEngine\xrRender;..\..\xrRender;..\..\xrEngine;Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item8">..\..\xrEngine\xrRender;..\..\xrRender;..\..\xrEngine;Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item9">..\..\xrRender;..\..\xrEngine;Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;X:\stalker_addon\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item10">..\..\xrEngine\xrRender;..\..\xrEngine;Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;x:\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item11">Edit;Engine;$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;x:\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item12">$(BCB)\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;$(COMPONENTS)\alexmx;$(COMPONENTS)\ElPack\Code;$(COMPONENTS)\ElPack\Code\Source;x:\libraries</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item13">H:\RAD\Borland\CBuilder6\Projects;Edit;Engine;C:\Rad\Borland\CBuilder6\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;r:\borland\components6\alexmx;R:\Borland\Components6\ElPack\Code;R:\Borland\Components6\ElPack\Code\Source;..\lib\dx;..\lib;x:\;..\ECore;..\ECore\Editor</HistoryLists_hlLibraryPath><HistoryLists_hlLibraryPath Name="Item14">H:\RAD\Borland\CBuilder6\Projects;Engine\Game;Edit;Engine;C:\Rad\Borland\CBuilder6\Projects;$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\Projects\Lib;r:\borland\components6\alexmx;R:\Borland\Components6\ElPack\Code;R:\Borland\Components6\ElPack\Code\Source;..\lib\dx;..\lib;x:\;..\ECore;..\ECore\Editor</HistoryLists_hlLibraryPath></HistoryLists_hlLibraryPath><HistoryLists_hlDebugSourcePath><HistoryLists_hlDebugSourcePath Name="Count">2</HistoryLists_hlDebugSourcePath><HistoryLists_hlDebugSourcePath Name="Item0">X:\stalker_addon\sources\engine\editors\ECore\Editor\</HistoryLists_hlDebugSourcePath><HistoryLists_hlDebugSourcePath Name="Item1">c:\rad\borland\cbuilder5\source\vcl;R:\Borland\Components6\AlexMX\</HistoryLists_hlDebugSourcePath></HistoryLists_hlDebugSourcePath><HistoryLists_hlConditionals><HistoryLists_hlConditionals Name="Count">2</HistoryLists_hlConditionals><HistoryLists_hlConditionals Name="Item0">_EDITOR;_LEVEL_EDITOR;_DEBUG</HistoryLists_hlConditionals><HistoryLists_hlConditionals Name="Item1">_EDITOR;_LEVEL_EDITOR</HistoryLists_hlConditionals></HistoryLists_hlConditionals><HistoryLists_hlIntOutputDir><HistoryLists_hlIntOutputDir Name="Count">2</HistoryLists_hlIntOutputDir><HistoryLists_hlIntOutputDir Name="Item0">x:\intermediate_ed\le</HistoryLists_hlIntOutputDir><HistoryLists_hlIntOutputDir Name="Item1">intermediate</HistoryLists_hlIntOutputDir></HistoryLists_hlIntOutputDir><HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Count">5</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item0">x:\stalker_addon\binaries</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item1">x:\stalker_addon\binaries\</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item2">x:\binaries\</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item3">x:\binaries</HistoryLists_hlFinalOutputDir><HistoryLists_hlFinalOutputDir Name="Item4">x:\</HistoryLists_hlFinalOutputDir></HistoryLists_hlFinalOutputDir><HistoryLists_hIBPIOutputDir><HistoryLists_hIBPIOutputDir Name="Count">2</HistoryLists_hIBPIOutputDir><HistoryLists_hIBPIOutputDir Name="Item0">X:\stalker_addon\libraries</HistoryLists_hIBPIOutputDir><HistoryLists_hIBPIOutputDir Name="Item1">x:\libraries</HistoryLists_hIBPIOutputDir></HistoryLists_hIBPIOutputDir><Debugging><Debugging Name="DebugSourceDirs">X:\stalker_addon\sources\engine\editors\ECore\Editor\;X:\src\editors\xrEProps\</Debugging></Debugging><Parameters><Parameters Name="RunParams">-dont_remember_last_folder -editor -hq</Parameters><Parameters Name="Launcher"></Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="DebugCWD">G:\BORSCHT</Parameters><Parameters Name="HostApplication">x:\stalker_addon\binaries\LevelEditor.exe</Parameters><Parameters Name="RemoteHost"></Parameters><Parameters Name="RemotePath"></Parameters><Parameters Name="RemoteLauncher"></Parameters><Parameters Name="RemoteCWD"></Parameters><Parameters Name="RemoteDebug">False</Parameters><Parameters Name="RemoteParams"></Parameters><Parameters Name="UseRemoteLauncher">False</Parameters><Parameters Name="Debug Symbols Search Path"></Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><Compiler><Compiler Name="ShowInfoMsgs">0</Compiler><Compiler Name="LinkDebugVcl">0</Compiler><Compiler Name="LinkCGLIB">0</Compiler></Compiler><CORBA><CORBA Name="AddServerUnit">1</CORBA><CORBA Name="AddClientUnit">1</CORBA><CORBA Name="PrecompiledHeaders">1</CORBA></CORBA><Linker><Linker Name="LibPrefix"></Linker><Linker Name="LibSuffix"></Linker><Linker Name="LibVersion"></Linker></Linker><ProjectProperties><ProjectProperties Name="AutoShowDeps">False</ProjectProperties><ProjectProperties Name="ManagePaths">True</ProjectProperties><ProjectProperties Name="VerifyPackages">True</ProjectProperties></ProjectProperties><Source><Source Name="MainSource">LevelEditor.cpp</Source></Source><HistoryLists_hlILINK_LibraryPath><HistoryLists_hlILINK_LibraryPath Name="Count">1</HistoryLists_hlILINK_LibraryPath><HistoryLists_hlILINK_LibraryPath Name="Item0">X:\SDK\components\AlexMX;X:\SDK\components\LMD2018\lib\d11;$(BDS)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</HistoryLists_hlILINK_LibraryPath><HistoryLists_hlILINK_LibraryPath Name="Item1">$(BDS)\lib\debug;X:\SDK\components\AlexMX;X:\SDK\components\LMD2018\lib\d11;$(BDS)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</HistoryLists_hlILINK_LibraryPath></HistoryLists_hlILINK_LibraryPath><HistoryLists_hlIntermediateOutputDir><HistoryLists_hlIntermediateOutputDir Name="Count">1</HistoryLists_hlIntermediateOutputDir><HistoryLists_hlIntermediateOutputDir Name="Item0">x:\intermediate_ed\le</HistoryLists_hlIntermediateOutputDir><HistoryLists_hlIntermediateOutputDir Name="Item1">x:\intermediate_ed\le\Debug</HistoryLists_hlIntermediateOutputDir></HistoryLists_hlIntermediateOutputDir><HistoryLists_hlILINK_BpiLibOutputDir><HistoryLists_hlILINK_BpiLibOutputDir Name="Count">1</HistoryLists_hlILINK_BpiLibOutputDir><HistoryLists_hlILINK_BpiLibOutputDir Name="Item0">X:\stalker_addon\libraries</HistoryLists_hlILINK_BpiLibOutputDir></HistoryLists_hlILINK_BpiLibOutputDir><HistoryLists_hlBCC_MaxIdentifierLength><HistoryLists_hlBCC_MaxIdentifierLength Name="Count">1</HistoryLists_hlBCC_MaxIdentifierLength><HistoryLists_hlBCC_MaxIdentifierLength Name="Item0">250</HistoryLists_hlBCC_MaxIdentifierLength></HistoryLists_hlBCC_MaxIdentifierLength><HistoryLists_hlBCC_IncludePath><HistoryLists_hlBCC_IncludePath Name="Count">1</HistoryLists_hlBCC_IncludePath><HistoryLists_hlBCC_IncludePath Name="Item0">..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BDS)\Projects;$(BDS)\include\vcl;$(BDS)\include;X:\SDK\Components\alexmx;X:\SDK\components\LMD2018\lib\d11;..\..\xrCore;..\..\xrEngine;..\..\utils\ETools;X:\SDK\include\freemagic;$(BDS)\include\dinkumware</HistoryLists_hlBCC_IncludePath></HistoryLists_hlBCC_IncludePath><HistoryLists_hlBCC_Defines><HistoryLists_hlBCC_Defines Name="Count">2</HistoryLists_hlBCC_Defines><HistoryLists_hlBCC_Defines Name="Item0">NO_STRICT;_EDITOR;_LEVEL_EDITOR</HistoryLists_hlBCC_Defines><HistoryLists_hlBCC_Defines Name="Item1">NDEBUG;NO_STRICT;_EDITOR;_LEVEL_EDITOR</HistoryLists_hlBCC_Defines></HistoryLists_hlBCC_Defines><HistoryLists_hlBCC_OutputDir><HistoryLists_hlBCC_OutputDir Name="Count">2</HistoryLists_hlBCC_OutputDir><HistoryLists_hlBCC_OutputDir Name="Item0">x:\intermediate_ed\le\</HistoryLists_hlBCC_OutputDir><HistoryLists_hlBCC_OutputDir Name="Item1">x:\intermediate_ed\le\Release</HistoryLists_hlBCC_OutputDir></HistoryLists_hlBCC_OutputDir><HistoryLists_hlILINK_MaxErrors><HistoryLists_hlILINK_MaxErrors Name="Count">1</HistoryLists_hlILINK_MaxErrors><HistoryLists_hlILINK_MaxErrors Name="Item0">0</HistoryLists_hlILINK_MaxErrors></HistoryLists_hlILINK_MaxErrors><HistoryLists_hlILINK_AdditionalOptions><HistoryLists_hlILINK_AdditionalOptions Name="Count">1</HistoryLists_hlILINK_AdditionalOptions><HistoryLists_hlILINK_AdditionalOptions Name="Item0"> -GC-GF:LARGEADDRESSAWARE</HistoryLists_hlILINK_AdditionalOptions></HistoryLists_hlILINK_AdditionalOptions><HistoryLists_hlILINK_FileAlignment><HistoryLists_hlILINK_FileAlignment Name="Count">1</HistoryLists_hlILINK_FileAlignment><HistoryLists_hlILINK_FileAlignment Name="Item0">0x200</HistoryLists_hlILINK_FileAlignment></HistoryLists_hlILINK_FileAlignment><HistoryLists_hlILINK_ObjectAlignment><HistoryLists_hlILINK_ObjectAlignment Name="Count">1</HistoryLists_hlILINK_ObjectAlignment><HistoryLists_hlILINK_ObjectAlignment Name="Item0">4096</HistoryLists_hlILINK_ObjectAlignment></HistoryLists_hlILINK_ObjectAlignment><HistoryLists_hlILINK_BaseAddress><HistoryLists_hlILINK_BaseAddress Name="Count">1</HistoryLists_hlILINK_BaseAddress><HistoryLists_hlILINK_BaseAddress Name="Item0">0x00400000</HistoryLists_hlILINK_BaseAddress></HistoryLists_hlILINK_BaseAddress><HistoryLists_hlILINK_HeapCommitSize><HistoryLists_hlILINK_HeapCommitSize Name="Count">1</HistoryLists_hlILINK_HeapCommitSize><HistoryLists_hlILINK_HeapCommitSize Name="Item0">0x00001000</HistoryLists_hlILINK_HeapCommitSize></HistoryLists_hlILINK_HeapCommitSize><HistoryLists_hlILINK_HeapReserveSize><HistoryLists_hlILINK_HeapReserveSize Name="Count">1</HistoryLists_hlILINK_HeapReserveSize><HistoryLists_hlILINK_HeapReserveSize Name="Item0">0x00100000</HistoryLists_hlILINK_HeapReserveSize></HistoryLists_hlILINK_HeapReserveSize><HistoryLists_hlILINK_StackCommitSize><HistoryLists_hlILINK_StackCommitSize Name="Count">1</HistoryLists_hlILINK_StackCommitSize><HistoryLists_hlILINK_StackCommitSize Name="Item0">0x00002000</HistoryLists_hlILINK_StackCommitSize></HistoryLists_hlILINK_StackCommitSize><HistoryLists_hlILINK_StackReserveSize><HistoryLists_hlILINK_StackReserveSize Name="Count">2</HistoryLists_hlILINK_StackReserveSize><HistoryLists_hlILINK_StackReserveSize Name="Item0">0x00200000</HistoryLists_hlILINK_StackReserveSize><HistoryLists_hlILINK_StackReserveSize Name="Item1">0x00100000</HistoryLists_hlILINK_StackReserveSize></HistoryLists_hlILINK_StackReserveSize><HistoryLists_hlILINK_IntermediateOutputPath><HistoryLists_hlILINK_IntermediateOutputPath Name="Count">1</HistoryLists_hlILINK_IntermediateOutputPath><HistoryLists_hlILINK_IntermediateOutputPath Name="Item0">x:\intermediate_ed\le</HistoryLists_hlILINK_IntermediateOutputPath></HistoryLists_hlILINK_IntermediateOutputPath><HistoryLists_hlDCC_IncludePath><HistoryLists_hlDCC_IncludePath Name="Count">1</HistoryLists_hlDCC_IncludePath><HistoryLists_hlDCC_IncludePath Name="Item0">.\;$(BDS)\lib;$(BDS)\lib\obj</HistoryLists_hlDCC_IncludePath></HistoryLists_hlDCC_IncludePath><HistoryLists_hlDCC_ObjOutput><HistoryLists_hlDCC_ObjOutput Name="Count">1</HistoryLists_hlDCC_ObjOutput><HistoryLists_hlDCC_ObjOutput Name="Item0">x:\intermediate_ed\le\</HistoryLists_hlDCC_ObjOutput></HistoryLists_hlDCC_ObjOutput><DebugSymbolTables><DebugSymbolTables Name="xrCoreB.dll">'X:\stalker_addon\binaries'</DebugSymbolTables></DebugSymbolTables></CPlusPlusBuilder.Personality></BorlandProject></BorlandProject>
   </ProjectExtensions>
   <Import Project="$(MSBuildBinPath)\Borland.Cpp.Targets" />
   <ItemGroup>
     <CppCompile Include="..\..\Layers\xrRender\DetailManager.cpp">
-      <BuildOrder>107</BuildOrder>
-    </CppCompile>
-    <CppCompile Include="..\..\Layers\xrRender\DetailManager_CACHE.cpp">
-      <BuildOrder>110</BuildOrder>
-    </CppCompile>
-    <CppCompile Include="..\..\Layers\xrRender\DetailManager_Decompress.cpp">
       <BuildOrder>108</BuildOrder>
     </CppCompile>
-    <CppCompile Include="..\..\Layers\xrRender\DetailManager_soft.cpp">
-      <BuildOrder>109</BuildOrder>
-    </CppCompile>
-    <CppCompile Include="..\..\Layers\xrRender\DetailManager_VS.cpp">
+    <CppCompile Include="..\..\Layers\xrRender\DetailManager_CACHE.cpp">
       <BuildOrder>111</BuildOrder>
     </CppCompile>
-    <CppCompile Include="..\..\xrEngine\ObjectAnimator.cpp">
+    <CppCompile Include="..\..\Layers\xrRender\DetailManager_Decompress.cpp">
+      <BuildOrder>109</BuildOrder>
+    </CppCompile>
+    <CppCompile Include="..\..\Layers\xrRender\DetailManager_soft.cpp">
+      <BuildOrder>110</BuildOrder>
+    </CppCompile>
+    <CppCompile Include="..\..\Layers\xrRender\DetailManager_VS.cpp">
       <BuildOrder>112</BuildOrder>
     </CppCompile>
+    <CppCompile Include="..\..\xrEngine\ObjectAnimator.cpp">
+      <BuildOrder>113</BuildOrder>
+    </CppCompile>
     <CppCompile Include="..\..\xrServerEntities\gametype_chooser.cpp">
-      <BuildOrder>106</BuildOrder>
+      <BuildOrder>107</BuildOrder>
     </CppCompile>
     <CppCompile Include="..\..\xrServerEntities\LevelGameDef.cpp">
-      <BuildOrder>105</BuildOrder>
+      <BuildOrder>106</BuildOrder>
     </CppCompile>
     <CppCompile Include="BottomBar.cpp">
       <Form>fraBottomBar</Form>
       <DesignClass>TFrame</DesignClass>
       <DependentOn>BottomBar.h</DependentOn>
-      <BuildOrder>116</BuildOrder>
+      <BuildOrder>117</BuildOrder>
     </CppCompile>
     <CppCompile Include="DOOneColor.cpp">
       <Form>frmOneColor</Form>
       <DependentOn>DOOneColor.h</DependentOn>
-      <BuildOrder>120</BuildOrder>
+      <BuildOrder>121</BuildOrder>
     </CppCompile>
     <CppCompile Include="DOShuffle.cpp">
       <Form>frmDOShuffle</Form>
       <DependentOn>DOShuffle.h</DependentOn>
-      <BuildOrder>121</BuildOrder>
+      <BuildOrder>122</BuildOrder>
     </CppCompile>
     <CppCompile Include="EditLibrary.cpp">
       <Form>frmEditLibrary</Form>
       <DependentOn>EditLibrary.h</DependentOn>
-      <BuildOrder>122</BuildOrder>
+      <BuildOrder>123</BuildOrder>
     </CppCompile>
     <CppCompile Include="EditLightAnim.cpp">
       <Form>frmEditLightAnim</Form>
       <DependentOn>EditLightAnim.h</DependentOn>
-      <BuildOrder>123</BuildOrder>
+      <BuildOrder>124</BuildOrder>
     </CppCompile>
     <CppCompile Include="Edit\AppendObjectInfoForm.cpp">
       <Form>frmAppendObjectInfo</Form>
@@ -219,6 +219,10 @@
     </CppCompile>
     <CppCompile Include="Edit\EditObjectExportLWO.cpp">
       <BuildOrder>14</BuildOrder>
+    </CppCompile>
+    <CppCompile Include="Edit\EGarbageGenerator.cpp">
+      <DependentOn>Edit\EGarbageGenerator.h</DependentOn>
+      <BuildOrder>105</BuildOrder>
     </CppCompile>
     <CppCompile Include="Edit\ELight.cpp">
       <BuildOrder>15</BuildOrder>
@@ -484,133 +488,133 @@
     <CppCompile Include="FormAbout.cpp">
       <Form>AboutForm</Form>
       <DependentOn>FormAbout.h</DependentOn>
-      <BuildOrder>147</BuildOrder>
+      <BuildOrder>148</BuildOrder>
     </CppCompile>
     <CppCompile Include="FormCoord.cpp">
       <Form>frmCoord</Form>
       <DependentOn>FormCoord.h</DependentOn>
-      <BuildOrder>146</BuildOrder>
+      <BuildOrder>147</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameAIMap.cpp">
       <Form>fraAIMap</Form>
       <DependentOn>FrameAIMap.h</DependentOn>
-      <BuildOrder>124</BuildOrder>
+      <BuildOrder>125</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameDetObj.cpp">
       <Form>fraDetailObject</Form>
       <DependentOn>FrameDetObj.h</DependentOn>
-      <BuildOrder>125</BuildOrder>
+      <BuildOrder>126</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameFogVol.cpp">
       <Form>fraFogVol</Form>
       <DependentOn>FrameFogVol.h</DependentOn>
-      <BuildOrder>144</BuildOrder>
+      <BuildOrder>145</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameGroup.cpp">
       <Form>fraGroup</Form>
       <DependentOn>FrameGroup.h</DependentOn>
-      <BuildOrder>126</BuildOrder>
+      <BuildOrder>127</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameLight.cpp">
       <Form>fraLight</Form>
       <DependentOn>FrameLight.h</DependentOn>
-      <BuildOrder>127</BuildOrder>
+      <BuildOrder>128</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameObject.cpp">
       <Form>fraObject</Form>
       <DependentOn>FrameObject.h</DependentOn>
-      <BuildOrder>128</BuildOrder>
+      <BuildOrder>129</BuildOrder>
     </CppCompile>
     <CppCompile Include="FramePortal.cpp">
       <Form>fraPortal</Form>
       <DependentOn>FramePortal.h</DependentOn>
-      <BuildOrder>129</BuildOrder>
+      <BuildOrder>130</BuildOrder>
     </CppCompile>
     <CppCompile Include="FramePS.cpp">
       <Form>fraPS</Form>
       <DependentOn>FramePS.h</DependentOn>
-      <BuildOrder>130</BuildOrder>
+      <BuildOrder>131</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameSector.cpp">
       <Form>fraSector</Form>
       <DependentOn>FrameSector.h</DependentOn>
-      <BuildOrder>131</BuildOrder>
+      <BuildOrder>132</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameShape.cpp">
       <Form>fraShape</Form>
       <DependentOn>FrameShape.h</DependentOn>
-      <BuildOrder>132</BuildOrder>
+      <BuildOrder>133</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameSpawn.cpp">
       <Form>fraSpawn</Form>
       <DependentOn>FrameSpawn.h</DependentOn>
-      <BuildOrder>133</BuildOrder>
+      <BuildOrder>134</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrameWayPoint.cpp">
       <Form>fraWayPoint</Form>
       <DependentOn>FrameWayPoint.h</DependentOn>
-      <BuildOrder>134</BuildOrder>
+      <BuildOrder>135</BuildOrder>
     </CppCompile>
     <CppCompile Include="FrmDBXpacker.cpp">
       <Form>DB_packer</Form>
       <DependentOn>FrmDBXpacker.h</DependentOn>
-      <BuildOrder>141</BuildOrder>
+      <BuildOrder>142</BuildOrder>
     </CppCompile>
     <CppCompile Include="iniStreamImpl.cpp">
-      <BuildOrder>142</BuildOrder>
+      <BuildOrder>143</BuildOrder>
     </CppCompile>
     <CppCompile Include="LEClipEditor.cpp">
       <Form>ClipMaker</Form>
       <DependentOn>LEClipEditor.h</DependentOn>
-      <BuildOrder>145</BuildOrder>
+      <BuildOrder>146</BuildOrder>
     </CppCompile>
     <CppCompile Include="LeftBar.cpp">
       <Form>fraLeftBar</Form>
       <DesignClass>TFrame</DesignClass>
       <DependentOn>LeftBar.h</DependentOn>
-      <BuildOrder>135</BuildOrder>
+      <BuildOrder>136</BuildOrder>
     </CppCompile>
     <CppCompile Include="LevelEditor.cpp">
-      <BuildOrder>113</BuildOrder>
+      <BuildOrder>114</BuildOrder>
     </CppCompile>
     <CppCompile Include="main.cpp">
       <Form>frmMain</Form>
       <DependentOn>main.h</DependentOn>
-      <BuildOrder>117</BuildOrder>
+      <BuildOrder>118</BuildOrder>
     </CppCompile>
     <CppCompile Include="ObjectList.cpp">
       <Form>frmObjectList</Form>
       <DependentOn>ObjectList.h</DependentOn>
-      <BuildOrder>136</BuildOrder>
+      <BuildOrder>137</BuildOrder>
     </CppCompile>
     <CppCompile Include="previewimage.cpp">
       <Form>frmPreviewImage</Form>
       <DependentOn>previewimage.h</DependentOn>
-      <BuildOrder>137</BuildOrder>
+      <BuildOrder>138</BuildOrder>
     </CppCompile>
     <CppCompile Include="PropertiesEObject.cpp">
       <Form>frmPropertiesEObject</Form>
       <DependentOn>PropertiesEObject.h</DependentOn>
-      <BuildOrder>138</BuildOrder>
+      <BuildOrder>139</BuildOrder>
     </CppCompile>
     <CppCompile Include="RightForm.cpp">
       <Form>frmRight</Form>
       <DependentOn>RightForm.h</DependentOn>
-      <BuildOrder>143</BuildOrder>
+      <BuildOrder>144</BuildOrder>
     </CppCompile>
     <CppCompile Include="Splash.cpp">
       <Form>frmSplash</Form>
       <DependentOn>Splash.h</DependentOn>
-      <BuildOrder>139</BuildOrder>
+      <BuildOrder>140</BuildOrder>
     </CppCompile>
     <CppCompile Include="stdafx.cpp">
-      <BuildOrder>119</BuildOrder>
+      <BuildOrder>120</BuildOrder>
     </CppCompile>
     <CppCompile Include="TopBar.cpp">
       <Form>fraTopBar</Form>
       <DesignClass>TFrame</DesignClass>
       <DependentOn>TopBar.h</DependentOn>
-      <BuildOrder>118</BuildOrder>
+      <BuildOrder>119</BuildOrder>
     </CppCompile>
     <None Include="Edit\CustomObject.h">
       <BuildOrder>98</BuildOrder>
@@ -622,16 +626,16 @@
       <BuildOrder>101</BuildOrder>
     </None>
     <None Include="Engine\ShapeData.h">
-      <BuildOrder>140</BuildOrder>
+      <BuildOrder>141</BuildOrder>
     </None>
     <None Include="LevelEditor.todo">
-      <BuildOrder>148</BuildOrder>
+      <BuildOrder>149</BuildOrder>
     </None>
     <ResFiles Include="LevelEditor.res">
-      <BuildOrder>114</BuildOrder>
+      <BuildOrder>115</BuildOrder>
     </ResFiles>
     <ResFiles Include="resource.res">
-      <BuildOrder>115</BuildOrder>
+      <BuildOrder>116</BuildOrder>
     </ResFiles>
     <FormResources Include="BottomBar.dfm" />
     <FormResources Include="DOOneColor.dfm" />

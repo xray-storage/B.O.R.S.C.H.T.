@@ -37,7 +37,7 @@ bool ESceneObjectTool::LoadLTX(CInifile& ini)
 		sprintf				(buff,"object_name_%u",i);
         shared_str s		= ini.r_string("AppendRandom", buff);
         m_AppendRandomObjects.push_back	(s);
-    }
+	}
 
     m_Flags.set(flAppendRandom,FALSE);
 

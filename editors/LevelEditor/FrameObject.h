@@ -23,24 +23,16 @@ class TfraObject : public TForm
 {
 __published:	// IDE-managed Components
 	TFormStorage *fsStorage;
-	TLabel *Label5;
-	TExtBtn *ebSelectByRefs;
-	TExtBtn *ebDeselectByRefs;
-	TExtBtn *ebMultiSelectByRefMove;
-	TBevel *Bevel1;
-	TLabel *Label2;
-	TExtBtn *ebMultiSelectByRefAppend;
-	TLabel *Label3;
 	TPanel *paSelectObject;
 	TLabel *Label1;
-	TExtBtn *ExtBtn1;
-	TExtBtn *ExtBtn3;
+	TExtBtn *ebSelectByRefs;
+	TExtBtn *ebDeselectByRefs;
 	TLabel *APHeadLabel3;
 	TExtBtn *ExtBtn5;
-	TExtBtn *ExtBtn6;
+	TExtBtn *ebMultiSelectByRefMove;
 	TBevel *Bevel3;
 	TLabel *Label4;
-	TExtBtn *ExtBtn7;
+	TExtBtn *ebMultiSelectByRefAppend;
 	TLabel *Label6;
 	TPanel *paCommands;
 	TExtBtn *ebMultiAppend;
@@ -57,6 +49,7 @@ __published:	// IDE-managed Components
 	TExtBtn *ExtBtn4;
 	TMultiObjSpinEdit *seSelPercent;
 	TExtBtn *ExtBtn9;
+	TExtBtn *ebGenerateGarbage;
     void __fastcall PaneMinClick(TObject *Sender);
     void __fastcall ebSelectByRefsClick(TObject *Sender);
     void __fastcall ebDeselectByRefsClick(TObject *Sender);
@@ -74,6 +67,7 @@ __published:	// IDE-managed Components
 	void __fastcall ebRandomAppendModeClick(TObject *Sender);
 	void __fastcall ExtBtn8Click(TObject *Sender);
 	void __fastcall ExtBtn9Click(TObject *Sender);
+	void __fastcall ebGenerateGarbageClick(TObject *Sender);
 private:	// User declarations
 	void 			MultiSelByRefObject ( bool clear_prev );
 	void 			SelByRefObject  	( bool flag );

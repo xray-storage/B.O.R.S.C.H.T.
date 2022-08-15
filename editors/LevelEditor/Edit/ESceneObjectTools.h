@@ -13,11 +13,12 @@ protected:
 	virtual void 		RemoveControls			();
 
     enum{
-    	flAppendRandomUpdateProps		= (1<<27),
-    	flAppendRandomScaleProportional	= (1<<28),
-    	flAppendRandom					= (1<<29),
-    	flAppendRandomScale				= (1<<30),
-    	flAppendRandomRotation			= (1<<31),
+    	flAppendRandomNormalAlignment   = (1<<26),
+    	flAppendRandomUpdateProps       = (1<<27),
+    	flAppendRandomScaleProportional = (1<<28),
+    	flAppendRandom                  = (1<<29),
+    	flAppendRandomScale             = (1<<30),
+    	flAppendRandomRotation          = (1<<31),
     };
     Flags32				m_Flags;
 	bool 				ExportBreakableObjects	(SExportStreams* F);
@@ -25,6 +26,7 @@ protected:
 
 	TProperties* 		m_Props;
     void 				OnChangeAppendRandomFlags(PropValue* prop);
+    void                OnAppendRandomFileBtnClick(ButtonValue* B, bool& bModif, bool& bSafe);
 //----------------------------------------------------
 public:
     Fvector				m_AppendRandomMinScale;
@@ -33,6 +35,7 @@ public:
     Fvector				m_AppendRandomMaxRotation;
     shared_str			m_AppendRandomObjectsStr;
     RStringVec			m_AppendRandomObjects;
+    float               m_AppendRandomObjectsPerM2;
 public:
 						ESceneObjectTool		();
 
@@ -68,6 +71,7 @@ public:
     BOOL				IsAppendRandomScaleActive	(){return m_Flags.is(flAppendRandomScale);}
     BOOL				IsAppendRandomRotationActive(){return m_Flags.is(flAppendRandomRotation);}
     BOOL				IsAppendRandomScaleProportional(){return m_Flags.is(flAppendRandomScaleProportional);}
+    BOOL                IsAppendRandomNormalAlignmentActive(){return m_Flags.is(flAppendRandomNormalAlignment);}
 
     // tools
     virtual bool		ExportGame         		(SExportStreams* F);

@@ -15,11 +15,12 @@
 ESceneObjectTool::ESceneObjectTool():ESceneCustomOTool(OBJCLASS_SCENEOBJECT)
 {
     m_AppendRandomMinScale.set		(1.f,1.f,1.f);
-    m_AppendRandomMaxScale.set		(1.f,1.f,1.f);
-    m_AppendRandomMinRotation.set	(0.f,0.f,0.f);
-    m_AppendRandomMaxRotation.set	(0.f,0.f,0.f);
-	m_Flags.zero	();
-    m_Props			= 0;
+    m_AppendRandomMaxScale.set      (1.f,1.f,1.f);
+    m_AppendRandomMinRotation.set   (0.f,0.f,0.f);
+    m_AppendRandomMaxRotation.set   (0.f,0.f,0.f);
+    m_AppendRandomObjectsPerM2      = 0.02f;
+	m_Flags.zero    ();
+    m_Props         = 0;
 }
 
 void ESceneObjectTool::CreateControls()
@@ -94,44 +95,106 @@ void ESceneObjectTool::OnChangeAppendRandomFlags(PropValue* prop)
     m_Flags.set					(flAppendRandomUpdateProps,TRUE);
 	_SequenceToList				(m_AppendRandomObjects,*m_AppendRandomObjectsStr);
 }
+//----------------------------------------------------
+
+void ESceneObjectTool::OnAppendRandomFileBtnClick(ButtonValue* B, bool& bModif, bool& bSafe)
+{
+    bModif = false;
+    xr_string fn;
+	switch(B->btn_num){
+    case 0:
+        if(EFS.GetOpenName("$import$", fn, false, NULL, 6)){
+            CInifile* I = xr_new<CInifile>(fn.c_str(), TRUE, TRUE, TRUE);
+            
+            m_Flags.set(flAppendRandomScale, I->r_bool("append_random", "scale"));
+            m_Flags.set(flAppendRandomScaleProportional, I->r_bool("append_random", "scale_proportional"));
+            m_AppendRandomMinScale = I->r_fvector3("append_random", "scale_min");
+            m_AppendRandomMaxScale = I->r_fvector3("append_random", "scale_max");
+            m_Flags.set(flAppendRandomRotation, I->r_bool("append_random", "rotation"));
+            m_AppendRandomMinRotation = I->r_fvector3("append_random", "rotation_min");
+            m_AppendRandomMaxRotation = I->r_fvector3("append_random", "rotation_max");
+            
+            m_AppendRandomObjects.resize(I->r_u32("append_random", "objects_count"));
+            for(size_t i = 0; i < m_AppendRandomObjects.size(); i++)
+            	m_AppendRandomObjects[i] = I->r_string("append_random", shared_str().sprintf("object_%u", i).c_str());
+            
+            m_Flags.set(flAppendRandomNormalAlignment, I->r_bool("append_random", "normal_alignment"));
+            m_AppendRandomObjectsPerM2 = I->r_float("append_random", "objects_per_m2");
+            
+            xr_delete(I);
+            
+			m_Flags.set(flAppendRandomUpdateProps,TRUE);
+        }
+    break;
+    case 1:
+        if(EFS.GetSaveName("$import$", fn, NULL, 6)){
+		    CInifile* I = xr_new<CInifile>(fn.c_str(), FALSE, FALSE, TRUE);
+            
+            I->w_bool("append_random", "scale", m_Flags.is(flAppendRandomScale));
+            I->w_bool("append_random", "scale_proportional", m_Flags.is(flAppendRandomScaleProportional));
+            I->w_fvector3("append_random", "scale_min", m_AppendRandomMinScale);
+            I->w_fvector3("append_random", "scale_max", m_AppendRandomMaxScale);
+            I->w_bool("append_random", "rotation", m_Flags.is(flAppendRandomRotation));
+            I->w_fvector3("append_random", "rotation_min", m_AppendRandomMinRotation);
+            I->w_fvector3("append_random", "rotation_max", m_AppendRandomMaxRotation);
+            
+            I->w_u32("append_random", "objects_count", m_AppendRandomObjects.size());
+            for(size_t i = 0; i < m_AppendRandomObjects.size(); i++)
+            	I->w_string("append_random", shared_str().sprintf("object_%u", i).c_str(), *m_AppendRandomObjects[i]); 
+            
+            I->w_bool("append_random", "normal_alignment", m_Flags.is(flAppendRandomNormalAlignment));
+            I->w_float("append_random", "objects_per_m2", m_AppendRandomObjectsPerM2);
+            
+            xr_delete(I);
+        }
+    break;
+	}
+}
+//----------------------------------------------------
 
 void ESceneObjectTool::FillAppendRandomProperties(bool bUpdateOnly)
 {
-	if (!bUpdateOnly) m_Props		= TProperties::CreateModalForm("Random Append Properties",false);
+	if (!bUpdateOnly) m_Props       = TProperties::CreateModalForm("Random Append Properties",false);
 
-	m_AppendRandomObjectsStr		= _ListToSequence(m_AppendRandomObjects).c_str();    
+	m_AppendRandomObjectsStr        = _ListToSequence(m_AppendRandomObjects).c_str();
 
-    PropValue* V;           
-    PropItemVec 					items; 
-    V=PHelper().CreateFlag32		(items,"Scale",				&m_Flags, flAppendRandomScale);
-    V->OnChangeEvent.bind			(this,&ESceneObjectTool::OnChangeAppendRandomFlags);
-    if (m_Flags.is(flAppendRandomScale)){
-        V=PHelper().CreateFlag32	(items,"Scale\\Proportional",&m_Flags, flAppendRandomScaleProportional);
-        V->OnChangeEvent.bind		(this,&ESceneObjectTool::OnChangeAppendRandomFlags);
-        if (m_Flags.is(flAppendRandomScaleProportional)){
-            PHelper().CreateFloat	(items,"Scale\\Minimum",	&m_AppendRandomMinScale.x,0.001f,1000.f,0.001f,3);
-            PHelper().CreateFloat	(items,"Scale\\Maximum",	&m_AppendRandomMaxScale.x,0.001f,1000.f,0.001f,3);
-        }else{
-            PHelper().CreateVector	(items,"Scale\\Minimum",	&m_AppendRandomMinScale,0.001f,1000.f,0.001f,3);
-            PHelper().CreateVector	(items,"Scale\\Maximum",	&m_AppendRandomMaxScale,0.001f,1000.f,0.001f,3);
+	PropValue* V;
+	PropItemVec                     items;
+	V=PHelper().CreateFlag32        (items,"Scale",              &m_Flags, flAppendRandomScale);
+	V->OnChangeEvent.bind           (this,&ESceneObjectTool::OnChangeAppendRandomFlags);
+	if(m_Flags.is(flAppendRandomScale)) {
+		V=PHelper().CreateFlag32    (items,"Scale\\Proportional",&m_Flags, flAppendRandomScaleProportional);
+		V->OnChangeEvent.bind       (this,&ESceneObjectTool::OnChangeAppendRandomFlags);
+		if(m_Flags.is(flAppendRandomScaleProportional)) {
+			PHelper().CreateFloat   (items,"Scale\\Minimum",    &m_AppendRandomMinScale.x,0.001f,1000.f,0.001f,3);
+			PHelper().CreateFloat   (items,"Scale\\Maximum",    &m_AppendRandomMaxScale.x,0.001f,1000.f,0.001f,3);
+		} else {
+			PHelper().CreateVector  (items,"Scale\\Minimum",    &m_AppendRandomMinScale,0.001f,1000.f,0.001f,3);
+			PHelper().CreateVector  (items,"Scale\\Maximum",    &m_AppendRandomMaxScale,0.001f,1000.f,0.001f,3);
         }
     }
 
-    V=PHelper().CreateFlag32		(items,"Rotate",			&m_Flags, flAppendRandomRotation);
-    V->OnChangeEvent.bind			(this,&ESceneObjectTool::OnChangeAppendRandomFlags);
-    if (m_Flags.is(flAppendRandomRotation)){
-        PHelper().CreateAngle3		(items,"Rotate\\Minimum",	&m_AppendRandomMinRotation);
-        PHelper().CreateAngle3		(items,"Rotate\\Maximum",	&m_AppendRandomMaxRotation);
+	V=PHelper().CreateFlag32        (items,"Rotate",            &m_Flags, flAppendRandomRotation);
+	V->OnChangeEvent.bind           (this,&ESceneObjectTool::OnChangeAppendRandomFlags);
+    if(m_Flags.is(flAppendRandomRotation)) {
+		PHelper().CreateAngle3      (items,"Rotate\\Minimum",   &m_AppendRandomMinRotation);
+		PHelper().CreateAngle3      (items,"Rotate\\Maximum",   &m_AppendRandomMaxRotation);
     }
-	V=PHelper().CreateChoose		(items,"Objects",&m_AppendRandomObjectsStr,smObject,0,0,32);
-    V->OnChangeEvent.bind			(this,&ESceneObjectTool::OnChangeAppendRandomFlags);
-
-    m_Props->AssignItems			(items);
+	V=PHelper().CreateChoose        (items,"Objects",&m_AppendRandomObjectsStr,smObject,0,0,32);
+	V->OnChangeEvent.bind           (this,&ESceneObjectTool::OnChangeAppendRandomFlags);
     
-    if (!bUpdateOnly){
+	V=PHelper().CreateFlag32        (items,"Scatter Random Objects\\Normal Alignment", &m_Flags,                    flAppendRandomNormalAlignment);
+	V=PHelper().CreateFloat         (items,"Scatter Random Objects\\Objects per m^2",  &m_AppendRandomObjectsPerM2, 0.f, 1.f, 0.001f, 3);
+    
+    ButtonValue* B = PHelper().CreateButton(items,"File","Load,Save", 0);
+	B->OnBtnClickEvent.bind(this,&ESceneObjectTool::OnAppendRandomFileBtnClick);
+
+	m_Props->AssignItems            (items);
+
+	if(!bUpdateOnly) {
         if (mrOk==m_Props->ShowPropertiesModal())
-            Scene->UndoSave			();
-        TProperties::DestroyForm	(m_Props);
+			Scene->UndoSave         ();
+		TProperties::DestroyForm    (m_Props);
     }
 }
 //----------------------------------------------------
