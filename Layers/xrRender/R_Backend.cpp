@@ -68,9 +68,9 @@ void CBackend::RestoreQuadIBData()
 	u16		*Indices		= 0;
 	R_CHK(QuadIB->Lock(0,0,(void**)&Indices,0));
 	{
-		int		Cnt = 0;
-		int		ICnt= 0;
-		for (int i=0; i<dwTriCount; i++)
+		u32		Cnt = 0;
+		u32		ICnt= 0;
+		for (u32 i=0; i<dwTriCount; i++)
 		{
 			Indices[ICnt++]=u16(Cnt+0);
 			Indices[ICnt++]=u16(Cnt+1);
@@ -97,9 +97,9 @@ void CBackend::CreateQuadIB		()
 	R_CHK(HW.pDevice->CreateIndexBuffer(dwIdxCount*2,dwUsage,D3DFMT_INDEX16,D3DPOOL_MANAGED,&QuadIB,NULL));
 	R_CHK(QuadIB->Lock(0,0,(void**)&Indices,0));
 	{
-		int		Cnt = 0;
-		int		ICnt= 0;
-		for (int i=0; i<dwTriCount; i++)
+		u32		Cnt = 0;
+		u32		ICnt= 0;
+		for (u32 i=0; i<dwTriCount; i++)
 		{
 			Indices[ICnt++]=u16(Cnt+0);
 			Indices[ICnt++]=u16(Cnt+1);
