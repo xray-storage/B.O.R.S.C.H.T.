@@ -2,8 +2,8 @@ object frmChoseItem: TfrmChoseItem
   Left = 856
   Top = 319
   Caption = 'Select Item'
-  ClientHeight = 429
-  ClientWidth = 349
+  ClientHeight = 504
+  ClientWidth = 402
   Color = 10528425
   Constraints.MinHeight = 360
   Constraints.MinWidth = 330
@@ -23,27 +23,29 @@ object frmChoseItem: TfrmChoseItem
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
-    Left = 177
+    Left = 230
     Top = 0
     Width = 2
-    Height = 429
+    Height = 504
     Align = alRight
     ExplicitLeft = 185
     ExplicitHeight = 435
   end
   object paRight: TPanel
-    Left = 179
+    Left = 232
     Top = 0
     Width = 170
-    Height = 429
+    Height = 504
     Align = alRight
     BevelOuter = bvNone
     Color = clGray
     Constraints.MinWidth = 170
     TabOrder = 0
+    ExplicitLeft = 179
+    ExplicitHeight = 429
     object Splitter2: TSplitter
       Left = 0
-      Top = 284
+      Top = 359
       Width = 170
       Height = 2
       Cursor = crVSplit
@@ -52,7 +54,7 @@ object frmChoseItem: TfrmChoseItem
     end
     object paMulti: TPanel
       Left = 0
-      Top = 286
+      Top = 361
       Width = 170
       Height = 125
       Align = alBottom
@@ -60,12 +62,17 @@ object frmChoseItem: TfrmChoseItem
       ParentColor = True
       TabOrder = 0
       Visible = False
+      ExplicitTop = 286
+      DesignSize = (
+        170
+        125)
       object ebMultiUp: TExtBtn
         Left = 155
         Top = 3
         Width = 14
         Height = 18
         Align = alNone
+        Anchors = [akTop, akRight]
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
@@ -90,6 +97,7 @@ object frmChoseItem: TfrmChoseItem
         Width = 14
         Height = 18
         Align = alNone
+        Anchors = [akTop, akRight]
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
@@ -114,6 +122,7 @@ object frmChoseItem: TfrmChoseItem
         Width = 14
         Height = 18
         Align = alNone
+        Anchors = [akTop, akRight]
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
@@ -141,6 +150,7 @@ object frmChoseItem: TfrmChoseItem
         Width = 14
         Height = 18
         Align = alNone
+        Anchors = [akTop, akRight]
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
@@ -171,8 +181,8 @@ object frmChoseItem: TfrmChoseItem
         Top = 1
         Width = 152
         Height = 123
-        Align = alLeft
         AutoExpand = True
+        Anchors = [akLeft, akTop, akRight]
         DragAllowed = True
         DrawFocusRect = False
         DragTrgDrawMode = dtdDownColorLine
@@ -256,7 +266,7 @@ object frmChoseItem: TfrmChoseItem
     end
     object Panel2: TPanel
       Left = 0
-      Top = 411
+      Top = 486
       Width = 170
       Height = 18
       Align = alBottom
@@ -265,6 +275,7 @@ object frmChoseItem: TfrmChoseItem
       Constraints.MaxHeight = 18
       Constraints.MinHeight = 18
       TabOrder = 1
+      ExplicitTop = 411
       object sbSelect: TExtBtn
         Left = 1
         Top = 0
@@ -469,28 +480,31 @@ object frmChoseItem: TfrmChoseItem
       Left = 0
       Top = 185
       Width = 170
-      Height = 99
+      Height = 174
       Align = alClient
       BevelOuter = bvNone
       Constraints.MinHeight = 99
       TabOrder = 3
       Visible = False
+      ExplicitHeight = 99
     end
   end
   object Panel4: TPanel
     Left = 0
     Top = 0
-    Width = 177
-    Height = 429
+    Width = 230
+    Height = 504
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
+    ExplicitWidth = 177
+    ExplicitHeight = 429
     object tvItems: TElTree
       Left = 0
       Top = 0
-      Width = 177
-      Height = 411
+      Width = 230
+      Height = 486
       Align = alClient
       AutoExpand = True
       CheckBoxGlyph.Data = {
@@ -644,11 +658,13 @@ object frmChoseItem: TfrmChoseItem
       OnCompareItems = tvItemsCompareItems
       OnDblClick = tvItemsDblClick
       OnKeyPress = tvItemsKeyPress
+      ExplicitWidth = 177
+      ExplicitHeight = 411
     end
     object paFind: TPanel
       Left = 0
-      Top = 411
-      Width = 177
+      Top = 486
+      Width = 230
       Height = 18
       Align = alBottom
       Alignment = taLeftJustify
@@ -656,6 +672,8 @@ object frmChoseItem: TfrmChoseItem
       Caption = 'Find:'
       Color = 10528425
       TabOrder = 1
+      ExplicitTop = 411
+      ExplicitWidth = 177
       object edFind: TEdit
         Left = 25
         Top = 1
