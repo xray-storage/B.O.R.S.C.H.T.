@@ -1245,7 +1245,7 @@ bool CLevelMain::SelectionFrustum(CFrustum& frustum)
     if (depth<Device.m_Camera._Znear()) depth = Device.m_Camera._Zfar();
     else depth += EPrefs->bp_depth_tolerance;
 
-    for (i=0; i<4; i++){
+    for (int i=0; i<4; i++){
 	    Device.m_Camera.MouseRayFromPoint(st, d, pt[i]);
         p[i].mad(st,d,depth);
     }

@@ -11,6 +11,7 @@
 #include "../xrEProps/FolderLib.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#pragma link "ElTreeInplaceEditors"
 #pragma resource "*.dfm"
 TfrmBonePart *frmBonePart;        
 TElTree* 	T[4];                       
@@ -59,13 +60,13 @@ void __fastcall TfrmBonePart::FormShow(TObject *Sender)
 void __fastcall TfrmBonePart::FillBoneParts()
 {
     for (int k=0; k<4; k++) T[k]->IsUpdating = true;
-    for (k=0; k<4; k++){T[k]->Items->Clear();E[k]->Text="";}
+	for (int k=0; k<4; k++){T[k]->Items->Clear();E[k]->Text="";}
 	for (BPIt it=m_BoneParts->begin(); it!=m_BoneParts->end(); it++){
         E[it-m_BoneParts->begin()]->Text = it->alias.c_str();
         for (RStringVecIt w_it=it->bones.begin(); w_it!=it->bones.end(); w_it++)
         	FHelper.AppendObject(T[it-m_BoneParts->begin()],w_it->c_str(),false,true);
     }
-    for (k=0; k<4; k++) T[k]->IsUpdating = false;
+    for (int k=0; k<4; k++) T[k]->IsUpdating = false;
     lbTotalBones->Caption = m_EditObject->BoneCount();
     UpdateCount();
 }
@@ -132,7 +133,7 @@ void __fastcall TfrmBonePart::ebSaveClick(TObject *Sender)
 
     // verify
 	U8Vec b_use(m_EditObject->BoneCount(),0);
-    for (k=0; k<4; k++){
+    for (int k=0; k<4; k++){
     	if (T[k]->Items->Count)
 		    for ( TElTreeItem* node = T[k]->Items->GetFirstNode(); node; node = node->GetNext())
 	        	b_use[m_EditObject->FindBoneByNameIdx(AnsiString(node->Text).c_str())]++;
@@ -145,7 +146,7 @@ void __fastcall TfrmBonePart::ebSaveClick(TObject *Sender)
 
 	// save    
 	m_BoneParts->clear();
-    for (k=0; k<4; k++){
+    for (int k=0; k<4; k++){
     	if (T[k]->Items->Count){
             m_BoneParts->push_back(SBonePart());
             SBonePart& BP = m_BoneParts->back();
@@ -170,11 +171,11 @@ void __fastcall TfrmBonePart::ebCancelClick(TObject *Sender)
 void __fastcall TfrmBonePart::ExtBtn1Click(TObject *Sender)
 {
     for (int k=0; k<4; k++) T[k]->IsUpdating = true;
-    for (k=0; k<4; k++){T[k]->Items->Clear();E[k]->Text="";}
+	for (int k=0; k<4; k++){T[k]->Items->Clear();E[k]->Text="";}
     E[0]->Text = "default";
     for (BoneIt it=m_EditObject->FirstBone(); it!=m_EditObject->LastBone(); it++)
         FHelper.AppendObject(T[0],(*it)->Name().c_str(),false,true);
-    for (k=0; k<4; k++) T[k]->IsUpdating = false;
+    for (int k=0; k<4; k++) T[k]->IsUpdating = false;
     UpdateCount();
 }
 //---------------------------------------------------------------------------
@@ -221,7 +222,7 @@ void __fastcall TfrmBonePart::ebSaveToClick(TObject *Sender)
                     ini.w_string(buff, AnsiString(node->Text).c_str(), NULL );
 			}
         }
-        }
+	}
 }
 //---------------------------------------------------------------------------
 

@@ -831,7 +831,7 @@ bool CExportSkeleton::ExportGeometry(IWriter& F, u8 infl)
     // OGF_CHILDREN
     F.open_chunk	(OGF_CHILDREN);
     int chield=0;
-    for (split_it=m_Splits.begin(); split_it!=m_Splits.end(); split_it++){
+    for (SplitIt split_it=m_Splits.begin(); split_it!=m_Splits.end(); split_it++){
 	    F.open_chunk(chield++);
         split_it->Save(F);
 	    F.close_chunk();
@@ -856,7 +856,7 @@ bool CExportSkeleton::ExportGeometry(IWriter& F, u8 infl)
     bool bRes = true;
                     
     F.open_chunk(OGF_S_IKDATA);
-    for (bone_it=m_Source->FirstBone(); bone_it!=m_Source->LastBone(); bone_it++,bone_idx++)
+    for (BoneIt bone_it=m_Source->FirstBone(); bone_it!=m_Source->LastBone(); bone_it++,bone_idx++)
 		if (!(*bone_it)->ExportOGF(F, m_Source->a_vScale, m_Source->a_vAdjustMass)) bRes=false;
     F.close_chunk();
 
@@ -972,13 +972,13 @@ bool CExportSkeleton::ExportMotionKeys(IWriter& F)
             float t 		= (float)frm/cur_motion->FPS();
 	        int bone_id 	= 0;
 
-            for(BoneIt b_it=b_lst.begin(); b_it!=b_lst.end(); ++b_it, ++bone_id)
+			for(BoneIt b_it=b_lst.begin(); b_it!=b_lst.end(); ++b_it, ++bone_id)
 			{
 	            Fvector 				T,R;
-                if(cur_motion->BoneMotions().size()>bone_id)
+				if(cur_motion->BoneMotions().size()>size_t(bone_id))
                 	cur_motion->_Evaluate	(bone_id,t,T,R);
                    else
-                   {
+				   {
                        T	= (*b_it)->_Offset();
                        R	= (*b_it)->_Rotate();
                    }
@@ -987,7 +987,7 @@ bool CExportSkeleton::ExportMotionKeys(IWriter& F)
             
             m_Source->CalculateAnimation(cur_motion);
 	        bone_id 		= 0;
-            for(b_it=b_lst.begin(); b_it!=b_lst.end(); b_it++, bone_id++)
+			for(BoneIt b_it=b_lst.begin(); b_it!=b_lst.end(); b_it++, bone_id++)
             {
                 CBone* B 			= *b_it;
                 Fmatrix mat			= B->_MTransform();
@@ -1007,7 +1007,7 @@ bool CExportSkeleton::ExportMotionKeys(IWriter& F)
             }
         }
         // free temp storage
-        for (itm_idx=0; itm_idx<b_lst.size(); ++itm_idx)
+		for (u32 itm_idx=0; itm_idx<b_lst.size(); ++itm_idx)
         {
         	bm_item& BM 	= items[itm_idx];
             // check T
@@ -1044,7 +1044,7 @@ bool CExportSkeleton::ExportMotionKeys(IWriter& F)
                 Msg("animation [%s] is 16bit-transform (%f)m", cur_motion->Name(), St.magnitude());
             }
             
-            for (t_idx=0; t_idx<dwLen; ++t_idx)
+            for (u32 t_idx=0; t_idx<dwLen; ++t_idx)
             {
                 Fvector& t	= BM._keysT[t_idx];
                 CKeyQR& r	= BM._keysQR[t_idx];

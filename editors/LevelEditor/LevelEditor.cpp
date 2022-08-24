@@ -8,6 +8,7 @@
 #include "UI_LevelMain.h"
 #include "UI_LevelTools.h"
 //---------------------------------------------------------------------------
+USEFORM("Edit\AppendObjectInfoForm.cpp", frmAppendObjectInfo);
 USEFORM("BottomBar.cpp", fraBottomBar); /* TFrame: File Type */
 USEFORM("main.cpp", frmMain);
 USEFORM("TopBar.cpp", fraTopBar); /* TFrame: File Type */
@@ -31,7 +32,6 @@ USEFORM("ObjectList.cpp", frmObjectList);
 USEFORM("previewimage.cpp", frmPreviewImage);
 USEFORM("PropertiesEObject.cpp", frmPropertiesEObject);
 USEFORM("Splash.cpp", frmSplash);
-USEFORM("Edit\AppendObjectInfoForm.cpp", frmAppendObjectInfo);
 USEFORM("FrmDBXpacker.cpp", DB_packer);
 USEFORM("RightForm.cpp", frmRight);
 USEFORM("FrameFogVol.cpp", fraFogVol);

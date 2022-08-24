@@ -83,7 +83,7 @@ CInput::CInput						( BOOL bExclusive, int deviceForInit)
 		mouse_input_flags,
 		MOUSEBUFFERSIZE ));
 
-	Debug.set_on_dialog				(&on_error_dialog);
+	Debug.set_on_dialog				(on_error_dialog);
 
 #ifdef ENGINE_BUILD
 	Device.seqAppActivate.Add		(this);
@@ -206,7 +206,7 @@ void CInput::KeyUpdate	( )
 		}
 	}
 
-	for ( i = 0; i < COUNT_KB_BUTTONS; i++ )
+	for (u32 i = 0; i < COUNT_KB_BUTTONS; i++ )
 		if (KBState[i]) 
 			cbStack.back()->IR_OnKeyboardHold( i );
 

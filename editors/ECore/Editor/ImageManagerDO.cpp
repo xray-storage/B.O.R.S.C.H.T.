@@ -128,10 +128,10 @@ int CImageManager::CreateMergedTexture(u32 layer_cnt, SSimpleImageVec& src_image
 
     std::sort			(src_images.begin(),src_images.end(),item_area_sort_pred);
 
-    for (s_it=src_images.begin(); s_it!=src_images.end(); s_it++)
+    for (SSimpleImageVecIt s_it=src_images.begin(); s_it!=src_images.end(); s_it++)
     	dest_remap[s_it->tag]	= s_it-src_images.begin();
 
-    for (s_it = src_images.begin(); s_it!=src_images.end(); s_it++){
+    for (SSimpleImageVecIt s_it = src_images.begin(); s_it!=src_images.end(); s_it++){
 		Irect R;		R.set(0,0, s_it->w-1,s_it->h-1);
         BOOL bRotated;
         if (!_rect_place(dest_mask,dest_width,dest_height,R,bRotated)) return 0;

@@ -264,7 +264,7 @@ void SceneBuilder::SaveBuildAsObject()
 			tmpFaces.w_string	(tmp);
 		}
         //faces
-		for(fi=0; fi<m.m_iFaceCount; ++fi)
+		for(int fi=0; fi<m.m_iFaceCount; ++fi)
 		{
 			const b_face& it		= m.m_pFaces[fi];
 
@@ -363,7 +363,7 @@ void SceneBuilder::SaveBuild()
 		F->close_chunk	();
 
         F->open_chunk	(EB_MU_models);
-        for (k=0; k<(int)l_mu_models.size(); ++k)
+        for (int k=0; k<(int)l_mu_models.size(); ++k)
         {
             b_mu_model&	m= l_mu_models[k];
             // name
@@ -1303,7 +1303,7 @@ BOOL SceneBuilder::CompileStatic(bool b_selected_only)
             tp.flags.assign		(STextureParams::flDitherColor|STextureParams::flGenerateMipMaps);
 			ImageLib.MakeGameTexture		(fn_color.c_str(),&merged_image.layers[0].front(), tp);
 			ImageLib.MakeGameTexture		(fn_normal.c_str(),&merged_image.layers[1].front(),tp);
-	        for (k=0; k<(int)l_lods.size(); k++){        
+	        for (int k=0; k<(int)l_lods.size(); k++){        
 	            e_b_lod& l	= l_lods[k];         
                 for (u32 f=0; f<8; f++){
                 	for (u32 t=0; t<4; t++){

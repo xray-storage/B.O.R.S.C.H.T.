@@ -61,10 +61,10 @@ static void compute_build_id()
 
 	build_id			= (years - start_year)*365 + days - start_day;
 
-	for (i=0; i<months; ++i)
+	for (int i=0; i<months; ++i)
 		build_id		+= days_in_month[i];
 
-	for (i=0; i<start_month-1; ++i)
+	for (int i=0; i<start_month-1; ++i)
 		build_id		-= days_in_month[i];
 }
 

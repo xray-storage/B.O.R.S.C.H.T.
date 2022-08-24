@@ -11,6 +11,7 @@
 #include "ExtBtn.hpp"
 #include "ElXPThemedControl.hpp"
 #include "mxPlacemnt.hpp"
+#include "ElTreeInplaceEditors.hpp"
 //---------------------------------------------------------------------------
 class TfrmBonePart : public TForm
 {

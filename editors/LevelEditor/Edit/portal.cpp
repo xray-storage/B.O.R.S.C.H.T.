@@ -385,7 +385,7 @@ void CPortal::Simplify()
     center.set(0,0,0);
     mView.invert();
     m_SimplifyVertices.resize(vertices.size());
-    for (k=0; k<vertices.size(); k++){
+	for (u32 k=0; k<vertices.size(); k++){
     	p.set(vertices[k].x,vertices[k].y,0.f);
      	mView.transform_tiny(m_SimplifyVertices[k],p);
         center.add(m_SimplifyVertices[k]);
@@ -393,7 +393,7 @@ void CPortal::Simplify()
     center.div(vertices.size());
 
     norm.set(0,0,0);
-    for (k=0; k<m_SimplifyVertices.size()-1; k++){
+    for (u32 k=0; k<m_SimplifyVertices.size()-1; k++){
         temp.mknormal(center,m_SimplifyVertices[k],m_SimplifyVertices[k+1]);
     	norm.add(temp);
     }

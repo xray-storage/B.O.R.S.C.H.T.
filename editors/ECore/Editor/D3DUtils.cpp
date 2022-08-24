@@ -10,6 +10,7 @@
 #include "du_sphere_part.h"
 #include "du_cone.h"
 #include "du_cylinder.h"
+#include "du_selection_box.h"
 
 #pragma warning(push)
 #pragma warning(disable:4995)
@@ -23,10 +24,6 @@ CDrawUtilities DU_impl;
 static Fvector circledef1[LINE_DIVISION];
 static Fvector circledef2[LINE_DIVISION];
 static Fvector circledef3[LINE_DIVISION];
-
-const u32 boxcolor = D3DCOLOR_RGBA(255,255,255,0);
-static const int boxvertcount = 48;
-static Fvector boxvert[boxvertcount];
 
 #ifdef _EDITOR
 #	define DU_DRAW_RS	Device.SetRS
@@ -93,7 +90,7 @@ u32 m_SelectionRect=D3DCOLOR_RGBA(127,255,127,64);
 
 u32 m_ColorSafeRect = 0xffB040B0;
 
-void SPrimitiveBuffer::CreateFromData(D3DPRIMITIVETYPE _pt, u32 _p_cnt, u32 FVF, LPVOID vertices, u32 _v_cnt, u16* indices, u32 _i_cnt)
+void SPrimitiveBuffer::CreateFromData(D3DPRIMITIVETYPE _pt, u32 _p_cnt, Fvector* vertices, u32 _v_cnt, u16* indices, u32 _i_cnt)
 {
 	IDirect3DVertexBuffer9*	pVB=0;
 	IDirect3DIndexBuffer9*	pIB=0;
@@ -101,13 +98,13 @@ void SPrimitiveBuffer::CreateFromData(D3DPRIMITIVETYPE _pt, u32 _p_cnt, u32 FVF,
 	p_type				= _pt;
 	v_cnt				= _v_cnt;
 	i_cnt				= _i_cnt;
-	u32 stride			= D3DXGetFVFVertexSize(FVF);
+	u32 stride			= D3DXGetFVFVertexSize(FVF::F_L);
 	R_CHK(HW.pDevice->CreateVertexBuffer(v_cnt*stride, D3DUSAGE_WRITEONLY, 0, D3DPOOL_MANAGED, &pVB, 0));
 	u8* 				bytes;
 	R_CHK				(pVB->Lock(0,0,(LPVOID*)&bytes,0));
 	FLvertexVec	verts	(v_cnt);
 	for (u32 k=0; k<v_cnt; ++k)
-		verts[k].set	(((Fvector*)vertices)[k],0xFFFFFFFF);
+		verts[k].set	(vertices[k],0xFFFFFFFF);
 	Memory.mem_copy		(bytes,&*verts.begin(),v_cnt*stride);
 	R_CHK				(pVB->Unlock());
 	if (i_cnt){ 
@@ -119,7 +116,7 @@ void SPrimitiveBuffer::CreateFromData(D3DPRIMITIVETYPE _pt, u32 _p_cnt, u32 FVF,
 	}else{
 		OnRender.bind	(this,&SPrimitiveBuffer::RenderDP);
 	}
-	pGeom.create		(FVF,pVB,pIB);
+	pGeom.create		(FVF::F_L,pVB,pIB);
 }
 void SPrimitiveBuffer::Destroy()
 {                       
@@ -159,7 +156,7 @@ void CDrawUtilities::UpdateGrid(int number_of_cell, float square_size, int subdi
 				m_GridPoints.push_back( right );
 			}
 		}
-		for(i=-m_GridCounts[1]; i<=m_GridCounts[1]; i++){
+		for(int i=-m_GridCounts[1]; i<=m_GridCounts[1]; i++){
 			if( (!!thin) != !!(i%m_GridSubDiv[1]) ){
 				left.p.x = -m_GridCounts[0]*m_GridStep.x;
 				right.p.x = m_GridCounts[0]*m_GridStep.x;
@@ -178,18 +175,19 @@ void CDrawUtilities::OnDeviceCreate()
 {
 	Device.seqRender.Add			(this,REG_PRIORITY_LOW-1000);
 
-	m_SolidBox.CreateFromData		(D3DPT_TRIANGLELIST,DU_BOX_NUMFACES,		D3DFVF_XYZ|D3DFVF_DIFFUSE,du_box_vertices,			DU_BOX_NUMVERTEX,			du_box_faces,			DU_BOX_NUMFACES*3);
-	m_SolidCone.CreateFromData		(D3DPT_TRIANGLELIST,DU_CONE_NUMFACES,		D3DFVF_XYZ|D3DFVF_DIFFUSE,du_cone_vertices,		DU_CONE_NUMVERTEX,			du_cone_faces,			DU_CONE_NUMFACES*3);
-	m_SolidSphere.CreateFromData	(D3DPT_TRIANGLELIST,DU_SPHERE_NUMFACES,		D3DFVF_XYZ|D3DFVF_DIFFUSE,du_sphere_vertices,		DU_SPHERE_NUMVERTEX,		du_sphere_faces,		DU_SPHERE_NUMFACES*3);
-	m_SolidSpherePart.CreateFromData(D3DPT_TRIANGLELIST,DU_SPHERE_PART_NUMFACES,D3DFVF_XYZ|D3DFVF_DIFFUSE,du_sphere_part_vertices,	DU_SPHERE_PART_NUMVERTEX,	du_sphere_part_faces,	DU_SPHERE_PART_NUMFACES*3);
-    m_SolidCylinder.CreateFromData	(D3DPT_TRIANGLELIST,DU_CYLINDER_NUMFACES,	D3DFVF_XYZ|D3DFVF_DIFFUSE,du_cylinder_vertices,	DU_CYLINDER_NUMVERTEX,		du_cylinder_faces,		DU_CYLINDER_NUMFACES*3);
-    m_WireBox.CreateFromData		(D3DPT_LINELIST,	DU_BOX_NUMLINES,		D3DFVF_XYZ|D3DFVF_DIFFUSE,du_box_vertices,			DU_BOX_NUMVERTEX,			du_box_lines,			DU_BOX_NUMLINES*2);
-	m_WireCone.CreateFromData		(D3DPT_LINELIST,	DU_CONE_NUMLINES,		D3DFVF_XYZ|D3DFVF_DIFFUSE,du_cone_vertices,		DU_CONE_NUMVERTEX,			du_cone_lines,			DU_CONE_NUMLINES*2);
-	m_WireSphere.CreateFromData		(D3DPT_LINELIST,	DU_SPHERE_NUMLINES,		D3DFVF_XYZ|D3DFVF_DIFFUSE,du_sphere_verticesl,		DU_SPHERE_NUMVERTEXL,		du_sphere_lines,		DU_SPHERE_NUMLINES*2);
-	m_WireSpherePart.CreateFromData	(D3DPT_LINELIST,	DU_SPHERE_PART_NUMLINES,D3DFVF_XYZ|D3DFVF_DIFFUSE,du_sphere_part_vertices,	DU_SPHERE_PART_NUMVERTEX,	du_sphere_part_lines,	DU_SPHERE_PART_NUMLINES*2);
-    m_WireCylinder.CreateFromData	(D3DPT_LINELIST,	DU_CYLINDER_NUMLINES,	D3DFVF_XYZ|D3DFVF_DIFFUSE,du_cylinder_vertices,	DU_CYLINDER_NUMVERTEX,		du_cylinder_lines,		DU_CYLINDER_NUMLINES*2);
+	m_SolidBox.CreateFromData       (D3DPT_TRIANGLELIST,DU_BOX_NUMFACES,           du_box_vertices,           DU_BOX_NUMVERTEX,           du_box_faces,           DU_BOX_NUMFACES*3);
+	m_SolidCone.CreateFromData      (D3DPT_TRIANGLELIST,DU_CONE_NUMFACES,          du_cone_vertices,          DU_CONE_NUMVERTEX,          du_cone_faces,          DU_CONE_NUMFACES*3);
+	m_SolidSphere.CreateFromData    (D3DPT_TRIANGLELIST,DU_SPHERE_NUMFACES,        du_sphere_vertices,        DU_SPHERE_NUMVERTEX,        du_sphere_faces,        DU_SPHERE_NUMFACES*3);
+	m_SolidSpherePart.CreateFromData(D3DPT_TRIANGLELIST,DU_SPHERE_PART_NUMFACES,   du_sphere_part_vertices,   DU_SPHERE_PART_NUMVERTEX,   du_sphere_part_faces,   DU_SPHERE_PART_NUMFACES*3);
+	m_SolidCylinder.CreateFromData  (D3DPT_TRIANGLELIST,DU_CYLINDER_NUMFACES,      du_cylinder_vertices,      DU_CYLINDER_NUMVERTEX,      du_cylinder_faces,      DU_CYLINDER_NUMFACES*3);
+	m_WireBox.CreateFromData        (D3DPT_LINELIST,    DU_BOX_NUMLINES,           du_box_vertices,           DU_BOX_NUMVERTEX,           du_box_lines,           DU_BOX_NUMLINES*2);
+	m_WireCone.CreateFromData       (D3DPT_LINELIST,    DU_CONE_NUMLINES,          du_cone_vertices,          DU_CONE_NUMVERTEX,          du_cone_lines,          DU_CONE_NUMLINES*2);
+	m_WireSphere.CreateFromData     (D3DPT_LINELIST,    DU_SPHERE_NUMLINES,        du_sphere_verticesl,       DU_SPHERE_NUMVERTEXL,       du_sphere_lines,        DU_SPHERE_NUMLINES*2);
+	m_WireSpherePart.CreateFromData (D3DPT_LINELIST,    DU_SPHERE_PART_NUMLINES,   du_sphere_part_vertices,   DU_SPHERE_PART_NUMVERTEX,   du_sphere_part_lines,   DU_SPHERE_PART_NUMLINES*2);
+	m_WireCylinder.CreateFromData   (D3DPT_LINELIST,    DU_CYLINDER_NUMLINES,      du_cylinder_vertices,      DU_CYLINDER_NUMVERTEX,      du_cylinder_lines,      DU_CYLINDER_NUMLINES*2);
+	m_SelectionBox.CreateFromData   (D3DPT_LINELIST,    DU_SELECTION_BOX_NUMLINES, du_selection_box_vertices, DU_SELECTION_BOX_NUMVERTEX, du_selection_box_lines, DU_SELECTION_BOX_NUMLINES*2);
 
-	for(int i=0;i<LINE_DIVISION;i++){                                
+	for(int i = 0; i < LINE_DIVISION; i++) {
 		float angle = M_PI * 2.f * (i / (float)LINE_DIVISION);
         float _sa=_sin(angle), _ca=_cos(angle);
 		circledef1[i].x = _ca;
@@ -202,22 +200,8 @@ void CDrawUtilities::OnDeviceCreate()
 		circledef3[i].y = 0;
 		circledef3[i].z = _ca;
 	}
-    // initialize identity box
-	Fbox bb;
-	bb.set(-0.505f,-0.505f,-0.505f, 0.505f,0.505f,0.505f);
-	for (i=0; i<8; i++){
-    	Fvector S;
-    	Fvector p;
-        bb.getpoint(i,p);
-        S.set((float)SIGN(p.x),(float)SIGN(p.y),(float)SIGN(p.z));
-    	boxvert[i*6+0].set(p);
-    	boxvert[i*6+1].set(p.x-S.x*0.25f,p.y,p.z);
-    	boxvert[i*6+2].set(p);
-    	boxvert[i*6+3].set(p.x,p.y-S.y*0.25f,p.z);
-    	boxvert[i*6+4].set(p);
-    	boxvert[i*6+5].set(p.x,p.y,p.z-S.z*0.25f);
-    }
-    // create render stream
+
+	// create render stream
 	vs_L.create		(FVF::F_L,RCache.Vertex.Buffer(),RCache.Index.Buffer());
     vs_TL.create	(FVF::F_TL,RCache.Vertex.Buffer(),RCache.Index.Buffer());
     vs_LIT.create	(FVF::F_LIT,RCache.Vertex.Buffer(),RCache.Index.Buffer());
@@ -233,18 +217,19 @@ void CDrawUtilities::OnDeviceCreate()
 
 void CDrawUtilities::OnDeviceDestroy()
 {
-	Device.seqRender.Remove		(this);
-	xr_delete					(m_Font);
-    m_SolidBox.Destroy			();
-	m_SolidCone.Destroy			();
-	m_SolidSphere.Destroy		();
-	m_SolidSpherePart.Destroy	();
-    m_SolidCylinder.Destroy		();
-    m_WireBox.Destroy			();
-	m_WireCone.Destroy			();
-	m_WireSphere.Destroy		();
-	m_WireSpherePart.Destroy	();
-    m_WireCylinder.Destroy		();
+	Device.seqRender.Remove     (this);
+	xr_delete                   (m_Font);
+	m_SolidBox.Destroy          ();
+	m_SolidCone.Destroy         ();
+	m_SolidSphere.Destroy       ();
+	m_SolidSpherePart.Destroy   ();
+	m_SolidCylinder.Destroy     ();
+	m_WireBox.Destroy           ();
+	m_WireCone.Destroy          ();
+	m_WireSphere.Destroy        ();
+	m_WireSpherePart.Destroy    ();
+	m_WireCylinder.Destroy      ();
+	m_SelectionBox.Destroy      ();
 
 	vs_L.destroy		();
 	vs_TL.destroy		();
@@ -635,29 +620,26 @@ void CDrawUtilities::DrawLine(const Fvector& p0, const Fvector& p1, u32 c){
 	pv->set			(p1,c);
 	Stream->Unlock	(2,vs_L->vb_stride);
 	// and Render it as triangle list
-    DU_DRAW_DP		(D3DPT_LINELIST,vs_L,vBase,1);
+	DU_DRAW_DP		(D3DPT_LINELIST,vs_L,vBase,1);
 }
 
 //----------------------------------------------------
 void CDrawUtilities::DrawSelectionBox(const Fvector& C, const Fvector& S, u32* c)
 {
-    u32 cc=(c)?*c:boxcolor;
+	Fmatrix parent = RCache.get_xform_world();
 
-	// fill VB
-	_VertexStream*	Stream	= &RCache.Vertex;
-	u32			vBase;
-	FVF::L*	pv	 	= (FVF::L*)Stream->Lock(boxvertcount,vs_L->vb_stride,vBase);
-    for (int i=0; i<boxvertcount; i++,pv++){
-	    pv->p.mul(boxvert[i],S);
-        pv->p.add(C);
-        pv->color	= cc;
-    }
-	Stream->Unlock	(boxvertcount,vs_L->vb_stride);
+	Fmatrix mat;
+	mat.scale(S);
+	mat.c.set(C);
+	mat.mulA_43(parent);
 
-	// and Render it as triangle list
-	DU_DRAW_RS	(D3DRS_FILLMODE,D3DFILL_SOLID);
-    DU_DRAW_DP	(D3DPT_LINELIST,vs_L,vBase,boxvertcount/2);
-    DU_DRAW_RS	(D3DRS_FILLMODE,FILL_MODE);
+	RCache.set_xform_world(mat);
+
+	if(c) DU_DRAW_RS(D3DRS_TEXTUREFACTOR, *c);
+	m_SelectionBox.Render();
+	if(c) DU_DRAW_RS(D3DRS_TEXTUREFACTOR, 0xffffffff);
+
+	RCache.set_xform_world(parent);
 }
 
 void CDrawUtilities::DrawBox(const Fvector& offs, const Fvector& Size, BOOL bSolid, BOOL bWire, u32 clr_s, u32 clr_w)

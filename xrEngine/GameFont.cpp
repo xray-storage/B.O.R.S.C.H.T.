@@ -201,9 +201,9 @@ u16 CGameFont::GetCutLengthPos( float fTargetWidth , const char * pszText )
 	wide_char wsStr[ MAX_MB_CHARS ], wsPos[ MAX_MB_CHARS ];
 	float fCurWidth = 0.0f , fDelta = 0.0f;
 
-	u16	len	= mbhMulti2Wide( wsStr , wsPos , MAX_MB_CHARS , pszText );
+	u16 i, len = mbhMulti2Wide( wsStr , wsPos , MAX_MB_CHARS , pszText );
 
-	for ( u16 i = 1 ; i <= len ; i++ ) {
+	for ( i = 1 ; i <= len ; i++ ) {
 
 		fDelta = GetCharTC( wsStr[ i ] ).z - 2;
 

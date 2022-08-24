@@ -895,7 +895,7 @@ void TClipMaker::RealUpdateClips()
     // clip list
     ListItemsVec			l_items;
     
-    for (it=clips.begin(); it!=clips.end(); ++it)
+    for (AnimClipIt it=clips.begin(); it!=clips.end(); ++it)
     	LHelper().CreateItem	(l_items,*(*it)->name,0,0,*it);
         
 	m_ClipList->AssignItems		(l_items,true);

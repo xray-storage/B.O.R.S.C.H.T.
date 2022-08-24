@@ -281,10 +281,8 @@ void TItemList::AssignItems(ListItemsVec& items, bool full_expand, bool full_sor
 	UnlockUpdating			();
 
     // restore selection
-    tvItems->DeselectAll	();
-
-    
-    for (s_it=last_selected_items.begin(); s_it!=last_selected_items.end(); s_it++)
+	tvItems->DeselectAll	();
+    for (RStringVecIt s_it=last_selected_items.begin(); s_it!=last_selected_items.end(); s_it++)
 	    FHelper.RestoreSelection(tvItems,**s_it,true);
 
     // check size
@@ -456,7 +454,7 @@ void TItemList::RefreshForm()
             }
         }
     }
-    for (item=tvItems->Items->GetFirstNode(); item; item=item->GetNext()){
+	for (TElTreeItem* item=tvItems->Items->GetFirstNode(); item; item=item->GetNext()){
         ListItem* prop				= (ListItem*)item->Tag;
         if (!prop) item->Hidden		= !item->HasVisibleChildren;
     }

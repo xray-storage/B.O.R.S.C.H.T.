@@ -218,7 +218,7 @@ void TfrmMain::RefreshBars()
 
     // recreate recent file list
 	size_t cnt = EPrefs->scene_recent_list.size();
-	for(j = 0; j < cnt; j++)
+	for(size_t j = 0; j < cnt; j++)
 	{
 		TMenuItem *item = xr_new<TMenuItem>(this);
 		item->Caption = EPrefs->scene_recent_list[j];
@@ -230,7 +230,7 @@ void TfrmMain::RefreshBars()
 
     TMenuItem *separator = xr_new<TMenuItem>(this);
     separator->Caption = "-";
-	miFile->Insert(10+j, separator);
+	miFile->Insert(10+cnt, separator);
 }
 //---------------------------------------------------------------------------
 

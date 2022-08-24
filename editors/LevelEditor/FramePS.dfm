@@ -17,6 +17,8 @@ object fraPS: TfraPS
   OnDestroy = FormDestroy
   OnHide = FormHide
   OnShow = FormShow
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object paSelectObject: TPanel
@@ -84,6 +86,7 @@ object fraPS: TfraPS
       Color = clGray
       ParentColor = False
       OnClick = ExpandClick
+      ExplicitWidth = 69
     end
     object ExtBtn3: TExtBtn
       Left = 205
@@ -194,7 +197,7 @@ object fraPS: TfraPS
     object APHeadLabel2: TLabel
       Left = 1
       Top = 1
-      Width = 215
+      Width = 51
       Height = 13
       Align = alTop
       Alignment = taCenter
@@ -239,7 +242,7 @@ object fraPS: TfraPS
     Width = 9
     Top = 24
     Bitmap = {
-      494C010103000400040009000E00FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000400080009000E00FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000240000000E0000000100200000000000E007
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

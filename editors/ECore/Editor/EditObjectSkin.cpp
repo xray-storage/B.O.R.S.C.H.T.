@@ -261,7 +261,7 @@ void ComputeSphere(Fsphere &B, FvectorVec& V)
 	bbox.grow			(EPS_L);
 	bbox.getsphere		(S2.P,S2.R);
 	S2.R = -1;
-	for (I=V.begin(); I!=V.end(); I++)	{
+	for (FvectorIt I=V.begin(); I!=V.end(); I++)	{
 		float d = S2.P.distance_to_sqr(*I);
 		if (d>S2.R) S2.R=d;
 	}

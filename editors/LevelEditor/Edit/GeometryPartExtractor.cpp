@@ -77,7 +77,7 @@ bool SBPart::prepare				(SBAdjVec& adjs, u32 bone_face_min)
     M.invert						();
 
     // transform vertices & calculate bounding box
-    for (f_it=m_Faces.begin(); f_it!=m_Faces.end(); f_it++){
+    for (SBFaceVecIt f_it=m_Faces.begin(); f_it!=m_Faces.end(); f_it++){
         SBFace* F					= (*f_it);
         if (F->adjs.empty()){	
             ELog.Msg(mtError,"Error face found at pos: [%3.2f,%3.2f,%3.2f]",VPUSH(F->o[0])); 
@@ -172,7 +172,7 @@ bool SBPart::prepare				(SBAdjVec& adjs, u32 bone_face_min)
         }
         
 		// calculate bone offset
-        for (f_it=m_Faces.begin(); f_it!=m_Faces.end(); f_it++){
+        for (SBFaceVecIt f_it=m_Faces.begin(); f_it!=m_Faces.end(); f_it++){
             SBFace* F					= *f_it;
 			VERIFY						(F->bone_id!=-1);
 			if(F->bone_id==-2) continue;
@@ -205,7 +205,7 @@ bool SBPart::prepare				(SBAdjVec& adjs, u32 bone_face_min)
 		//
 
         Fvector& offs					= m_Bones.front().offset;
-        for (b_it=m_Bones.begin(); b_it!=m_Bones.end(); b_it++)
+        for (SBBoneVecIt b_it=m_Bones.begin(); b_it!=m_Bones.end(); b_it++)
             b_it->offset.sub			(offs);
     }
     return m_bValid;
@@ -295,7 +295,7 @@ bool SBPart::Export	(IWriter& F, u8 infl)
     // OGF_CHILDREN
     F.open_chunk	(OGF_CHILDREN);
     int chield=0;
-    for (split_it=m_Splits.begin(); split_it!=m_Splits.end(); split_it++){
+    for (SplitIt split_it=m_Splits.begin(); split_it!=m_Splits.end(); split_it++){
 	    F.open_chunk(chield++);
         split_it->Save(F);
 	    F.close_chunk();
@@ -317,7 +317,7 @@ bool SBPart::Export	(IWriter& F, u8 infl)
     F.close_chunk();
 
     F.open_chunk(OGF_S_IKDATA);
-    for (bone_idx=0; bone_idx<bone_count; bone_idx++){
+    for (u32 bone_idx=0; bone_idx<bone_count; bone_idx++){
     	SBBone& bone=m_Bones[bone_idx];
 
         F.w_u32		(0x0001); VERIFY(0x0001==OGF_IKDATA_VERSION);

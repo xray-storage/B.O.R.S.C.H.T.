@@ -229,7 +229,7 @@ void ESceneAIMapTool::OnFrame()
     	m_Flags.set(flUpdateHL,FALSE);
         for (AINodeIt it=m_Nodes.begin(); it!=m_Nodes.end(); it++)
 			(*it)->flags.set(SAINode::flHLSelected,FALSE);
-        for (it=m_Nodes.begin(); it!=m_Nodes.end(); it++){
+        for (AINodeIt it=m_Nodes.begin(); it!=m_Nodes.end(); it++){
             SAINode& N = **it;
             if (N.flags.is(SAINode::flSelected))
                 for (int k=0; k<4; k++)

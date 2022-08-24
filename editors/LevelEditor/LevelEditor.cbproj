@@ -65,7 +65,6 @@
     <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
     <BCC_wstl>true</BCC_wstl>
     <BCC_ZeroLengthEmptyMemberFuncs>true</BCC_ZeroLengthEmptyMemberFuncs>
-    <BCC_OldForStatementScoping>true</BCC_OldForStatementScoping>
     <FinalOutputDir>x:\stalker_addon\binaries</FinalOutputDir>
     <BCC_wcln>true</BCC_wcln>
     <BCC_ExtendedErrorInfo>true</BCC_ExtendedErrorInfo>
@@ -83,14 +82,14 @@
     <ILINK_BpiLibOutputDir>X:\stalker_addon\libraries</ILINK_BpiLibOutputDir>
     <TASM_IncludePath>..\..\xrServerEntities;..\..\Layers\xrRender;$(DXSDK_DIR)\Include;Edit;Engine;$(BDS)\Projects;$(BDS)\include\vcl;$(BDS)\include;X:\SDK\Components\alexmx;X:\SDK\Components\ElPack\Code;X:\SDK\Components\ElPack\Code\Source;..\..\xrCore;..\..\xrEngine;..\..\utils\ETools;X:\SDK\include\freemagic;$(BDS)\include\dinkumware</TASM_IncludePath>
     <AllPackageLibs>bcbsmp.lib;xmlrtl.lib;vclactnband.lib;rtl.lib;vcl.lib;bcbsmp.lib;vclx.lib;editorB.lib;xmlrtl.lib;vclactnband.lib;lmdrtelcore.lib;lmdrtrtlx.lib;lmdrtl.lib;dcleditorB.lib</AllPackageLibs>
-    <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
     <ILINK_LibraryPath>X:\SDK\components\AlexMX;X:\SDK\components\LMD2018\lib\d11;$(BDS)\Imports;..\..\Layers\xrRender;..\..\xrServerEntities;..\..\xrEngine;Edit;$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</ILINK_LibraryPath>
-    <TASM_Defines>_EDITOR _LEVEL_EDITOR _DEBUG</TASM_Defines>
-    <BRCC_Defines>_EDITOR;_LEVEL_EDITOR;_DEBUG</BRCC_Defines>
-    <Multithreaded>true</Multithreaded>
+    <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
     <BCC_Defines>NO_STRICT;_EDITOR;_LEVEL_EDITOR</BCC_Defines>
-    <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+    <Multithreaded>true</Multithreaded>
+    <BRCC_Defines>_EDITOR;_LEVEL_EDITOR;_DEBUG</BRCC_Defines>
+    <TASM_Defines>_EDITOR _LEVEL_EDITOR _DEBUG</TASM_Defines>
     <TASM_Debugging>None</TASM_Debugging>
+    <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
     <BCC_CallingConvention>stdcall</BCC_CallingConvention>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -99,8 +98,8 @@
     <BCC_OutputDir>x:\intermediate_ed\le\Debug</BCC_OutputDir>
     <BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
     <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
-    <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     <DCC_DebugInformation>true</DCC_DebugInformation>
+    <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     <IntermediateOutputDir>x:\intermediate_ed\le\Debug</IntermediateOutputDir>
     <TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
     <BCC_StackFrames>true</BCC_StackFrames>

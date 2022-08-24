@@ -221,7 +221,7 @@ void MeshMender::ProcessNormals(TriangleList& possibleNeighbors,
 
 		//now start building groups
 		CanSmoothNormalsChecker canSmoothNormalsChecker;
-		for( i = 0; i < possibleNeighbors.size(); ++i )
+		for( unsigned int i = 0; i < possibleNeighbors.size(); ++i )
 		{
 			Triangle* currTri = &(m_Triangles[ possibleNeighbors[i] ]);
 			assert(currTri);
@@ -236,7 +236,7 @@ void MeshMender::ProcessNormals(TriangleList& possibleNeighbors,
 		
 		xr_vector<D3DXVECTOR3> groupNormalVectors;
 
-		for( i = 0; i < neighborGroups.size(); ++i )
+		for( unsigned int i = 0; i < neighborGroups.size(); ++i )
 		{
 			//for each group, calculate the group normal
 			TriangleList& curGroup = neighborGroups[ i ];
@@ -256,7 +256,7 @@ void MeshMender::ProcessNormals(TriangleList& possibleNeighbors,
 		//next step, ensure that triangles in different groups are not
 		//sharing vertices. and give the shared vertex their new group vector
 		xr_set<size_t> otherGroupsIndices;
-		for( i = 0; i < neighborGroups.size(); ++i )
+		for( unsigned int i = 0; i < neighborGroups.size(); ++i )
 		{
 			TriangleList& curGroup = neighborGroups[ i ];
 			xr_set<size_t> thisGroupIndices;
@@ -313,14 +313,14 @@ void MeshMender::ProcessTangents(TriangleList& possibleNeighbors,
 
 
 		//reset each triangle to prepare for smoothing group building
-		for(unsigned int i =0; i < possibleNeighbors.size(); ++i)
+		for(unsigned int i = 0; i < possibleNeighbors.size(); ++i)
 		{
 			m_Triangles[ possibleNeighbors[i] ].Reset();
 		}
 
 		//now start building groups
 		CanSmoothTangentsChecker canSmoothTangentsChecker;
-		for(i =0; i < possibleNeighbors.size(); ++i)
+		for(unsigned int i = 0; i < possibleNeighbors.size(); ++i)
 		{
 			Triangle* currTri = &(m_Triangles[ possibleNeighbors[i] ]);
 			assert(currTri);
@@ -334,9 +334,7 @@ void MeshMender::ProcessTangents(TriangleList& possibleNeighbors,
 
 
 		xr_vector<D3DXVECTOR3> groupTangentVectors;
-	
-		
-		for(i=0; i<neighborGroups.size(); ++i)
+		for(unsigned int i = 0; i < neighborGroups.size(); ++i)
 		{
 			D3DXVECTOR3 gtang(0,0,0);
 			for(unsigned int t = 0; t < neighborGroups[i].size(); ++t)//for each triangle in the group, 
@@ -351,7 +349,7 @@ void MeshMender::ProcessTangents(TriangleList& possibleNeighbors,
 		//next step, ensure that triangles in different groups are not
 		//sharing vertices. and give the shared vertex their new group vector
 		xr_set<size_t> otherGroupsIndices;
-		for( i = 0; i < neighborGroups.size(); ++i )
+		for(unsigned int i = 0; i < neighborGroups.size(); ++i)
 		{
 			TriangleList& curGroup = neighborGroups[ i ];
 			xr_set<size_t> thisGroupIndices;
@@ -394,10 +392,7 @@ void MeshMender::ProcessTangents(TriangleList& possibleNeighbors,
 			{
 				otherGroupsIndices.insert(*it);
 			}
-
 		}
-
-
 }
 
 
@@ -410,14 +405,14 @@ void MeshMender::ProcessBinormals(TriangleList& possibleNeighbors,
 
 
 		//reset each triangle to prepare for smoothing group building
-		for(unsigned int i =0; i < possibleNeighbors.size(); ++i )
+		for(unsigned int i = 0; i < possibleNeighbors.size(); ++i)
 		{
 			m_Triangles[ possibleNeighbors[i] ].Reset();
 		}
 
 		//now start building groups
 		CanSmoothBinormalsChecker canSmoothBinormalsChecker;
-		for(i =0; i < possibleNeighbors.size(); ++i )
+		for(unsigned int i = 0; i < possibleNeighbors.size(); ++i)
 		{
 			Triangle* currTri = &(m_Triangles[ possibleNeighbors[i] ]);
 			assert(currTri);
@@ -433,7 +428,7 @@ void MeshMender::ProcessBinormals(TriangleList& possibleNeighbors,
 		xr_vector<D3DXVECTOR3> groupBinormalVectors;
 	
 		
-		for(i=0; i<neighborGroups.size(); ++i)
+		for(unsigned int i = 0; i < neighborGroups.size(); ++i)
 		{
 			D3DXVECTOR3 gbinormal(0,0,0);
 			for(unsigned int t = 0; t < neighborGroups[i].size(); ++t)//for each triangle in the group, 
@@ -448,7 +443,7 @@ void MeshMender::ProcessBinormals(TriangleList& possibleNeighbors,
 		//next step, ensure that triangles in different groups are not
 		//sharing vertices. and give the shared vertex their new group vector
 		xr_set<size_t> otherGroupsIndices;
-		for( i = 0; i < neighborGroups.size(); ++i )
+		for(unsigned int i = 0; i < neighborGroups.size(); ++i)
 		{
 			TriangleList& curGroup = neighborGroups[ i ];
 			xr_set<size_t> thisGroupIndices;
@@ -491,9 +486,7 @@ void MeshMender::ProcessBinormals(TriangleList& possibleNeighbors,
 			{
 				otherGroupsIndices.insert(*it);
 			}
-
 		}
-
 }
 
 

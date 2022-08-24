@@ -31,8 +31,6 @@ object frmObjectList: TfrmObjectList
     BevelOuter = bvNone
     Color = 10528425
     TabOrder = 0
-    ExplicitLeft = 298
-    ExplicitHeight = 469
     object ebShowSel: TExtBtn
       Left = 1
       Top = 143
@@ -94,14 +92,13 @@ object frmObjectList: TfrmObjectList
       Height = 81
       Align = alTop
       Caption = ' Show options '
-      ItemIndex = 1
+      ItemIndex = 0
       Items.Strings = (
         'All'
         'Visible Only'
         'Invisible Only')
       TabOrder = 0
       OnClick = rgSOClick
-      ExplicitTop = 1
     end
     object paBottom: TPanel
       Left = 1
@@ -112,7 +109,6 @@ object frmObjectList: TfrmObjectList
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 1
-      ExplicitTop = 428
       object sbRefreshList: TExtBtn
         Left = 1
         Top = 0
@@ -163,7 +159,6 @@ object frmObjectList: TfrmObjectList
         'Current')
       TabOrder = 2
       OnClick = rgToolsClick
-      ExplicitLeft = 5
     end
   end
   object paItems: TPanel
@@ -318,8 +313,6 @@ object frmObjectList: TfrmObjectList
       Align = alBottom
       Color = clGray
       TabOrder = 1
-      ExplicitTop = 444
-      ExplicitWidth = 296
       object ElEdit1: TElEdit
         Left = 1
         Top = 1
@@ -335,7 +328,6 @@ object frmObjectList: TfrmObjectList
         OnEnter = ElEdit1Change
         OnExit = ElEdit1Exit
         OnKeyDown = ElEdit1KeyDown
-        ExplicitWidth = 294
       end
     end
   end
