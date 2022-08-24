@@ -12,7 +12,8 @@ protected:
     virtual void 		CreateControls			();
 	virtual void 		RemoveControls			();
 
-    enum{
+	enum{
+    	flAppendRandomVaryingCnt        = (1<<25),
     	flAppendRandomNormalAlignment   = (1<<26),
     	flAppendRandomUpdateProps       = (1<<27),
     	flAppendRandomScaleProportional = (1<<28),
@@ -35,7 +36,9 @@ public:
     Fvector				m_AppendRandomMaxRotation;
     shared_str			m_AppendRandomObjectsStr;
     RStringVec			m_AppendRandomObjects;
-    float               m_AppendRandomObjectsPerM2;
+	float               m_AppendRandomObjectsPerM2;
+	shared_str          m_AppendRandomMaterialsStr;
+	RStringVec          m_AppendRandomMaterials;
 public:
 						ESceneObjectTool		();
 
@@ -71,7 +74,8 @@ public:
     BOOL				IsAppendRandomScaleActive	(){return m_Flags.is(flAppendRandomScale);}
     BOOL				IsAppendRandomRotationActive(){return m_Flags.is(flAppendRandomRotation);}
     BOOL				IsAppendRandomScaleProportional(){return m_Flags.is(flAppendRandomScaleProportional);}
-    BOOL                IsAppendRandomNormalAlignmentActive(){return m_Flags.is(flAppendRandomNormalAlignment);}
+	BOOL                IsAppendRandomNormalAlignmentActive(){return m_Flags.is(flAppendRandomNormalAlignment);}
+	BOOL                IsAppendRandomVaryingCountActive(){return m_Flags.is(flAppendRandomVaryingCnt);}
 
     // tools
     virtual bool		ExportGame         		(SExportStreams* F);
