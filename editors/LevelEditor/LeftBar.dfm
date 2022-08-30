@@ -2,7 +2,7 @@ object fraLeftBar: TfraLeftBar
   Left = 0
   Top = 0
   Width = 451
-  Height = 701
+  Height = 304
   HorzScrollBar.ButtonSize = 1
   HorzScrollBar.ParentColor = False
   HorzScrollBar.Visible = False
@@ -20,7 +20,6 @@ object fraLeftBar: TfraLeftBar
   ParentColor = False
   ParentFont = False
   TabOrder = 0
-  ExplicitHeight = 304
   object paLeftBar: TPanel
     Left = 0
     Top = 0
@@ -3506,7 +3505,7 @@ object fraLeftBar: TfraLeftBar
   end
   object paFrames: TPanel
     Left = 0
-    Top = 660
+    Top = 263
     Width = 451
     Height = 41
     Align = alBottom
@@ -3514,7 +3513,6 @@ object fraLeftBar: TfraLeftBar
     Color = 10528425
     Constraints.MinWidth = 220
     TabOrder = 1
-    ExplicitTop = 263
   end
   object fsStorage: TFormStorage
     IniSection = 'LeftBar'

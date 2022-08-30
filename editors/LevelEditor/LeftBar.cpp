@@ -563,12 +563,15 @@ void TfraLeftBar::UpdateSnapList()
 	lbSnapList->Items->Clear();
     ObjectList* lst = Scene->GetSnapList(true);
     if (lst&&!lst->empty()){
-    	int idx=0;
+		TStringList *sl = xr_new<TStringList>();
+		int idx=0;
         ObjectIt _F=lst->begin();
     	for (;_F!=lst->end(); _F++,idx++){
         	AnsiString s; s.sprintf("%d: %s",idx,(*_F)->Name);
-        	lbSnapList->Items->Add(s);
-        }
+			sl->Add(s);
+		}
+		lbSnapList->Items->AddStrings(sl);
+		xr_delete(sl);
     }
     Repaint();
 }
