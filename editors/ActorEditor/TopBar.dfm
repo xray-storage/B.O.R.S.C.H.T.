@@ -1,12 +1,12 @@
 object fraTopBar: TfraTopBar
   Left = 0
   Top = 0
-  Width = 784
-  Height = 20
+  Width = 451
+  Height = 304
   HorzScrollBar.Visible = False
   VertScrollBar.Visible = False
   Align = alClient
-  Constraints.MaxHeight = 20
+  Constraints.MaxHeight = 304
   Constraints.MinHeight = 20
   Color = 10528425
   Font.Charset = DEFAULT_CHARSET
@@ -21,13 +21,14 @@ object fraTopBar: TfraTopBar
     Left = 0
     Top = 0
     Width = 51
-    Height = 20
+    Height = 304
     Align = alLeft
     BevelOuter = bvNone
     Color = 10528425
     ParentShowHint = False
     ShowHint = True
     TabOrder = 0
+    ExplicitHeight = 20
     object ebEditUndo: TExtBtn
       Left = 0
       Top = 0
@@ -173,13 +174,14 @@ object fraTopBar: TfraTopBar
     Left = 51
     Top = 0
     Width = 127
-    Height = 20
+    Height = 304
     Align = alLeft
     BevelOuter = bvNone
     Color = 10528425
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
+    ExplicitHeight = 20
     object ebActionMove: TExtBtn
       Left = 50
       Top = 0
@@ -541,13 +543,14 @@ object fraTopBar: TfraTopBar
     Left = 282
     Top = 0
     Width = 227
-    Height = 20
+    Height = 304
     Align = alLeft
     BevelOuter = bvNone
     Color = 10528425
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
+    ExplicitHeight = 20
     object ebMSnap: TExtBtn
       Left = 200
       Top = 0
@@ -1212,13 +1215,14 @@ object fraTopBar: TfraTopBar
     Left = 178
     Top = 0
     Width = 104
-    Height = 20
+    Height = 304
     Align = alLeft
     BevelOuter = bvNone
     Color = 10528425
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
+    ExplicitHeight = 20
     object ebAxisX: TExtBtn
       Left = 0
       Top = 0
@@ -1509,13 +1513,14 @@ object fraTopBar: TfraTopBar
     Left = 550
     Top = 0
     Width = 179
-    Height = 20
+    Height = 304
     Align = alLeft
     BevelOuter = bvNone
     Color = 10528425
     ParentShowHint = False
     ShowHint = True
     TabOrder = 4
+    ExplicitHeight = 20
     object ebViewFront: TExtBtn
       Left = 0
       Top = 0
@@ -1737,13 +1742,14 @@ object fraTopBar: TfraTopBar
     Left = 509
     Top = 0
     Width = 41
-    Height = 20
+    Height = 304
     Align = alLeft
     BevelOuter = bvNone
     Color = 10528425
     ParentShowHint = False
     ShowHint = True
     TabOrder = 5
+    ExplicitHeight = 20
     object ebZoomExtents: TExtBtn
       Left = 0
       Top = 0

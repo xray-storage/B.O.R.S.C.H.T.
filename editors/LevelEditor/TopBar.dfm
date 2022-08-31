@@ -1,8 +1,8 @@
 object fraTopBar: TfraTopBar
   Left = 0
   Top = 0
-  Width = 159
-  Height = 644
+  Width = 451
+  Height = 304
   HorzScrollBar.Visible = False
   VertScrollBar.Visible = False
   Align = alClient

@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------
 // refs
 
-class ECORE_API TfrmMain : public TForm
+class TfrmMain : public TForm
 {
 __published:	// IDE-managed Components
         TPanel *paLeftBar;
@@ -75,6 +75,6 @@ public:		// User declarations
     bool            IsFocused(){return D3DWindow->Focused();}
 };
 //---------------------------------------------------------------------------
-extern /*ECORE_API */PACKAGE TfrmMain *frmMain;
+extern PACKAGE TfrmMain *frmMain;
 //---------------------------------------------------------------------------
 #endif

@@ -16,7 +16,7 @@
 #include <Menus.hpp>
 #include "cgauges.h"
 //---------------------------------------------------------------------------
-class ECORE_API TfraBottomBar : public TFrame
+class TfraBottomBar : public TFrame
 {
 __published:	// IDE-managed Components
 	TFormStorage *fsStorage;

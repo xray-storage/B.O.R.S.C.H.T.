@@ -19,11 +19,11 @@
 //---------------------------------------------------------------------------
 // refs
 
-class ECORE_API TfrmMain : public TForm
+class TfrmMain : public TForm
 {
 __published:	// IDE-managed Components
-        TPanel *paLeftBar;
-        TPanel *paBottomBar;
+	TPanel *paLeftBar;
+	TPanel *paBottomBar;
     TPanel *paTools;
     TTimer *tmRefresh;
 	TFormStorage *fsStorage;
@@ -238,6 +238,6 @@ public:		// User declarations
     void __fastcall miOpenRecentClick(TObject *Sender);
 };
 //---------------------------------------------------------------------------
-extern /*ECORE_API*/ PACKAGE TfrmMain *frmMain;
+extern PACKAGE TfrmMain *frmMain;
 //---------------------------------------------------------------------------
 #endif
