@@ -221,16 +221,17 @@ bool CEditableObject::VerifyBoneParts()
             }
         }
 
+	bool bRes = true;
     for (size_t u_it = 0; u_it < b_use.size(); u_it++){
     	if (b_use[u_it] < 1){
         	Msg("!Bone '%s' is not used in any part", *BoneNameByID(u_it));
-            return false;
-        }else if(b_use[u_it] > 1){
-        	Msg("!Bone '%s' is used in more than one part", *BoneNameByID(u_it));
-            return false;
+			bRes = false;
+		}else if(b_use[u_it] > 1){
+			Msg("!Bone '%s' is used in more than one part", *BoneNameByID(u_it));
+			bRes = false;
         }
     }
-    return true;
+    return bRes;
 }
 
 void CEditableObject::PrepareOGFDesc(ogf_desc& desc)
