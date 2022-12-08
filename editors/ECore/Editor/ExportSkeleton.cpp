@@ -597,6 +597,11 @@ bool CExportSkeleton::PrepareGeometry(u8 influence)
             u32 dwTexCnt 								= ((surf->_FVF()&D3DFVF_TEXCOUNT_MASK)>>D3DFVF_TEXCOUNT_SHIFT);
             R_ASSERT									(dwTexCnt==1);
 
+			if (!surf->Validate()) {
+                ELog.DlgMsg		(mtError,"Surface: '%s' has invalid shader or texture.",surf->_Name());
+				bRes			= FALSE;
+			}
+
             for (IntIt f_it=face_lst.begin(); f_it!=face_lst.end(); f_it++)
             {
 		    	if (!bRes)								break;
