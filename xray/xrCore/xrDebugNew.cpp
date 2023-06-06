@@ -119,6 +119,9 @@ void xrDebug::gather_info		(const char *expression, const char *description, con
 	memory_monitor::flush_each_time	(false);
 #endif // USE_MEMORY_MONITOR
 
+	if (IsDebuggerPresent())
+		return;
+
 	if (!strstr(GetCommandLine(),"-no_call_stack_assert")) {
 		if (shared_str_initialized)
 			Msg			("stack trace:");
