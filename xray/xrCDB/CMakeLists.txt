@@ -77,4 +77,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	xrCDB_Collector.cpp
 	xrCDB_frustum.cpp
 	xrCDB_ray.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core)
+add_library(Xray::CDB ALIAS ${PROJECT_NAME})

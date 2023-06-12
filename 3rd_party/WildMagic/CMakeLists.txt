@@ -21,3 +21,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/WmlVector3.cpp
 	src/WmlVector4.cpp
 	src/WmlWinSystem.cpp)
+add_library(WildMagic::WildMagic ALIAS ${PROJECT_NAME})
+

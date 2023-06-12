@@ -52,3 +52,4 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/vec2.h
 	src/vec3.h
 	src/vec4.h)
+add_library(Xray::QSlim ALIAS ${PROJECT_NAME})

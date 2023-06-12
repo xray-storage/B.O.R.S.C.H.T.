@@ -54,10 +54,12 @@ target_sources(libvorbis_static PRIVATE
 	lib/vorbisenc.c
 	lib/window.c
 	lib/window.h)
-target_link_libraries(libvorbis_static PRIVATE libogg)
+target_link_libraries(libvorbis_static PRIVATE Xiph::libogg)
+add_library(Xiph::libvorbis_static ALIAS libvorbis_static)
 
 add_library(libvorbisfile STATIC)
 target_include_directories(libvorbisfile PUBLIC include)
 target_sources(libvorbisfile PRIVATE
 	lib/vorbisfile.c)
-target_link_libraries(libvorbisfile PRIVATE libogg libvorbis_static)
+target_link_libraries(libvorbisfile PRIVATE Xiph::libogg Xiph::libvorbis_static)
+add_library(Xiph::libvorbisfile ALIAS libvorbisfile)

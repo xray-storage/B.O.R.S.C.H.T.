@@ -6,3 +6,4 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_sources(${PROJECT_NAME} PRIVATE
 	src/bitwise.c
 	src/framing.c)
+add_library(Xiph::libogg ALIAS ${PROJECT_NAME})

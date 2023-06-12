@@ -240,4 +240,15 @@ target_sources(${PROJECT_NAME} PRIVATE
 	../../Layers/xrRender/DetailManager_Decompress.cpp
 	../../Layers/xrRender/DetailManager_soft.cpp
 	../../Layers/xrRender/DetailManager_VS.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore ECore xrEProps xrCDB ETools xrSound xrSE_Factory MagicFM comctl32)
+target_link_libraries(${PROJECT_NAME}
+	PRIVATE
+		Xray::Core
+		Xray::ECore
+		Xray::EProps
+		Xray::CDB
+		Xray::ETools
+		Xray::Sound
+		Xray::SE_Factory
+		MagicFM::MagicFM
+		comctl32
+)

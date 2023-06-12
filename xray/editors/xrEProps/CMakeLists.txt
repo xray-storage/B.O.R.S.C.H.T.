@@ -54,4 +54,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 #	WaveForm.h
 #	xrEProps.cpp
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core)
+add_library(Xray::EProps ALIAS ${PROJECT_NAME})

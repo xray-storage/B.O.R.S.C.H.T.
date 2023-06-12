@@ -312,3 +312,4 @@ target_sources(MagicFM PRIVATE
 	Source/Numerics/MgcSpecialFunction.cpp
 	Source/Numerics/MgcSpecialFunction.h)
 target_link_libraries(MagicFM PRIVATE MagicFM_Core MagicFM_Distance2D MagicFM_Distance3D MagicFM_Core2D MagicFM_Core3D)
+add_library(MagicFM::MagicFM ALIAS MagicFM)

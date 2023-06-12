@@ -13,3 +13,4 @@ target_sources(${PROJECT_NAME} PRIVATE
 	OpenAL32.rc
 	resource.h)
 target_link_libraries(${PROJECT_NAME} PRIVATE winmm.lib)
+add_library(OpenAL32::OpenAL32 ALIAS ${PROJECT_NAME})

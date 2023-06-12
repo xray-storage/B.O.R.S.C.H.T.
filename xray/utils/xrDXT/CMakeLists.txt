@@ -21,4 +21,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	StdAfx.h
 	tga.cpp
 	tga.h)
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore nvtt)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core Nvtt::Nvtt)
+add_library(Xray::DXT ALIAS DXT)

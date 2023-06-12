@@ -57,4 +57,5 @@ target_sources(libtheora_static PRIVATE
 	lib/Version_script
 	lib/Version_script-dec
 	lib/Version_script-enc)
-target_link_libraries(libtheora_static PUBLIC libogg)
+target_link_libraries(libtheora_static PUBLIC Xiph::libogg)
+add_library(Xiph::libtheora_static ALIAS libtheora_static)

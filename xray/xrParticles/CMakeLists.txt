@@ -21,4 +21,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	psystem.h
 	stdafx.cpp
 	stdafx.h)
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core)
+add_library(Xray::Particles ALIAS ${PROJECT_NAME})
