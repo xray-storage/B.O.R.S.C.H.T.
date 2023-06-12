@@ -387,6 +387,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	libogg
 	xrSound
 	xrParticles
+	xrCPU_Pipe
 	ETools
 	xrEProps
 	LWO
