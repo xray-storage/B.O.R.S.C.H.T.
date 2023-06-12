@@ -18,9 +18,9 @@ bool TUI_ControlAIMapNodeAdd::Start(TShiftState Shift)
 {
 	append_nodes = 0;                           
 	Fvector p;
-    ESceneAIMapTool* S 		= (ESceneAIMapTool*)parent_tool;
+	ESceneAIMapTool* S 		= (ESceneAIMapTool*)parent_tool;
     if (S->PickObjects(p,UI->m_CurrentRStart,UI->m_CurrentRNorm,UI->ZFar())){
-    	S->SelectObjects	(false);
+		S->SelectObjects(false);
 	    append_nodes		= S->AddNode(p,((TfraAIMap*)S->pFrame)->ebIgnoreConstraints->Down,((TfraAIMap*)S->pFrame)->ebAutoLink->Down,S->m_BrushSize);
 		if (!Shift.Contains(ssAlt)){ 
 		    if (append_nodes) Scene->UndoSave();

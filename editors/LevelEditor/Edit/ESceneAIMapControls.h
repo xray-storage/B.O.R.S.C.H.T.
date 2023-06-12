@@ -6,7 +6,6 @@
 // refs
 class ESceneAIMapTool;
 
-#define estAIMapNode 	0
 //---------------------------------------------------------------------------
 class TUI_ControlAIMapNodeAdd: public TUI_CustomControl{
 	int 			append_nodes;

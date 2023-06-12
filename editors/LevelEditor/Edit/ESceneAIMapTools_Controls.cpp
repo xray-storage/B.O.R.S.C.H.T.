@@ -10,10 +10,10 @@ void ESceneAIMapTool::CreateControls()
 {
 	inherited::CreateDefaultControls(estDefault);
 	// node tools
-//    AddControl(xr_new<TUI_ControlAIMapNodeSelect>	(estAIMapNode,		etaSelect, 	this));
-    AddControl(xr_new<TUI_ControlAIMapNodeAdd>		(estAIMapNode,		etaAdd, 	this));
-    AddControl(xr_new<TUI_ControlAIMapNodeMove>		(estAIMapNode,		etaMove,	this));
-    AddControl(xr_new<TUI_ControlAIMapNodeRotate>	(estAIMapNode,		etaRotate,	this));
+//    AddControl(xr_new<TUI_ControlAIMapNodeSelect>	(estDefault,		etaSelect, 	this));
+	AddControl(xr_new<TUI_ControlAIMapNodeAdd>		(estDefault,		etaAdd, 	this));
+	AddControl(xr_new<TUI_ControlAIMapNodeMove>		(estDefault,		etaMove,	this));
+    AddControl(xr_new<TUI_ControlAIMapNodeRotate>	(estDefault,		etaRotate,	this));
 	// frame
     pFrame 			= xr_new<TfraAIMap>((TComponent*)0,this);
 }

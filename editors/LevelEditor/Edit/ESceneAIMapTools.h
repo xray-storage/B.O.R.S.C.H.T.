@@ -73,6 +73,7 @@ const int				HDIM_Z	= 128;
 class ESceneAIMapTool: public ESceneToolBase
 {
 	friend class SAINode;
+	friend struct delete_sel_node_pred;
 	typedef ESceneToolBase inherited;
     ObjectList			m_SnapObjects;
 	// hash
@@ -130,8 +131,7 @@ public:
     	flUpdateSnapList			= (1<<0),
     	flHideNodes					= (1<<1),
     	flSlowCalculate				= (1<<2),
-        flHideNodesWhileGenerating	= (1<<3),
-    	flUpdateHL 					= (1<<15),
+		flHideNodesWhileGenerating	= (1<<3),
     };
     Flags32				m_Flags;
 
@@ -142,7 +142,8 @@ public:
 
     xr_vector<Fvector>	m_ErrorNodes;
 
-    u32					m_SelectionCount;
+	u32					m_SelectionCount;
+	xr_list<SAINode*>   m_SelNodesCache;
 
     bool				PickObjects				(Fvector& dest, const Fvector& start, const Fvector& dir, float dist);
 public:
@@ -214,21 +215,35 @@ public:
     int					AddNode					(const Fvector& pos, bool bIgnoreConstraints, bool bAutoLink, int cnt);
 
     AINodeVec&			Nodes					(){return m_Nodes;}
-    
+
     void				MakeLinks				(u8 side_flag, EMode mode, bool bIgnoreConstraints);
     void				RemoveLinks				();
-    void				InvertLinks				();
-
-	void 				UpdateHLSelected		(){m_Flags.set(flUpdateHL,TRUE);}
+	void				InvertLinks				();
 
     void 				SmoothNodes				();
 	void 				ResetNodes				();
-    void				SelectNodesByLink		(int link);
+	void				SelectNodesByLink		(int link);
 
     void				OnPatchSizeChanged		(PropValue*);
     void				SelectErrorNodes		();
 
-    void				SelectNode				(SAINode *node, bool select);
+	ICF void			SelectNode				(SAINode *node, bool select)
+	{
+		if(node->flags.is(SAINode::flSelected) != select) {
+			node->flags.set(SAINode::flSelected, select);
+			m_SelectionCount += (-1 + (int)select*2);
+
+			if(node->flags.is(SAINode::flSelected)) {
+				//if(m_SelNodesCache.size() > 1024)
+				//	m_SelNodesCache.pop_front();
+				//m_SelNodesCache.push_back(node);
+				if(m_SelNodesCache.size() < 1024)
+					m_SelNodesCache.push_front(node);
+            } else {
+            	m_SelNodesCache.remove(node);
+            }
+		}
+	}
 };
 #endif // ESceneAIMapToolsH
 

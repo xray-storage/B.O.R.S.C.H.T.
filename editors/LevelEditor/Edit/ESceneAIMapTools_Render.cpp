@@ -72,8 +72,8 @@ void ESceneAIMapTool::OnRender(int priority, bool strictB2F)
                 _VertexStream* Stream= &RCache.Vertex;
                 FVF::LIT* pv		= (FVF::LIT*)Stream->Lock(block_size,m_RGeom->vb_stride,vBase);
                 u32	cnt				= 0;
-//				Device.Statistic.TEST0.Begin();
-//				Device.Statistic.TEST2.Begin();
+//				Device.Statistic->TEST0.Begin();
+//				Device.Statistic->TEST2.Begin();
                 for (int x=rect.x1; x<=rect.x2; x++){
                     for (int z=rect.y1; z<=rect.y2; z++){
                         AINodeVec* nodes	= HashMap(x,z);
@@ -84,18 +84,17 @@ void ESceneAIMapTool::OnRender(int priority, bool strictB2F)
                                 SAINode& N 	= **it;
 
 								Fvector v;	v.set(N.Pos.x-st,N.Pos.y,N.Pos.z-st);
-                                float p_denom 	= N.Plane.n.dotproduct(DUP);
-                                float b			= (_abs(p_denom)<EPS_S)?m_Params.fPatchSize:_abs(N.Plane.classify(v) / p_denom);
+								float p_denom 	= N.Plane.n.dotproduct(DUP);
+								float b			= (_abs(p_denom)<EPS_S)?m_Params.fPatchSize:_abs(N.Plane.classify(v) / p_denom);
 							
-                                if (Render->ViewBase.testSphere_dirty(N.Pos,_max(b,st))){
-                                    u32 clr;
-                                    if (N.flags.is(SAINode::flSelected))clr = 0xffffffff;
-                                    else 								clr = N.flags.is(SAINode::flHLSelected)?0xff909090:0xff606060;
-                                    int k = 0;
-                                    if (N.n1) k |= 1<<0;
-                                    if (N.n2) k |= 1<<1;
-                                    if (N.n3) k |= 1<<2;
-                                    if (N.n4) k |= 1<<3;
+								if (Render->ViewBase.testSphere_dirty(N.Pos,_max(b,st))){
+									u32 clr = 0xff606060;
+									int k = 0;
+									if (N.n1) { k |= 1<<0; if(N.n1->flags.get()&SAINode::flSelected) clr = 0xff909090; }
+									if (N.n2) { k |= 1<<1; if(N.n2->flags.get()&SAINode::flSelected) clr = 0xff909090; }
+									if (N.n3) { k |= 1<<2; if(N.n3->flags.get()&SAINode::flSelected) clr = 0xff909090; }
+									if (N.n4) { k |= 1<<3; if(N.n4->flags.get()&SAINode::flSelected) clr = 0xff909090; }
+									if (N.flags.get()&SAINode::flSelected) clr = 0xffffffff;
                                     Fvector		v;
                                     FVF::LIT	v1,v2,v3,v4;
                                     float tt	= 0.01f;
@@ -121,8 +120,8 @@ void ESceneAIMapTool::OnRender(int priority, bool strictB2F)
                         }
                     }
                 }
-//                Device.Statistic.TEST2.End();
-//                Device.Statistic.TEST0.End();
+//				Device.Statistic->TEST2.End();
+//				Device.Statistic->TEST0.End();
 				Stream->Unlock		(cnt,m_RGeom->vb_stride);
                 if (cnt) Device.DP	(D3DPT_TRIANGLELIST,m_RGeom,vBase,cnt/3);
                 Device.SetRS		(D3DRS_CULLMODE,		D3DCULL_CCW);
