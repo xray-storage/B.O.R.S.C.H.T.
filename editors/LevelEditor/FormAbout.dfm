@@ -120,7 +120,7 @@ object AboutForm: TAboutForm
     Top = 72
     Width = 121
     Height = 13
-    Caption = '(C) BORSCHT team 2018'
+    Caption = '(C) BORSCHT team 2023'
   end
   object lbURL: TLabel
     Left = 16
