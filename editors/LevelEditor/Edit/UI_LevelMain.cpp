@@ -123,12 +123,11 @@ CCommandVar CLevelTool::CommandEnableTarget(CCommandVar p1, CCommandVar p2)
 CCommandVar CLevelTool::CommandShowTarget(CCommandVar p1, CCommandVar p2)
 {
 	ESceneToolBase* M 	= Scene->GetTool(p1);
-    if(p2)
-    	M->m_EditFlags.set(ESceneToolBase::flVisible,TRUE);
-    else
-		M->m_EditFlags.set(ESceneToolBase::flVisible,FALSE);
 
-    return TRUE;
+	M->m_EditFlags.set(ESceneToolBase::flVisible,!!p2);
+	UI->RedrawScene();
+
+	return TRUE;
 }
 
 CCommandVar CLevelTool::CommandReadonlyTarget(CCommandVar p1, CCommandVar p2)
