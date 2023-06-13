@@ -169,6 +169,7 @@
 #define CLSID_DEVICE_FLARE			MK_CLSID('D','_','F','L','A','R','E',' ')
 #define CLSID_DEVICE_COMPASS		MK_CLSID('D','_','C','O','M','P','A','S')
 #define CLSID_DEVICE_DOSIMETER		MK_CLSID('D','O','S','I','M','E','T','R')
+#define CLSID_PENDULUM   			MK_CLSID('O','_','P','E','N','D','U','L')
 
 // Inventory items
 #define CLSID_IITEM_BOLT			MK_CLSID('I','I','_','B','O','L','T',' ')
