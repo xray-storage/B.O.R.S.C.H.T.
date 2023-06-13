@@ -21,7 +21,8 @@ public:
 							CHolderCustom		()				{m_owner=NULL;m_ownerActor=NULL;}
 	virtual					~CHolderCustom		()				{;}
 	virtual	void			UpdateEx			(float fov){}; //called by owner
-	virtual CHolderCustom	*cast_holder_custom	()				{return this;}
+	virtual CHolderCustom*	cast_holder_custom	()				{return this;}
+	virtual CGameObject*	cast_game_object	()				= 0;
 			bool			Engaged				()				{return m_owner!=NULL;}
 	virtual void			OnMouseMove			(int x, int y)	= 0;
 	virtual void			OnKeyboardPress		(int dik)		= 0;

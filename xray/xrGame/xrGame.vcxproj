@@ -3057,9 +3057,8 @@
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(ProjectName)_script.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <ClCompile Include="ActorFollowers.cpp" />
+    <ClCompile Include="ActorHolder.cpp" />
     <ClCompile Include="ActorInput.cpp" />
-    <ClCompile Include="ActorMountedWeapon.cpp" />
-    <ClCompile Include="ActorVehicle.cpp" />
     <ClCompile Include="actor_communication.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch_script.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug-LLVM|Win32'">pch_script.h</PrecompiledHeaderFile>

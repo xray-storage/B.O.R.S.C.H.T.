@@ -9185,12 +9185,6 @@
     <ClCompile Include="ActorInput.cpp">
       <Filter>Core\Client\Objects\actor\base</Filter>
     </ClCompile>
-    <ClCompile Include="ActorMountedWeapon.cpp">
-      <Filter>Core\Client\Objects\actor\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorVehicle.cpp">
-      <Filter>Core\Client\Objects\actor\base</Filter>
-    </ClCompile>
     <ClCompile Include="fire_disp_controller.cpp">
       <Filter>Core\Client\Objects\actor\base</Filter>
     </ClCompile>
@@ -11248,6 +11242,9 @@
     </ClCompile>
     <ClCompile Include="objects\physics\Pendulum.cpp">
       <Filter>Core\Client\Objects\physics\Pendulum</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorHolder.cpp">
+      <Filter>Core\Client\Objects\actor\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -31,10 +31,9 @@ void CActor::attach_Holder(CHolderCustom* vehicle)
     PickupModeOff();
     m_holder = vehicle;
 
-    IRenderVisual* pVis = Visual();
-    IKinematicsAnimated* V = smart_cast<IKinematicsAnimated*>(pVis);
-    R_ASSERT(V);
-    IKinematics* pK = smart_cast<IKinematics*>(pVis);
+    auto V = Visual()->dcast_PKinematicsAnimated();
+    auto pK = Visual()->dcast_PKinematics();
+    ;
 
     if (!m_holder->attach_Actor(this)) {
         m_holder = NULL;
@@ -42,9 +41,11 @@ void CActor::attach_Holder(CHolderCustom* vehicle)
     }
     // temp play animation
     CCar* car = smart_cast<CCar*>(m_holder);
-    u16 anim_type = car->DriverAnimationType();
-    SVehicleAnimCollection& anims = m_vehicle_anims->m_vehicles_type_collections[anim_type];
-    V->PlayCycle(anims.idles[0], FALSE);
+    if (car) {
+        u16 anim_type = car->DriverAnimationType();
+        SVehicleAnimCollection& anims = m_vehicle_anims->m_vehicles_type_collections[anim_type];
+        V->PlayCycle(anims.idles[0], FALSE);
+    }
 
     ResetCallbacks();
     u16 head_bone = pK->LL_BoneID("bip01_head");
@@ -52,7 +53,7 @@ void CActor::attach_Holder(CHolderCustom* vehicle)
 
     character_physics_support()->movement()->DestroyCharacter();
     mstate_wishful = 0;
-    m_holderID = car->ID();
+    m_holderID = m_holder->cast_game_object()->ID();
 
     SetWeaponHideState(INV_STATE_CAR, true);
 
@@ -63,7 +64,8 @@ void CActor::detach_Holder()
 {
     if (!m_holder)
         return;
-    CCar* car = smart_cast<CCar*>(m_holder);
+
+    auto car = m_holder->cast_game_object()->cast_physics_shell_holder();
     if (!car)
         return;
     CPHShellSplitterHolder* sh = car->PPhysicsShell()->SplitterHolder();
@@ -76,7 +78,7 @@ void CActor::detach_Holder()
     }
     if (sh)
         sh->Activate();
-    m_holder->detach_Actor(); //
+    m_holder->detach_Actor();
 
     character_physics_support()->movement()->SetPosition(m_holder->ExitPosition());
     character_physics_support()->movement()->SetVelocity(m_holder->ExitVelocity());
@@ -86,13 +88,12 @@ void CActor::detach_Holder()
     r_model_yaw_dest = r_model_yaw;
     m_holder = NULL;
     SetCallbacks();
-    IKinematicsAnimated* V = smart_cast<IKinematicsAnimated*>(Visual());
+    auto V = Visual()->dcast_PKinematicsAnimated();
     R_ASSERT(V);
     V->PlayCycle(m_anims->m_normal.legs_idle);
     V->PlayCycle(m_anims->m_normal.m_torso_idle);
     m_holderID = u16(-1);
 
-    //.	SetWeaponHideState(whs_CAR, FALSE);
     SetWeaponHideState(INV_STATE_CAR, false);
 }
 
@@ -104,16 +105,15 @@ void CActor::on_requested_spawn(CObject* object)
 
 bool CActor::use_Holder(CHolderCustom* holder)
 {
-    Fvector center;
-    Center(center);
+    Fvector foot = Position();
     bool b = false;
     if (m_holder) {
-        if (m_holder->Use(Device.vCameraPosition, Device.vCameraDirection, center))
+        if (m_holder->Use(Device.vCameraPosition, Device.vCameraDirection, foot))
             detach_Holder();
         b = true;
     } else {
         if (holder) {
-            if (holder->Use(Device.vCameraPosition, Device.vCameraDirection, center)) {
+            if (holder->Use(Device.vCameraPosition, Device.vCameraDirection, foot)) {
                 if (pCamBobbing) {
                     Cameras().RemoveCamEffector(eCEBobbing);
                     pCamBobbing = NULL;
