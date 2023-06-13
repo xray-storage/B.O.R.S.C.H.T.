@@ -118,6 +118,9 @@ u32	mem_usage_impl	(HANDLE heap_handle, u32* pBlocksUsed, u32* pBlocksFree)
 	if ( no_memory_usage )
 		return		0;
 
+	if (!HeapLock(heap_handle))
+		return 0;
+
 	int				heapstatus;
 	size_t	total	= 0;
 	u32	blocks_free	= 0;
@@ -134,6 +137,8 @@ u32	mem_usage_impl	(HANDLE heap_handle, u32* pBlocksUsed, u32* pBlocksFree)
 	}
 	if (pBlocksFree)	*pBlocksFree= 1024*(u32)blocks_free;
 	if (pBlocksUsed)	*pBlocksUsed= 1024*(u32)blocks_used;
+
+	HeapUnlock(heap_handle);
 
 	switch( heapstatus )
 	{
