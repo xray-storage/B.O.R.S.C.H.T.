@@ -6,19 +6,21 @@
 
 // chunks
 static const u16 OBJECT_TOOLS_VERSION  	= 0x0000;
+static const u16 SCATTER_PARAMS_VERSION = 0x0001;
 //----------------------------------------------------
 enum{
     CHUNK_VERSION			= 0x1001ul,
     CHUNK_APPEND_RANDOM		= 0x1002ul,
-    CHUNK_FLAGS				= 0x1003ul,
+	CHUNK_FLAGS				= 0x1003ul,
+	CHUNK_SCATTER_PARAMS    = 0x1004ul,
 };
 bool ESceneObjectTool::LoadLTX(CInifile& ini)
 {
 	u32 version 	= ini.r_u32("main", "version");
     if( version!=OBJECT_TOOLS_VERSION )
     {
-            ELog.DlgMsg( mtError, "%s tools: Unsupported version.",ClassDesc());
-            return false;
+		ELog.DlgMsg( mtError, "%s tools: Unsupported version.",ClassDesc());
+		return false;
     }
 
 	inherited::LoadLTX		(ini);
@@ -29,14 +31,29 @@ bool ESceneObjectTool::LoadLTX(CInifile& ini)
     m_AppendRandomMaxScale	= ini.r_fvector3	("AppendRandom", "AppendRandomMaxScale");
     m_AppendRandomMinRotation = ini.r_fvector3	("AppendRandom", "AppendRandomMinRotation");
     m_AppendRandomMaxRotation = ini.r_fvector3	("AppendRandom", "AppendRandomMaxRotation");
-    u32 cnt =   ini.r_u32		("AppendRandom", "AppendRandomObjects_size");
+	u32 cnt =   ini.r_u32		("AppendRandom", "AppendRandomObjects_size");
 
 	for (u32 i=0; i<cnt; ++i)
 	{
 		string128 			buff;
 		sprintf				(buff,"object_name_%u",i);
-        shared_str s		= ini.r_string("AppendRandom", buff);
-        m_AppendRandomObjects.push_back	(s);
+		shared_str s		= ini.r_string("AppendRandom", buff);
+		m_AppendRandomObjects.push_back	(s);
+	}
+
+	// aaargh!! line_exist doesn't handle upper-case characters in section name!
+	if(ini.line_exist("appendrandom", "ObjectsPerM2"))
+		m_AppendRandomObjectsPerM2 = ini.r_float("AppendRandom", "ObjectsPerM2");
+
+	if(ini.line_exist("appendrandom", "AppendRandomMaterials_size")) {
+		u32 cnt = ini.r_u32("AppendRandom", "AppendRandomMaterials_size");
+		for (u32 i=0; i<cnt; ++i)
+		{
+			string128 			buff;
+			sprintf				(buff,"material_%u",i);
+			shared_str s		= ini.r_string("AppendRandom", buff);
+			m_AppendRandomMaterials.push_back	(s);
+		}
 	}
 
     m_Flags.set(flAppendRandom,FALSE);
@@ -56,17 +73,24 @@ void ESceneObjectTool::SaveLTX(CInifile& ini)
     ini.w_fvector3	("AppendRandom", "AppendRandomMaxScale", m_AppendRandomMaxScale);
     ini.w_fvector3	("AppendRandom", "AppendRandomMinRotation", m_AppendRandomMinRotation);
     ini.w_fvector3	("AppendRandom", "AppendRandomMaxRotation", m_AppendRandomMaxRotation);
-    ini.w_u32		("AppendRandom", "AppendRandomObjects_size", m_AppendRandomObjects.size());
+	ini.w_u32		("AppendRandom", "AppendRandomObjects_size", m_AppendRandomObjects.size());
 
-    if (m_AppendRandomObjects.size())
-    {
+	if (m_AppendRandomObjects.size()) {
     	u32 i=0;
-    	for (RStringVecIt it=m_AppendRandomObjects.begin(); it!=m_AppendRandomObjects.end(); ++it, ++i)
-        {
-        	string128 			buff;
-            sprintf				(buff,"object_name_%d",i);
-            ini.w_string		("AppendRandom", buff, (*it).c_str());
-        }
+		for (RStringVecIt it=m_AppendRandomObjects.begin(); it!=m_AppendRandomObjects.end(); ++it, ++i) {
+			string128 			buff;
+			sprintf				(buff,"object_name_%d",i);
+			ini.w_string		("AppendRandom", buff, (*it).c_str());
+		}
+	}
+
+	ini.w_float     ("AppendRandom", "ObjectsPerM2", m_AppendRandomObjectsPerM2);
+
+	ini.w_u32		("AppendRandom", "AppendRandomMaterials_size", m_AppendRandomMaterials.size());
+	for(size_t i = 0; i < m_AppendRandomMaterials.size(); i++) {
+		string128 			buff;
+		sprintf				(buff,"material_%d",i);
+		ini.w_string		("AppendRandom", buff, m_AppendRandomMaterials[i].c_str());
     }
 }
 
@@ -75,7 +99,7 @@ bool ESceneObjectTool::LoadStream(IReader& F)
 	u16 version 	= 0;
     if(F.r_chunk(CHUNK_VERSION,&version)){
         if( version!=OBJECT_TOOLS_VERSION ){
-            ELog.DlgMsg( mtError, "%s tools: Unsupported version.",ClassDesc());
+			ELog.DlgMsg( mtError, "%s tools: Unsupported version.",ClassDesc());
             return false;
         }
     }
@@ -97,7 +121,18 @@ bool ESceneObjectTool::LoadStream(IReader& F)
                 m_AppendRandomObjects.push_back	(buf);
             }
         }
-    };
+	};
+
+	if (F.find_chunk(CHUNK_SCATTER_PARAMS)) {
+		u16 version = F.r_u16();
+		if(version == 1) {
+			m_AppendRandomObjectsPerM2 = F.r_float();
+			m_AppendRandomMaterials.resize(F.r_u32());
+			for(size_t i = 0; i < m_AppendRandomMaterials.size(); i++) {
+				F.r_stringZ(m_AppendRandomMaterials[i]);
+            }
+		}
+	}
 
     m_Flags.set(flAppendRandom,FALSE);
 
@@ -120,12 +155,21 @@ void ESceneObjectTool::SaveStream(IWriter& F)
     F.w_fvector3	(m_AppendRandomMaxScale);
     F.w_fvector3	(m_AppendRandomMinRotation);
     F.w_fvector3	(m_AppendRandomMaxRotation);
-    F.w_u32			(m_AppendRandomObjects.size());
+	F.w_u32			(m_AppendRandomObjects.size());
     if (m_AppendRandomObjects.size()){
     	for (RStringVecIt it=m_AppendRandomObjects.begin(); it!=m_AppendRandomObjects.end(); ++it)
-            F.w_stringZ(*it);
-    }
-    F.close_chunk	();
+			F.w_stringZ(*it);
+	}
+	F.close_chunk	();
+
+	F.open_chunk    (CHUNK_SCATTER_PARAMS);
+	F.w_u16         (SCATTER_PARAMS_VERSION);
+	F.w_float       (m_AppendRandomObjectsPerM2);
+	F.w_u32         (m_AppendRandomMaterials.size());
+	for(size_t i = 0; i < m_AppendRandomMaterials.size(); i++) {
+		F.w_stringZ(m_AppendRandomMaterials[i]);
+	}
+	F.close_chunk();
 }
 //----------------------------------------------------
 

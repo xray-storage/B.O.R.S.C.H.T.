@@ -124,7 +124,6 @@ void ESceneObjectTool::OnAppendRandomFileBtnClick(ButtonValue* B, bool& bModif, 
 				m_AppendRandomMaterials[i] = I->r_string("append_random", shared_str().sprintf("material_%u", i).c_str());
 
 			m_Flags.set(flAppendRandomNormalAlignment, I->r_bool("append_random", "normal_alignment"));
-			m_Flags.set(flAppendRandomVaryingCnt, I->r_bool("append_random", "varying_count"));
 			m_AppendRandomObjectsPerM2 = I->r_float("append_random", "objects_per_m2");
             
             xr_delete(I);
@@ -140,10 +139,10 @@ void ESceneObjectTool::OnAppendRandomFileBtnClick(ButtonValue* B, bool& bModif, 
             I->w_bool("append_random", "scale_proportional", m_Flags.is(flAppendRandomScaleProportional));
             I->w_fvector3("append_random", "scale_min", m_AppendRandomMinScale);
             I->w_fvector3("append_random", "scale_max", m_AppendRandomMaxScale);
-            I->w_bool("append_random", "rotation", m_Flags.is(flAppendRandomRotation));
+			I->w_bool("append_random", "rotation", m_Flags.is(flAppendRandomRotation));
             I->w_fvector3("append_random", "rotation_min", m_AppendRandomMinRotation);
             I->w_fvector3("append_random", "rotation_max", m_AppendRandomMaxRotation);
-            
+
             I->w_u32("append_random", "objects_count", m_AppendRandomObjects.size());
             for(size_t i = 0; i < m_AppendRandomObjects.size(); i++)
             	I->w_string("append_random", shared_str().sprintf("object_%u", i).c_str(), *m_AppendRandomObjects[i]); 
@@ -153,7 +152,6 @@ void ESceneObjectTool::OnAppendRandomFileBtnClick(ButtonValue* B, bool& bModif, 
 				I->w_string("append_random", shared_str().sprintf("material_%u", i).c_str(), *m_AppendRandomMaterials[i]);
 
 			I->w_bool("append_random", "normal_alignment", m_Flags.is(flAppendRandomNormalAlignment));
-			I->w_bool("append_random", "varying_count", m_Flags.is(flAppendRandomVaryingCnt));
 			I->w_float("append_random", "objects_per_m2", m_AppendRandomObjectsPerM2);
             
             xr_delete(I);
@@ -168,6 +166,7 @@ void ESceneObjectTool::FillAppendRandomProperties(bool bUpdateOnly)
 	if (!bUpdateOnly) m_Props       = TProperties::CreateModalForm("Random Append Properties",false);
 
 	m_AppendRandomObjectsStr        = _ListToSequence(m_AppendRandomObjects).c_str();
+    m_AppendRandomMaterialsStr      = _ListToSequence(m_AppendRandomMaterials).c_str();
 
 	PropValue* V;
 	PropItemVec                     items;
@@ -195,8 +194,9 @@ void ESceneObjectTool::FillAppendRandomProperties(bool bUpdateOnly)
 	V->OnChangeEvent.bind           (this,&ESceneObjectTool::OnChangeAppendRandomFlags);
     
 	V=PHelper().CreateFlag32        (items,"Scatter Random Objects\\Normal Alignment", &m_Flags,                    flAppendRandomNormalAlignment);
-	V=PHelper().CreateFlag32        (items,"Scatter Random Objects\\Varying Count",    &m_Flags,                    flAppendRandomVaryingCnt);
-	V=PHelper().CreateFloat         (items,"Scatter Random Objects\\Objects per m^2",  &m_AppendRandomObjectsPerM2, 0.f, 1.f, 0.001f, 3);
+	V=PHelper().CreateFlag32        (items,"Scatter Random Objects\\Shape Restrict",   &m_Flags,                    flAppendRandomShapeRestrict);
+	V=PHelper().CreateFlag32        (items,"Scatter Random Objects\\Shape Emitter",    &m_Flags,                    flAppendRandomShapeEmitter);
+	V=PHelper().CreateFloat         (items,"Scatter Random Objects\\Objects per m^2",  &m_AppendRandomObjectsPerM2, 0.f, 10.f, 0.001f, 3);
 
 	V=PHelper().CreateChoose        (items,"Scatter Random Objects\\Allowed Materials",&m_AppendRandomMaterialsStr, smGameMaterial, 0, 0, 32, cfAllowNone|cfMultiSelect);
 	V->OnChangeEvent.bind           (this,&ESceneObjectTool::OnChangeAppendRandomFlags);

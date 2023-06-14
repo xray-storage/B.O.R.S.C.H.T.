@@ -18,6 +18,8 @@ object fraObject: TfraObject
   OnDestroy = FormDestroy
   OnHide = FormHide
   OnShow = FormShow
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object paSelectObject: TPanel
@@ -385,7 +387,7 @@ object fraObject: TfraObject
     object APHeadLabel2: TLabel
       Left = 1
       Top = 1
-      Width = 253
+      Width = 68
       Height = 13
       Align = alTop
       Alignment = taCenter
@@ -393,7 +395,6 @@ object fraObject: TfraObject
       Color = clGray
       ParentColor = False
       OnClick = ExpandClick
-      ExplicitWidth = 68
     end
     object Bevel2: TBevel
       Left = 1

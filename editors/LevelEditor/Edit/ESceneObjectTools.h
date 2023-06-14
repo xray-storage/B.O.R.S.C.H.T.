@@ -13,7 +13,8 @@ protected:
 	virtual void 		RemoveControls			();
 
 	enum{
-    	flAppendRandomVaryingCnt        = (1<<25),
+		flAppendRandomShapeEmitter      = (1<<24),
+		flAppendRandomShapeRestrict     = (1<<25),
     	flAppendRandomNormalAlignment   = (1<<26),
     	flAppendRandomUpdateProps       = (1<<27),
     	flAppendRandomScaleProportional = (1<<28),
@@ -73,9 +74,10 @@ public:
     BOOL				IsAppendRandomActive		(){return m_Flags.is(flAppendRandom);}
     BOOL				IsAppendRandomScaleActive	(){return m_Flags.is(flAppendRandomScale);}
     BOOL				IsAppendRandomRotationActive(){return m_Flags.is(flAppendRandomRotation);}
-    BOOL				IsAppendRandomScaleProportional(){return m_Flags.is(flAppendRandomScaleProportional);}
+	BOOL				IsAppendRandomScaleProportional(){return m_Flags.is(flAppendRandomScaleProportional);}
 	BOOL                IsAppendRandomNormalAlignmentActive(){return m_Flags.is(flAppendRandomNormalAlignment);}
-	BOOL                IsAppendRandomVaryingCountActive(){return m_Flags.is(flAppendRandomVaryingCnt);}
+	BOOL                IsAppendRandomShapeRestrict(){return m_Flags.is(flAppendRandomShapeRestrict);}
+	BOOL                IsAppendRandomShapeEmitter(){return m_Flags.is(flAppendRandomShapeEmitter);}
 
     // tools
     virtual bool		ExportGame         		(SExportStreams* F);

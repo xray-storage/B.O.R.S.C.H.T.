@@ -12,6 +12,7 @@
 #include "../ECore/Editor/EThumbnail.h"
 #include "Scene.h"
 #include "EGarbageGenerator.h"
+#include "ESceneShapeTools.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "multi_edit"
@@ -268,9 +269,21 @@ void __fastcall TfraObject::ExtBtn9Click(TObject *Sender)
 void __fastcall TfraObject::ebGenerateGarbageClick(TObject *Sender)
 {
 	ObjectList ol;
-	ParentTools->GetQueryObjects(ol,1,1,0);
-	if(ol.size() == 1)
-		EGarbageGenerator().Generate((CSceneObject*)ol.front());
+	ParentTools->GetQueryObjects(ol,1,1,-1);
+	if(ol.size() == 1) {
+		EGarbageGenerator gg;
+
+		gg.m_shape_restrictor_mode = ParentTools->IsAppendRandomShapeRestrict();
+		gg.m_shape_emitter_mode = ParentTools->IsAppendRandomShapeEmitter();
+
+		gg.InitRestrictors(dynamic_cast<ESceneShapeTool*>(Scene->GetTool(OBJCLASS_SHAPE)));
+		if(gg.m_shape_emitter_mode)
+			gg.GenerateEmitter((CSceneObject*)ol.front());
+		else
+			gg.Generate((CSceneObject*)ol.front());
+	} else {
+		ELog.DlgMsg(mtInformation, "Select one ground-object, please.");
+    }
 }
 //---------------------------------------------------------------------------
 
