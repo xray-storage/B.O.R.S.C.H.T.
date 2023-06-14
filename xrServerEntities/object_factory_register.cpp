@@ -389,6 +389,7 @@ void CObjectFactory::register_classes	()
 	ADD(CFlare					,CSE_ALifeItem					,CLSID_DEVICE_FLARE				,"device_flare");
 	ADD(CCompass                ,CSE_ALifeItem                  ,CLSID_DEVICE_COMPASS           ,"device_compass");
 	ADD(CDosimeter              ,CSE_ALifeItem                  ,CLSID_DEVICE_DOSIMETER         ,"device_dosimeter");
+	ADD(CPhysicObject           ,CSE_ALifeObjectPhysic          ,CLSID_PENDULUM                 ,"obj_pendulum");
 
 	// objects
 	ADD(CProjector				,CSE_ALifeObjectProjector		,CLSID_OBJECT_PROJECTOR			,"projector");
