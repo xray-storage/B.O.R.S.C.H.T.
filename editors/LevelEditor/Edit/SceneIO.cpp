@@ -701,11 +701,12 @@ bool EScene::ReadObjectStream(IReader& F, CCustomObject*& O)
 //----------------------------------------------------
 bool EScene::ReadObjectLTX(CInifile& ini, LPCSTR sect_name, CCustomObject*& O)
 {
+	CInifile::Sect& sect    = ini.r_section(sect_name);
     ObjClassID clsid		= OBJCLASS_DUMMY;
-    clsid 					= ObjClassID(ini.r_u32(sect_name,"clsid"));
+	clsid 					= (ObjClassID)sect.r_u32("clsid");
 	O 						= GetOTool(clsid)->CreateObject(0,0);
 
-    bool bRes 				= O->LoadLTX(ini, sect_name);
+	bool bRes 				= O->LoadLTX(ini, sect);
 
 	if (!bRes)
     	xr_delete			(O);

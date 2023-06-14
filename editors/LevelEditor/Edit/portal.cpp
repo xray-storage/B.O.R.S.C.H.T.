@@ -409,40 +409,37 @@ void CPortal::Simplify()
 }
 //------------------------------------------------------------------------------
 
-bool CPortal::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CPortal::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	u32 version = ini.r_u32(sect_name, "version");
+	u32 version 		= sect.r_u32("version");
 
-    if( version!=PORTAL_VERSION )
-    {
+	if( version!=PORTAL_VERSION ) {
         ELog.Msg( mtError, "CPortal: Unsupported version.");
         return false;
     }
 
-	CCustomObject::LoadLTX(ini, sect_name);
+	CCustomObject::LoadLTX(ini, sect);
     LPCSTR 				str;
-    str    				= ini.r_string	(sect_name, "sector_front");
+	str    				= sect.r_string	("sector_front");
     m_SectorFront		= (CSector*)Scene->FindObjectByName(str,OBJCLASS_SECTOR);
 
-    str    				= ini.r_string	(sect_name, "sector_back");
+	str    				= sect.r_string	("sector_back");
  	m_SectorBack		= (CSector*)Scene->FindObjectByName(str,OBJCLASS_SECTOR);
 
-    if (!m_SectorBack||!m_SectorFront)
-    {
+	if (!m_SectorBack||!m_SectorFront) {
         ELog.Msg( mtError, "Portal: Can't find required sectors.\nObject '%s' can't load.", Name);
     	return false;
     }
 
-	u32 cnt 			= ini.r_u32(sect_name, "vert_count");
+	u32 cnt 			= sect.r_u32("vert_count");
 	m_Vertices.resize	(cnt);
     string512			buff;
-    for(u32 i=0; i<cnt; ++i)
-    {
-        sprintf			(buff,"vertex_%.4d",i);
-        m_Vertices[i]	= ini.r_fvector3(sect_name, buff);
-    }
-    if (cnt<3)
-    {
+	for(u32 i=0; i<cnt; ++i) {
+		sprintf			(buff,"vertex_%.4d",i);
+		m_Vertices[i]	= sect.r_fvector3(buff);
+	}
+
+	if (cnt<3) {
         ELog.Msg( mtError, "Portal: '%s' can't create.\nInvalid portal. (m_Vertices.size()<3)", Name);
     	return false;
     }

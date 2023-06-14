@@ -144,22 +144,21 @@ void EParticlesObject::Stop()
 	if (m_Particles) m_Particles->Stop();
 }
 //----------------------------------------------------
-bool EParticlesObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool EParticlesObject::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	u32 version = ini.r_u32(sect_name,"version");
+	u32 version = sect.r_u32("version");
 
+	inherited::LoadLTX(ini, sect);
 
-	inherited::LoadLTX(ini, sect_name);
+	if(version>=0x0012)
+		m_GameType.LoadLTX(ini, *sect.Name, false);
 
-    if(version>=0x0012)
-		m_GameType.LoadLTX(ini, sect_name, false);
-
-    m_RefName		= ini.r_string(sect_name, "ref_name");
-    if (!Compile(*m_RefName))
-    {
-        ELog.DlgMsg( mtError, "EParticlesObject: '%s' not found in library", *m_RefName );
+	m_RefName = sect.r_string("ref_name");
+	if (!Compile(*m_RefName)) {
+		ELog.DlgMsg( mtError, "EParticlesObject: '%s' not found in library", *m_RefName );
         return false;
-    }
+	}
+
     return true;
 }
 

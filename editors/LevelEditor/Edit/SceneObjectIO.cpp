@@ -15,32 +15,27 @@
 #define SCENEOBJ_CHUNK_PLACEMENT     	0x0904
 #define SCENEOBJ_CHUNK_FLAGS			0x0905
 
-bool CSceneObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CSceneObject::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-    bool bRes = true;
+	bool bRes = true;
 
-	u32 version = ini.r_u32(sect_name, "version"); // задел на будущее
+	u32 version 		= sect.r_u32("version"); // задел на будущее
 	(void)version;
 
-	CCustomObject::LoadLTX						(ini, sect_name);
+	CCustomObject::LoadLTX						(ini, sect);
 
-	xr_string ref_name  = ini.r_string			(sect_name, "reference_name");
-	if (!SetReference(ref_name.c_str()))
-	{
-		ELog.Msg            ( mtError, "CSceneObject: '%s' not found in library", ref_name.c_str() );
-		bRes                = false;
+	LPCSTR ref_name  	= sect.r_string("reference_name");
+	if (!SetReference(ref_name)) {
+		ELog.Msg		( mtError, "CSceneObject: '%s' not found in library", ref_name );
+		bRes			= false;
 
 		xr_string       _new_name;
 		bool b_found    = Scene->GetSubstObjectName(ref_name, _new_name);
-		if(b_found)
-		{
+		if(b_found) {
 			if(_new_name.empty())
 				return false;
-
-			bRes = SetReference(_new_name.c_str());
-		}
-		else
-		{
+			bRes 		= SetReference(_new_name.c_str());
+		} else {
 			static bool NoToAll = false;
 			if(NoToAll)
 				return false;
@@ -49,11 +44,10 @@ bool CSceneObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
 				mtConfirmation,
 				TMsgDlgButtons() << mbYes << mbNo << mbNoToAll,
 				"Object [%s] not found. Do you want to select it from library?",
-				ref_name.c_str()
+				ref_name
 			);
 
-			switch(mr)
-			{
+			switch(mr) {
 				case mrYes: {
 					LPCSTR new_val = 0;
 					if(TfrmChoseItem::SelectItem(smObject,new_val,1))
@@ -80,7 +74,7 @@ bool CSceneObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
 //	if(!CheckVersion())
 //		ELog.Msg( mtError, "CSceneObject: '%s' different file version!", ref_name.c_str() );
 
-	m_Flags.assign(ini.r_u32(sect_name, "flags"));
+	m_Flags.assign(sect.r_u32("flags"));
 
 	return bRes;
 }

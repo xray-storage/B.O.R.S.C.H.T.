@@ -474,29 +474,28 @@ void CSector::LoadSectorDefLTX( CInifile& ini, LPCSTR sect_name, u32 item_idx )
     sector_items.push_back(sitem);
 }
 
-bool CSector::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CSector::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	u32 version = ini.r_u32		(sect_name, "version");
+	u32 version					= sect.r_u32("version");
     if( version<0x0011)
     {
         ELog.Msg( mtError, "CSector: Unsupported version.");
         return false;
     }
 
-	CCustomObject::LoadLTX		(ini, sect_name);
+	CCustomObject::LoadLTX		(ini, sect);
 
-    sector_color.set(			ini.r_color(sect_name, "sector_color") );
+	sector_color.set(			sect.r_color("sector_color") );
 
-    m_bDefault 					= ini.r_bool(sect_name, "default");
+	m_bDefault 					= sect.r_bool("default");
 
-    u32 obj_cnt 				= ini.r_u32(sect_name, "items_count");
-    for(u32 i=0; i<obj_cnt; ++i)
-    {
-        LoadSectorDefLTX(ini, sect_name, i);
-    }
+	u32 obj_cnt 				= sect.r_u32("items_count");
+	for(u32 i=0; i<obj_cnt; ++i) {
+        LoadSectorDefLTX(ini, *sect.Name, i);
+	}
 
     if(version>=0x0012)
-    	m_map_idx 				= ini.r_u8(sect_name, "change_map_to_idx");
+		m_map_idx 				= sect.r_u8("change_map_to_idx");
         
     if (sector_items.empty()) return false;
 

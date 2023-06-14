@@ -47,19 +47,18 @@ void ESoundEnvironment::OnUpdateTransform()
     ExecCommand		(COMMAND_REFRESH_SOUND_ENV_GEOMETRY);
 }
 //----------------------------------------------------
-bool ESoundEnvironment::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool ESoundEnvironment::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	u32 version 	= ini.r_u32(sect_name, "version");
-    if(version!=SOUND_ENV_VERSION)
-    {
-        ELog.DlgMsg	(mtError, "ESoundSource: Unsupported version.");
+	u32 version 	= sect.r_u32("version");
+	if(version!=SOUND_ENV_VERSION) {
+		ELog.DlgMsg	(mtError, "ESoundSource: Unsupported version.");
         return 		false;
 	}
 
-	inherited::LoadLTX			(ini, sect_name);
+	inherited::LoadLTX(ini, sect);
 
-	m_EnvInner		= ini.r_string(sect_name, "env_inner");
-	m_EnvOuter		= ini.r_string(sect_name, "env_outer");
+	m_EnvInner		= sect.r_string("env_inner");
+	m_EnvOuter		= sect.r_string("env_outer");
 
 	return 			true;
 }
@@ -69,7 +68,6 @@ void ESoundEnvironment::SaveLTX(CInifile& ini, LPCSTR sect_name)
 	inherited::SaveLTX	(ini, sect_name);
 
 	ini.w_u32		(sect_name, "version", SOUND_ENV_VERSION);
-
     ini.w_string	(sect_name, "env_inner", m_EnvInner.c_str());
     ini.w_string	(sect_name, "env_outer", m_EnvOuter.c_str());
 }

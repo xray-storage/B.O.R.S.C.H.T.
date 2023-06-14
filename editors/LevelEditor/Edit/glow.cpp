@@ -136,25 +136,21 @@ bool CGlow::RayPick(float& distance, const Fvector& start, const Fvector& direct
 	return false;
 }
 
-bool CGlow::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CGlow::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	u32 version = ini.r_u32(sect_name, "version");
+	u32 version 		= sect.r_u32	("version");
 
-    if(version!=GLOW_VERSION)
-    {
+    if(version!=GLOW_VERSION) {
         ELog.DlgMsg( mtError, "CGlow: Unsupported version.");
-        return false;
+		return false;
     }
 
-	CCustomObject::LoadLTX(ini, sect_name);
+	CCustomObject::LoadLTX(ini, sect);
 
-   	m_ShaderName		= ini.r_string (sect_name, "shader_name");
-
-	m_TexName			= ini.r_string	(sect_name, "texture_name");
-
-	m_fRadius  			= ini.r_float	(sect_name, "radius");
-
-    m_Flags.assign		(ini.r_u32(sect_name, "flags"));
+	m_ShaderName		= sect.r_string ("shader_name");
+	m_TexName			= sect.r_string	("texture_name");
+	m_fRadius  			= sect.r_float	("radius");
+	m_Flags.assign		(sect.r_u32("flags"));
 
     return true;
 }
@@ -164,13 +160,9 @@ void CGlow::SaveLTX(CInifile& ini, LPCSTR sect_name)
 	CCustomObject::SaveLTX(ini, sect_name);
 
 	ini.w_u16		(sect_name, "version", GLOW_VERSION);
-
 	ini.w_float   	(sect_name, "radius", m_fRadius);
-
-    ini.w_string 	(sect_name, "shader_name", m_ShaderName.c_str());
-
+	ini.w_string 	(sect_name, "shader_name", m_ShaderName.c_str());
 	ini.w_string	(sect_name, "texture_name", m_TexName.c_str());
-
 	ini.w_u16		(sect_name, "flags", m_Flags.get());
 }
 

@@ -80,8 +80,8 @@ public:
 
     // file system function
 	virtual bool 	LoadStream		(IReader&);
-	virtual bool 	LoadLTX			(CInifile& ini, LPCSTR sect_name);
-	virtual void 	SaveStream			(IWriter&);
+	virtual bool 	LoadLTX			(CInifile& ini, CInifile::Sect& sect);
+	virtual void 	SaveStream		(IWriter&);
 	virtual void 	SaveLTX			(CInifile& ini, LPCSTR sect_name);
 	virtual void	FillProp		(LPCSTR pref, PropItemVec& values);
 	virtual bool 	GetSummaryInfo	(SSceneSummary* inf);

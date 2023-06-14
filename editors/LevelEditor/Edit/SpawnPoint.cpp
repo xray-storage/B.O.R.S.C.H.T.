@@ -338,15 +338,17 @@ void CSpawnPoint::SSpawnData::get_bone_xform	(LPCSTR name, Fmatrix& xform)
 
 bool CSpawnPoint::SSpawnData::LoadLTX	(CInifile& ini, LPCSTR sect_name)
 {
-    xr_string temp 		= ini.r_string		(sect_name, "name");
-    Create				(temp.c_str());
+	CInifile::Sect& sect 	= ini.r_section(sect_name);
 
-    if(ini.line_exist(sect_name,"fl"))
-		m_flags.assign		(ini.r_u8(sect_name,"fl"));
+	xr_string temp 			= sect.r_string	("name");
+	Create					(temp.c_str());
+
+	if(sect.line_exist("fl"))
+		m_flags.assign		(sect.r_u8("fl"));
         
-    NET_Packet 				Packet;
-    SIniFileStream 			ini_stream;
-    ini_stream.ini 			= &ini;
+	NET_Packet 				Packet;
+	SIniFileStream 			ini_stream;
+	ini_stream.ini 			= &ini;
     ini_stream.sect 		= sect_name;
 	ini_stream.move_begin	();
     Packet.inistream 		= &ini_stream;
@@ -1069,70 +1071,68 @@ bool CSpawnPoint::OnAppendObject(CCustomObject* object)
     return true;
 }
 
-bool CSpawnPoint::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CSpawnPoint::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
 
-	u32 version = ini.r_u32(sect_name, "version");
-
-    if(version<0x0014)
-    {
+	u32 version = sect.r_u32("version");
+	if(version<0x0014) {
         ELog.Msg( mtError, "SPAWNPOINT: Unsupported version.");
         return false;
     }
 
-	CCustomObject::LoadLTX(ini, sect_name);
-    m_Type 			= (EPointType)ini.r_u32(sect_name, "type");
+	CCustomObject::LoadLTX(ini, sect);
+	m_Type 			= (EPointType)sect.r_u32("type");
 
-    if (m_Type>=ptMaxType)
-    {
+	if (m_Type>=ptMaxType) {
         ELog.Msg( mtError, "SPAWNPOINT: Unsupported spawn version.");
         return false;
-    }
+	}
+
     switch (m_Type)
     {
     case ptSpawnPoint:
     {
         string128	buff;
-        strconcat	(sizeof(buff), buff, sect_name, "_spawndata");
+		strconcat	(sizeof(buff), buff, *sect.Name, "_spawndata");
         if (!m_SpawnData.LoadLTX(ini, buff))
-        {
+		{
             ELog.Msg( mtError, "SPAWNPOINT: Can't load Spawn Data.");
             return false;
         }
         SetValid		(true);
     }break;
     case ptRPoint:
-        {
+		{
             if(version>=0x0017)
-            	m_rpProfile				= ini.r_string(sect_name, "rp_profile");
+				m_rpProfile				= sect.r_string("rp_profile");
                 
-            m_RP_TeamID					= ini.r_u8	(sect_name, "team_id");
-            m_RP_Type					= ini.r_u8	(sect_name, "rp_type");
-            m_GameType.LoadLTX			(ini, sect_name, (version==0x0014) );
-        }
+			m_RP_TeamID					= sect.r_u8	("team_id");
+			m_RP_Type					= sect.r_u8	("rp_type");
+			m_GameType.LoadLTX			(ini, *sect.Name, (version==0x0014) );
+		}
     break;
     case ptEnvMod:
         {
-            m_EM_Radius			= ini.r_float(sect_name, "em_radius");
-            m_EM_Power			= ini.r_float(sect_name, "em_power");
-            m_EM_ViewDist		= ini.r_float(sect_name, "view_dist");
-            m_EM_FogColor		= ini.r_u32(sect_name, 	 "fog_color");
-            m_EM_FogDensity		= ini.r_float(sect_name, "fog_density");
-            m_EM_AmbientColor	= ini.r_u32(sect_name, 	"ambient_color");
-            m_EM_SkyColor		= ini.r_u32(sect_name, "sky_color");
-            m_EM_HemiColor		= ini.r_u32(sect_name, "hemi_color");
+			m_EM_Radius			= sect.r_float	("em_radius");
+			m_EM_Power			= sect.r_float	("em_power");
+			m_EM_ViewDist		= sect.r_float	("view_dist");
+			m_EM_FogColor		= sect.r_u32	("fog_color");
+			m_EM_FogDensity		= sect.r_float	("fog_density");
+			m_EM_AmbientColor	= sect.r_u32	("ambient_color");
+			m_EM_SkyColor		= sect.r_u32	("sky_color");
+			m_EM_HemiColor		= sect.r_u32	("hemi_color");
             if(version>=0x0016)
-            	m_EM_Flags.assign	(ini.r_u16(sect_name, "em_flags"));
-            if(version>=0x0018)
-            	m_EM_ShapeType		= ini.r_u8(sect_name, "shape_type");
+				m_EM_Flags.assign(sect.r_u16("em_flags"));
+			if(version>=0x0018)
+				m_EM_ShapeType	= sect.r_u8("shape_type");
         }
     break;
     default: THROW;
     }
 
 	// objects
-    if(ini.line_exist(sect_name, "attached_count"))
-	    Scene->ReadObjectsLTX(ini, sect_name, "attached",OnAppendObject,0);
+	if(sect.line_exist("attached_count"))
+		Scene->ReadObjectsLTX(ini, *sect.Name, "attached", OnAppendObject, 0);
 
 	UpdateTransform	();
 
@@ -1151,8 +1151,7 @@ void CSpawnPoint::SaveLTX(CInifile& ini, LPCSTR sect_name)
 	ini.w_u32			(sect_name, "version", SPAWNPOINT_VERSION);
 
     // save attachment
-    if (m_AttachedObject)
-    {
+    if (m_AttachedObject) {
 	    ObjectList 					lst;
         lst.push_back				(m_AttachedObject);
 		Scene->SaveObjectsLTX		(lst, sect_name, "attached", ini);

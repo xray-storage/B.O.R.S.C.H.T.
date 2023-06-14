@@ -78,13 +78,205 @@ XRCORE_API void _decorate(LPSTR dest, LPCSTR src)
 }
 //------------------------------------------------------------------------------
 
-BOOL	CInifile::Sect::line_exist( LPCSTR L, LPCSTR* val )
+BOOL CInifile::Sect::line_exist( LPCSTR L, LPCSTR* val )
 {
 	SectCIt A = std::lower_bound(Data.begin(),Data.end(),L,item_pred);
     if (A!=Data.end() && xr_strcmp(*A->first,L)==0){
-    	if (val) *val = *A->second;
+		if (val) *val = *A->second;
     	return TRUE;
     }
+	return FALSE;
+}
+
+LPCSTR CInifile::Sect::r_string( LPCSTR L )
+{
+	SectCIt A = std::lower_bound(Data.begin(),Data.end(),L,item_pred);
+	if (A!=Data.end() && xr_strcmp(*A->first,L)==0)	return *A->second;
+	else
+		Debug.fatal(DEBUG_INFO,"Can't find variable %s in [%s]",L,*Name);
+	return 0;
+}
+
+shared_str CInifile::Sect::r_string_wb( LPCSTR L )
+{
+	LPCSTR		_base				= r_string(L);
+
+	if	(0==_base)					return	shared_str(0);
+
+	string4096						_original;
+	strcpy_s						(_original,_base);
+	u32			_len				= xr_strlen(_original);
+	if	(0==_len)					return	shared_str("");
+	if	('"'==_original[_len-1])	_original[_len-1]=0;					// skip end
+	if	('"'==_original[0])			return	shared_str(&_original[0] + 1);	// skip begin
+	return									shared_str(_original);
+}
+
+u8 CInifile::Sect::r_u8( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	return		u8(atoi(C));
+}
+
+u16 CInifile::Sect::r_u16( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	return		u16(atoi(C));
+}
+
+u32 CInifile::Sect::r_u32( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	return		u32(atoi(C));
+}
+
+u64 CInifile::Sect::r_u64( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+#ifndef _EDITOR
+	return		_strtoui64(C,NULL,10);
+#else
+	return		(u64)_atoi64(C);
+#endif
+}
+
+s64 CInifile::Sect::r_s64( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	return		_atoi64(C);
+}
+
+s8 CInifile::Sect::r_s8( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	return		s8(atoi(C));
+}
+
+s16 CInifile::Sect::r_s16( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	return		s16(atoi(C));
+}
+
+s32 CInifile::Sect::r_s32( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	return		s32(atoi(C));
+}
+
+float CInifile::Sect::r_float( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	return		float(atof( C ));
+}
+
+Fcolor CInifile::Sect::r_fcolor( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	Fcolor		V={0,0,0,0};
+	sscanf		(C,"%f,%f,%f,%f",&V.r,&V.g,&V.b,&V.a);
+	return V;
+}
+
+u32 CInifile::Sect::r_color( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	u32			r=0,g=0,b=0,a=255;
+	sscanf		(C,"%d,%d,%d,%d",&r,&g,&b,&a);
+	return color_rgba(r,g,b,a);
+}
+
+Ivector2 CInifile::Sect::r_ivector2( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	Ivector2	V={0,0};
+	sscanf		(C,"%d,%d",&V.x,&V.y);
+	return V;
+}
+
+Ivector3 CInifile::Sect::r_ivector3( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	Ivector		V={0,0,0};
+	sscanf		(C,"%d,%d,%d",&V.x,&V.y,&V.z);
+	return V;
+}
+
+Ivector4 CInifile::Sect::r_ivector4( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	Ivector4	V={0,0,0,0};
+	sscanf		(C,"%d,%d,%d,%d",&V.x,&V.y,&V.z,&V.w);
+	return V;
+}
+
+Fvector2 CInifile::Sect::r_fvector2( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	Fvector2	V={0.f,0.f};
+	sscanf		(C,"%f,%f",&V.x,&V.y);
+	return V;
+}
+
+Fvector3 CInifile::Sect::r_fvector3( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	Fvector3	V={0.f,0.f,0.f};
+	sscanf		(C,"%f,%f,%f",&V.x,&V.y,&V.z);
+	return V;
+}
+
+Fvector4 CInifile::Sect::r_fvector4( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	Fvector4	V={0.f,0.f,0.f,0.f};
+	sscanf		(C,"%f,%f,%f,%f",&V.x,&V.y,&V.z,&V.w);
+	return V;
+}
+
+BOOL CInifile::Sect::r_bool( LPCSTR L )
+{
+	LPCSTR		C = r_string(L);
+	VERIFY2		(
+		xr_strlen(C) <= 5,
+		make_string(
+			"\"%s\" is not a valid bool value, section[%s], line[%s]",
+			C,
+			*Name,
+			L
+		)
+	);
+	char		B[8];
+	strncpy		(B,C,7);
+	B[7]		= 0;
+	strlwr		(B);
+    return 		IsBOOL(B);
+}
+
+CLASS_ID CInifile::Sect::r_clsid( LPCSTR L)
+{
+	LPCSTR		C = r_string(L);
+	return		TEXT2CLSID(C);
+}
+
+int CInifile::Sect::r_token( LPCSTR L, const xr_token *token_list)
+{
+	LPCSTR		C = r_string(L);
+	for( int i=0; token_list[i].name; i++ )
+		if( !stricmp(C,token_list[i].name) )
+			return token_list[i].id;
+	return 0;
+}
+
+BOOL CInifile::Sect::r_line( int L, const char** N, const char** V )
+{
+	if (L>=(int)Data.size() || L<0 ) return FALSE;
+	for (SectCIt I=Data.begin(); I!=Data.end(); I++) // why not just Data[L].first, Data[L].second ?
+		if (!(L--)){
+			*N = *I->first;
+			*V = *I->second;
+			return TRUE;
+		}
 	return FALSE;
 }
 //------------------------------------------------------------------------------
@@ -444,167 +636,95 @@ CInifile::Sect& CInifile::r_section( LPCSTR S )
 	return	**I;
 }
 
-LPCSTR	CInifile::r_string(LPCSTR S, LPCSTR L)
+LPCSTR CInifile::r_string( LPCSTR S, LPCSTR L )
 {
-	Sect&	I = r_section(S);
-	SectCIt	A = std::lower_bound(I.Data.begin(),I.Data.end(),L,item_pred);
-	if (A!=I.Data.end() && xr_strcmp(*A->first,L)==0)	return *A->second;
-	else
-		Debug.fatal(DEBUG_INFO,"Can't find variable %s in [%s]",L,S);
-	return 0;
+	return r_section(S).r_string(L);
 }
 
-shared_str		CInifile::r_string_wb(LPCSTR S, LPCSTR L)	{
-	LPCSTR		_base		= r_string(S,L);
-	
-	if	(0==_base)					return	shared_str(0);
-
-	string4096						_original;
-	strcpy_s						(_original,_base);
-	u32			_len				= xr_strlen(_original);
-	if	(0==_len)					return	shared_str("");
-	if	('"'==_original[_len-1])	_original[_len-1]=0;				// skip end
-	if	('"'==_original[0])			return	shared_str(&_original[0] + 1);	// skip begin
-	return									shared_str(_original);
+shared_str CInifile::r_string_wb( LPCSTR S, LPCSTR L )
+{
+	return r_section(S).r_string_wb(L);
 }
 
-u8 CInifile::r_u8(LPCSTR S, LPCSTR L)
+u8 CInifile::r_u8( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		u8(atoi(C));
+	return r_section(S).r_u8(L);
 }
-u16 CInifile::r_u16(LPCSTR S, LPCSTR L)
+u16 CInifile::r_u16( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		u16(atoi(C));
+	return r_section(S).r_u16(L);
 }
-u32 CInifile::r_u32(LPCSTR S, LPCSTR L)
+u32 CInifile::r_u32( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		u32(atoi(C));
+	return r_section(S).r_u32(L);
 }
-u64 CInifile::r_u64(LPCSTR S, LPCSTR L)
+u64 CInifile::r_u64( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-#ifndef _EDITOR
-	return		_strtoui64(C,NULL,10);
-#else
-	return		(u64)_atoi64(C);
-#endif
+	return r_section(S).r_u64(L);
 }
-
-s64 CInifile::r_s64(LPCSTR S, LPCSTR L)
+s8 CInifile::r_s8( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		_atoi64(C);
+	return r_section(S).r_s8(L);
 }
-s8 CInifile::r_s8(LPCSTR S, LPCSTR L)
+s16 CInifile::r_s16( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		s8(atoi(C));
+	return r_section(S).r_s16(L);
 }
-s16 CInifile::r_s16(LPCSTR S, LPCSTR L)
+s32 CInifile::r_s32( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		s16(atoi(C));
+	return r_section(S).r_s32(L);
 }
-s32 CInifile::r_s32(LPCSTR S, LPCSTR L)
+s64 CInifile::r_s64( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		s32(atoi(C));
+	return r_section(S).r_s64(L);
 }
-float CInifile::r_float(LPCSTR S, LPCSTR L)
+float CInifile::r_float( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		float(atof( C ));
+	return r_section(S).r_float(L);
 }
 Fcolor CInifile::r_fcolor( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	Fcolor		V={0,0,0,0};
-	sscanf		(C,"%f,%f,%f,%f",&V.r,&V.g,&V.b,&V.a);
-	return V;
+	return r_section(S).r_fcolor(L);
 }
 u32 CInifile::r_color( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	u32			r=0,g=0,b=0,a=255;
-	sscanf		(C,"%d,%d,%d,%d",&r,&g,&b,&a);
-	return color_rgba(r,g,b,a);
+	return r_section(S).r_color(L);
 }
-
 Ivector2 CInifile::r_ivector2( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	Ivector2	V={0,0};
-	sscanf		(C,"%d,%d",&V.x,&V.y);
-	return V;
+	return r_section(S).r_ivector2(L);
 }
 Ivector3 CInifile::r_ivector3( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	Ivector		V={0,0,0};
-	sscanf		(C,"%d,%d,%d",&V.x,&V.y,&V.z);
-	return V;
+	return r_section(S).r_ivector3(L);
 }
 Ivector4 CInifile::r_ivector4( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	Ivector4	V={0,0,0,0};
-	sscanf		(C,"%d,%d,%d,%d",&V.x,&V.y,&V.z,&V.w);
-	return V;
+	return r_section(S).r_ivector4(L);
 }
 Fvector2 CInifile::r_fvector2( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	Fvector2	V={0.f,0.f};
-	sscanf		(C,"%f,%f",&V.x,&V.y);
-	return V;
+	return r_section(S).r_fvector2(L);
 }
 Fvector3 CInifile::r_fvector3( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	Fvector3	V={0.f,0.f,0.f};
-	sscanf		(C,"%f,%f,%f",&V.x,&V.y,&V.z);
-	return V;
+	return r_section(S).r_fvector3(L);
 }
 Fvector4 CInifile::r_fvector4( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	Fvector4	V={0.f,0.f,0.f,0.f};
-	sscanf		(C,"%f,%f,%f,%f",&V.x,&V.y,&V.z,&V.w);
-	return V;
+	return r_section(S).r_fvector4(L);
 }
 BOOL	CInifile::r_bool( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	VERIFY2		(
-		xr_strlen(C) <= 5,
-		make_string(
-			"\"%s\" is not a valid bool value, section[%s], line[%s]",
-			C,
-			S,
-			L
-		)
-	);
-	char		B[8];
-	strncpy		(B,C,7);
-	B[7]		= 0;
-	strlwr		(B);
-    return 		IsBOOL(B);
+	return r_section(S).r_bool(L);
 }
-CLASS_ID CInifile::r_clsid( LPCSTR S, LPCSTR L)
+CLASS_ID CInifile::r_clsid( LPCSTR S, LPCSTR L )
 {
-	LPCSTR		C = r_string(S,L);
-	return		TEXT2CLSID(C);
+	return r_section(S).r_clsid(L);
 }
-int		CInifile::r_token	( LPCSTR S, LPCSTR L, const xr_token *token_list)
+int CInifile::r_token( LPCSTR S, LPCSTR L, const xr_token *token_list )
 {
-	LPCSTR		C = r_string(S,L);
-	for( int i=0; token_list[i].name; i++ )
-		if( !stricmp(C,token_list[i].name) )
-			return token_list[i].id;
-	return 0;
+	return r_section(S).r_token(L,token_list);
 }
 BOOL	CInifile::r_line( LPCSTR S, int L, const char** N, const char** V )
 {

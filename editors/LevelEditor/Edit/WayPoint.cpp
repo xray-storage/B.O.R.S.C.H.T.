@@ -519,27 +519,25 @@ bool CWayObject::FrustumPick(const CFrustum& frustum)
     return false;
 }
 
-bool CWayObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CWayObject::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
 	Clear();
 
-	u32 version 	= ini.r_u32(sect_name, "version");
+	u32 version 	= sect.r_u32("version");
 
-    if(version!=WAYOBJECT_VERSION)
-    {
+	if(version!=WAYOBJECT_VERSION) {
         ELog.DlgMsg	( mtError, "CWayPoint: Unsupported version.");
         return 		false;
+	}
+
+	CCustomObject::LoadLTX(ini, sect);
+
+	if(!Name) {
+		ELog.DlgMsg(mtError,"Corrupted scene file.[%s] sect[%s] has empty name",ini.fname(), *sect.Name);
+		return false;
     }
 
-	CCustomObject::LoadLTX(ini, sect_name);
-
-    if(!Name)
-    {
-     ELog.DlgMsg(mtError,"Corrupted scene file.[%s] sect[%s] has empty name",ini.fname(), sect_name);
-     return false;
-    }
-
-    u32 cnt = ini.r_u32(sect_name, "wp_count");
+	u32 cnt = sect.r_u32("wp_count");
     m_WayPoints.resize(cnt);
 
     string128 		buff;
@@ -547,41 +545,38 @@ bool CWayObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
 	for (WPIt it=m_WayPoints.begin(); it!=m_WayPoints.end(); ++it,++wp_idx)
     {
     	CWayPoint* W 	= xr_new<CWayPoint>("");
-        *it 			= W;
+		*it 			= W;
 
         sprintf				(buff,"wp_%d_pos",wp_idx);
-        W->m_vPosition		= ini.r_fvector3(sect_name, buff);
+		W->m_vPosition		= sect.r_fvector3(buff);
 
         sprintf				(buff,"wp_%d_flags",wp_idx);
-    	W->m_Flags.assign	(ini.r_u32(sect_name, buff));
+		W->m_Flags.assign	(sect.r_u32(buff));
 
         sprintf				(buff,"wp_%d_selected",wp_idx);
-        W->m_bSelected		= ini.r_bool(sect_name, buff);
+		W->m_bSelected		= sect.r_bool(buff);
 
         sprintf				(buff,"wp_%d_name",wp_idx);
-        W->m_Name			= ini.r_string(sect_name, buff);
-    }
+		W->m_Name			= sect.r_string(buff);
+	}
 
-    CInifile::Sect& S 		= ini.r_section(sect_name);
-    CInifile::SectCIt cit 	= S.Data.begin();
-    CInifile::SectCIt cit_e 	= S.Data.end();
-    for( ;cit!=cit_e; ++cit)
-    {
-    	if( cit->first.c_str() == strstr(cit->first.c_str(),"link_wp_") )
-        {
+	CInifile::SectCIt cit 	= sect.Data.begin();
+	CInifile::SectCIt cit_e = sect.Data.end();
+	for( ;cit!=cit_e; ++cit) {
+		if( cit->first.c_str() == strstr(cit->first.c_str(),"link_wp_") ) {
         	u32 wp_idx 		= u32(-1);
-        	u32 wp_link_idx = u32(-1);
+			u32 wp_link_idx = u32(-1);
 
         	int res = sscanf(cit->first.c_str(),"link_wp_%4d_%4d",&wp_idx, &wp_link_idx);
-            R_ASSERT4(res==2, "bad waypoint link record format", sect_name, cit->first.c_str());
+			R_ASSERT4(res==2, "bad waypoint link record format", *sect.Name, cit->first.c_str());
 
-            Fvector2 val 		= ini.r_fvector2(sect_name,cit->first.c_str());
-            u32 wp_to_idx 		= iFloor(val.x);
+			Fvector2 val 		= sect.r_fvector2(cit->first.c_str());
+			u32 wp_to_idx 		= iFloor(val.x);
         	m_WayPoints[wp_idx]->CreateLink(m_WayPoints[wp_to_idx], val.y);
         }
     }
 
-    m_Type			= EWayType(ini.r_u32(sect_name, "type"));
+	m_Type			= EWayType(sect.r_u32("type"));
 
     return true;
 }

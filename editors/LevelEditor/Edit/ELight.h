@@ -74,8 +74,8 @@ public:
         }
         void		SaveStream(IWriter& F);
         void		LoadStream(IReader& F);
-        void		SaveLTX(CInifile& ini, LPCSTR sect_name);
-        void		LoadLTX(CInifile& ini, LPCSTR sect_name);
+		void		SaveLTX(CInifile& ini, LPCSTR sect_name);
+        void		LoadLTX(CInifile& ini, CInifile::Sect& sect);
     };
     SFuzzyData*		m_FuzzyData;
 
@@ -114,10 +114,10 @@ public:
     // placement functions
 	virtual bool 	GetBox			(Fbox& box);
 
-    // file system function
+	// file system function
 	virtual bool 	LoadStream		(IReader&);
-	virtual bool 	LoadLTX			(CInifile& ini, LPCSTR sect_name);
-	virtual void 	SaveStream			(IWriter&);
+	virtual bool 	LoadLTX			(CInifile& ini, CInifile::Sect& sect);
+	virtual void 	SaveStream		(IWriter&);
 	virtual void 	SaveLTX			(CInifile& ini, LPCSTR sect_name);
 
     

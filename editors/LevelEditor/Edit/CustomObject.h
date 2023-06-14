@@ -39,7 +39,7 @@ struct SExportStreams{
 	SExportStreamItem	fog_vol;
 };
 
-class ECORE_API CCustomObject 
+class CCustomObject 
 {
 	ObjClassID		FClassID;
     ESceneCustomOTool* FParentTools;
@@ -194,8 +194,8 @@ public:
 	virtual void 	ScalePivot		(const Fmatrix& prev_inv, const Fmatrix& current, Fvector& amount);
 
 	virtual bool 	LoadStream		(IReader&);
-	virtual bool 	LoadLTX			(CInifile& ini, LPCSTR sect_name);
-	virtual void 	SaveStream			(IWriter&);
+	virtual bool 	LoadLTX			(CInifile& ini, CInifile::Sect& sect);
+	virtual void 	SaveStream		(IWriter&);
 	virtual void 	SaveLTX			(CInifile& ini, LPCSTR sect_name);
 
     virtual bool	ExportGame		(SExportStreams* data){return true;}

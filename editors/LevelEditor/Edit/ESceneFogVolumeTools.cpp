@@ -86,12 +86,11 @@ void ESceneFogVolumeTool::SaveSelection(IWriter& F)
 
 bool ESceneFogVolumeTool::LoadLTX(CInifile& ini)
 {
-	u32 version 	= ini.r_u32("main","version");
-    if( version!=FOG_VOL_TOOLS_VERSION )
-    {
-            ELog.DlgMsg( mtError, "%s tools: Unsupported version.",ClassDesc());
-            return false;
-    }
+	u32 version = ini.r_u32("main","version");
+	if( version!=FOG_VOL_TOOLS_VERSION ) {
+		ELog.DlgMsg( mtError, "%s tools: Unsupported version.",ClassDesc());
+		return false;
+	}
 
 	inherited::LoadLTX(ini);
 
@@ -186,19 +185,19 @@ void EFogVolume::OnUpdateTransform()
 	inherited::OnUpdateTransform();
 }
 
-bool EFogVolume::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool EFogVolume::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	u32 version 				= ini.r_u32(sect_name, "version");
+	u32 version 				= sect.r_u32("version");
 
-	inherited::LoadLTX			(ini, sect_name);
+	inherited::LoadLTX			(ini, sect);
 
-    if(version>0)
+	if(version>0)
     {
-    	m_volumeType			= ini.r_u8(sect_name, "folume_type");
-    	m_group_id				= ini.r_u32(sect_name, "group_id");
-    }
+		m_volumeType			= sect.r_u8("folume_type");
+		m_group_id				= sect.r_u32("group_id");
+	}
     if(version>1 && m_volumeType==fvEmitter)
-    	m_volume_profile		= ini.r_string(sect_name,"profile");
+		m_volume_profile		= sect.r_string("profile");
         
 	OnChangeEnvs				(NULL);
 

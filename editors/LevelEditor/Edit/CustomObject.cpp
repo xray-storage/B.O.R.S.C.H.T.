@@ -101,23 +101,23 @@ BOOL   CCustomObject::Editable() const
 	return !b1 || (b1&&b2);
 }
 
-bool  CCustomObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool  CCustomObject::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
 	u32 flags;
 
-    if(ini.line_exist(sect_name, "co_flags2"))
-    	flags = ini.r_u32(sect_name, "co_flags2");
-    else
-    	flags = ini.r_u32(sect_name, "co_flags") | flVisible;
+	if(sect.line_exist("co_flags2"))
+		flags = sect.r_u32("co_flags2");
+	else
+		flags = sect.r_u32("co_flags") | flVisible;
 
 	m_CO_Flags.assign	(flags);
 
-	FName				= ini.r_string(sect_name, "name");
-    FPosition			= ini.r_fvector3 	(sect_name, "position");
-    FRotation			= ini.r_fvector3 	(sect_name, "rotation");
-    FScale				= ini.r_fvector3 	(sect_name, "scale");
+	FName				= sect.r_string("name");
+	FPosition			= sect.r_fvector3("position");
+	FRotation			= sect.r_fvector3("rotation");
+	FScale				= sect.r_fvector3("scale");
 
-    // object motion
+	// object motion
     if (m_CO_Flags.is(flMotion))
     {
     	m_CO_Flags.set(flMotion, FALSE);

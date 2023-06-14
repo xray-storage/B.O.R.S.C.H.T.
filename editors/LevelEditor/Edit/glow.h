@@ -42,10 +42,10 @@ public:
 		                          SRayPickInfo* pinf = NULL );
     virtual bool 	FrustumPick	( const CFrustum& frustum );
 
-  	virtual bool 		LoadStream			(IReader&);
-  	virtual bool 		LoadLTX				(CInifile& ini, LPCSTR sect_name);
-	virtual void 		SaveStream			(IWriter&);
-  	virtual void 		SaveLTX				(CInifile& ini, LPCSTR sect_name);
+	virtual bool	LoadStream			(IReader&);
+	virtual bool 	LoadLTX				(CInifile& ini, CInifile::Sect& sect);
+	virtual void	SaveStream			(IWriter&);
+  	virtual void	SaveLTX				(CInifile& ini, LPCSTR sect_name);
 
 	virtual bool    GetBox      ( Fbox& box );
     virtual void	FillProp	( LPCSTR pref, PropItemVec& values );

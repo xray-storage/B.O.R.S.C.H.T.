@@ -112,38 +112,35 @@ bool ESoundSource::RayPick(float& distance, const Fvector& start, const Fvector&
 	return false;
 }
 //----------------------------------------------------
-bool ESoundSource::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool ESoundSource::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	u32 version =  ini.r_u32(sect_name, "version");
+	u32 version 				= sect.r_u32		("version");
 
-    if(version!=SOUND_SOURCE_VERSION)
-    {
-        ELog.Msg( mtError, "ESoundSource: Unsupported version.");
+    if(version!=SOUND_SOURCE_VERSION) {
+		ELog.Msg( mtError, "ESoundSource: Unsupported version.");
         return false;
     }
 
-	inherited::LoadLTX	(ini, sect_name);
+	inherited::LoadLTX	(ini, sect);
 
-    m_Type				= (ESoundType)ini.r_u32	(sect_name, "snd_type");
+	m_Type						= (ESoundType)sect.r_u32("snd_type");
+	m_WAVName					= sect.r_string		("snd_name");
+	m_Flags.assign				(sect.r_u32			("flags"));
 
-    m_WAVName			= ini.r_string			(sect_name, "snd_name");
+	m_Params.position			= sect.r_fvector3	("snd_position");
+	m_Params.volume				= sect.r_float		("volume");
+	m_Params.freq				= sect.r_float		("freq");
+	m_Params.min_distance		= sect.r_float		("min_dist");
+	m_Params.max_distance		= sect.r_float		("max_dist");
+	m_Params.max_ai_distance	= sect.r_float		("max_ai_dist");
 
-    m_Flags.assign		(ini.r_u32				(sect_name, "flags"));
-
-    m_Params.position	= ini.r_fvector3		(sect_name, "snd_position");
-    m_Params.volume		= ini.r_float			(sect_name, "volume");
-    m_Params.freq		= ini.r_float			(sect_name, "freq");
-    m_Params.min_distance=ini.r_float			(sect_name, "min_dist");
-    m_Params.max_distance= ini.r_float			(sect_name, "max_dist");
-    m_Params.max_ai_distance=ini.r_float		(sect_name, "max_ai_dist");
-
-    m_RandomPause		= ini.r_fvector2		(sect_name, "random_pause");
-    m_ActiveTime		= ini.r_fvector2		(sect_name, "active_time");
-    m_PlayTime			= ini.r_fvector2		(sect_name, "play_time");
+	m_RandomPause				= sect.r_fvector2	("random_pause");
+	m_ActiveTime				= sect.r_fvector2	("active_time");
+	m_PlayTime					= sect.r_fvector2	("play_time");
 
     ResetSource		();
 
-    switch (m_Type)
+	switch (m_Type)
     {
     case stStaticSource:
     	if (m_Flags.is(flPlaying)) 		Play();
@@ -159,11 +156,8 @@ void ESoundSource::SaveLTX(CInifile& ini, LPCSTR sect_name)
 	inherited::SaveLTX	(ini, sect_name);
 
 	ini.w_u32			(sect_name, "version", SOUND_SOURCE_VERSION);
-
-    ini.w_u32			(sect_name, "snd_type", (u32)m_Type);
-
-    ini.w_string		(sect_name, "snd_name", m_WAVName.c_str());
-
+	ini.w_u32			(sect_name, "snd_type", (u32)m_Type);
+	ini.w_string		(sect_name, "snd_name", m_WAVName.c_str());
     ini.w_u32			(sect_name, "flags", m_Flags.get());
 
     ini.w_fvector3		(sect_name, "snd_position", m_Params.position);

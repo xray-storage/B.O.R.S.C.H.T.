@@ -292,46 +292,43 @@ bool CEditShape::GetBox(Fbox& box)
 	return false;
 }
 
-bool CEditShape::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CEditShape::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-    u32 vers		= ini.r_u32(sect_name, "version");
+	u32 vers			= sect.r_u32("version");
 
- 	inherited::LoadLTX	(ini, sect_name);
+	inherited::LoadLTX	(ini, sect);
 
-    u32 count 			= ini.r_u32			(sect_name, "shapes_count");
-    if(vers>0x0001)
-    	m_shape_type	= ini.r_u8			(sect_name, "shape_type");
+	u32 count 			= sect.r_u32		("shapes_count");
+	if(vers>0x0001)
+		m_shape_type	= sect.r_u8			("shape_type");
         
     string128			buff;
     shapes.resize		(count);
-    for(u32 i=0; i<count; ++i)
+	for(u32 i=0; i<count; ++i)
     {
-       sprintf			(buff,"shape_type_%d", i);
-       shapes[i].type	= ini.r_u8(sect_name, buff);
-       if(shapes[i].type==CShapeData::cfSphere)
-       {
-       	sprintf			(buff,"shape_center_%d", i);
-		shapes[i].data.sphere.P = ini.r_fvector3	(sect_name, buff);
+		sprintf			(buff,"shape_type_%d", i);
+		shapes[i].type	= sect.r_u8(buff);
+		if(shapes[i].type==CShapeData::cfSphere) {
+			sprintf			(buff,"shape_center_%d", i);
+			shapes[i].data.sphere.P = sect.r_fvector3	(buff);
 
-       	sprintf			(buff,"shape_radius_%d", i);
-		shapes[i].data.sphere.R = ini.r_float		(sect_name, buff);
-       }else
-       {
-       	 R_ASSERT		(shapes[i].type==CShapeData::cfBox);
-         sprintf			(buff,"shape_matrix_i_%d", i);
-         shapes[i].data.box.i = ini.r_fvector3	(sect_name, buff);
+			sprintf			(buff,"shape_radius_%d", i);
+			shapes[i].data.sphere.R = sect.r_float		(buff);
+	   } else {
+			R_ASSERT		(shapes[i].type==CShapeData::cfBox);
+			sprintf			(buff,"shape_matrix_i_%d", i);
+			shapes[i].data.box.i = sect.r_fvector3		(buff);
 
-         sprintf			(buff,"shape_matrix_j_%d", i);
-         shapes[i].data.box.j = ini.r_fvector3	(sect_name, buff);
+			sprintf			(buff,"shape_matrix_j_%d", i);
+			shapes[i].data.box.j = sect.r_fvector3		(buff);
 
-         sprintf			(buff,"shape_matrix_k_%d", i);
-         shapes[i].data.box.k = ini.r_fvector3	(sect_name, buff);
+			sprintf			(buff,"shape_matrix_k_%d", i);
+			shapes[i].data.box.k = sect.r_fvector3		(buff);
 
-         sprintf			(buff,"shape_matrix_c_%d", i);
-         shapes[i].data.box.c = ini.r_fvector3	(sect_name, buff);
-       }
-    }
-
+			sprintf			(buff,"shape_matrix_c_%d", i);
+			shapes[i].data.box.c = sect.r_fvector3		(buff);
+		}
+	}
 
 	ComputeBounds();
 	return true;

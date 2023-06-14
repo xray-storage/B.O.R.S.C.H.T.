@@ -40,19 +40,19 @@ void CLight::SFuzzyData::SaveLTX(CInifile& ini, LPCSTR sect_name)
     }
 }
 
-void CLight::SFuzzyData::LoadLTX(CInifile& ini, LPCSTR sect_name)
+void CLight::SFuzzyData::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	m_ShapeType		= (EShapeType)ini.r_u8(sect_name, "fuzzy_shape_type");
-    m_SphereRadius	= ini.r_float		(sect_name, "fuzzy_sphere_radius");
-    m_BoxDimension	= ini.r_fvector3	(sect_name,  "fuzzy_box_dim");
-    m_PointCount	= ini.r_u32			(sect_name,  "fuzzy_point_count");
+	m_ShapeType		= (EShapeType)sect.r_u8	("fuzzy_shape_type");
+	m_SphereRadius	= sect.r_float			("fuzzy_sphere_radius");
+	m_BoxDimension	= sect.r_fvector3		("fuzzy_box_dim");
+	m_PointCount	= sect.r_u32			("fuzzy_point_count");
 
-    string128					buff;
-    m_Positions.clear			();
+	string128					buff;
+	m_Positions.clear			();
 	for(int idx=0; idx<m_PointCount; ++idx)
-    {
+	{
     	sprintf					(buff,"fuzzy_point_%d", idx);
-        Fvector p				= ini.r_fvector3	(sect_name, buff);
+		Fvector p				= sect.r_fvector3(buff);
         m_Positions.push_back 	(p);
     }
 }
@@ -76,46 +76,43 @@ void CLight::SFuzzyData::LoadStream(IReader& F)
     F.r				(&*m_Positions.begin(),sizeof(Fvector)*m_PointCount);
 }
 
-bool CLight::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CLight::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-	u32 version = ini.r_u32(sect_name, "version");
-
-    if(version!=LIGHT_VERSION)
-    {
-        ELog.DlgMsg( mtError, "CLight: Unsupported version.");
-        return false;
+	u32 version 	= sect.r_u32("version");
+	if(version!=LIGHT_VERSION) {
+		ELog.DlgMsg( mtError, "CLight: Unsupported version.");
+		return false;
     }
 
-	CCustomObject::LoadLTX	(ini, sect_name);
+	CCustomObject::LoadLTX	(ini, sect);
 
-    m_Type			= (ELight::EType)(ini.r_u32(sect_name, "type"));
-    m_Color			= ini.r_fcolor		(sect_name, "color");
-    m_Brightness	= ini.r_float	    (sect_name, "brightness");
-    m_Range			= ini.r_float	    (sect_name, "range");
-    m_Attenuation0	= ini.r_float	    (sect_name, "attenuation0");
-    m_Attenuation1	= ini.r_float	    (sect_name, "attenuation1");
-    m_Attenuation2	= ini.r_float	    (sect_name, "attenuation2");
-    m_Cone			= ini.r_float	    (sect_name, "cone");
-    m_VirtualSize	= ini.r_float	    (sect_name, "virtual_size");
+	m_Type			= (ELight::EType)(sect.r_u32("type"));
+	m_Color			= sect.r_fcolor		("color");
+	m_Brightness	= sect.r_float	    ("brightness");
+	m_Range			= sect.r_float	    ("range");
+	m_Attenuation0	= sect.r_float	    ("attenuation0");
+	m_Attenuation1	= sect.r_float	    ("attenuation1");
+	m_Attenuation2	= sect.r_float	    ("attenuation2");
+	m_Cone			= sect.r_float	    ("cone");
+	m_VirtualSize	= sect.r_float	    ("virtual_size");
 
-    m_UseInD3D		= ini.r_bool		(sect_name, "use_in_d3d");
-    m_Flags.assign	(ini.r_u32			(sect_name, "light_flags"));
-    m_LControl		= ini.r_u32			(sect_name, "light_control");
+	m_UseInD3D		= sect.r_bool		("use_in_d3d");
+	m_Flags.assign	(sect.r_u32			("light_flags"));
+	m_LControl		= sect.r_u32		("light_control");
 
-	LPCSTR anm		= ini.r_string		(sect_name,"anim_ref_name");
-    if(anm)
-    {
+	LPCSTR anm		= sect.r_string		("anim_ref_name");
+	if(anm) {
         m_pAnimRef	= LALib.FindItem(anm);
         if (!m_pAnimRef)
         	ELog.Msg(mtError, "Can't find light animation: %s",anm);
-    }
+	}
 
-   	m_FalloffTex	= ini.r_string	(sect_name, "fallof_texture");
+	m_FalloffTex	= sect.r_string		("fallof_texture");
 
 	if (m_Flags.is(ELight::flPointFuzzy))
     {
         m_FuzzyData	= xr_new<SFuzzyData>();
-        m_FuzzyData->LoadLTX(ini, sect_name);
+        m_FuzzyData->LoadLTX(ini, sect);
     }
 
 	UpdateTransform	();

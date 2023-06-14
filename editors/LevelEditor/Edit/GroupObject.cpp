@@ -109,46 +109,42 @@ bool CGroupObject::AppendObjectLoadCB(CCustomObject* object)
 #include "AppendObjectInfoForm.h"
 
 //------------------------------------------------------------------------------
-bool CGroupObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
+bool CGroupObject::LoadLTX(CInifile& ini, CInifile::Sect& sect)
 {
-    u32 version = ini.r_u32(sect_name, "version");
-    if (version<0x0011)
-    {
+	u32 version 								= sect.r_u32("version");
+    if (version<0x0011) {
         ELog.DlgMsg( mtError, "CGroupObject: unsupported file version. Object can't load.");
         return false;
     }
-	CCustomObject::LoadLTX(ini, sect_name);
+	CCustomObject::LoadLTX(ini, sect);
 
     Flags32 tmp_flags;tmp_flags.zero();
-    if(version<0x0012)
-    	tmp_flags.assign(ini.r_u32(sect_name, "flags") );
+	if(version<0x0012)
+		tmp_flags.assign(sect.r_u32("flags"));
 
 	// objects
-    if(/*IsOpened()*/ tmp_flags.test((1<<0)))
-    {    //old opened group save format
-        u32 cnt 	= ini.r_u32			(sect_name, "objects_in_group_count");
+	if(/*IsOpened()*/ tmp_flags.test((1<<0))) {
+		//old opened group save format
+		u32 cnt 		= sect.r_u32("objects_in_group_count");
         shared_str 		tmp;
-    	string128		buff;
+		string128		buff;
 
-        for (u32 k=0; k<cnt; ++k)
-        {
+		for (u32 k=0; k<cnt; ++k) {
 			m_ObjectsInGroup.resize				(m_ObjectsInGroup.size()+1);
         	sprintf								(buff,"objects_in_group_%d",k);
-        	m_ObjectsInGroup.back().ObjectName	= ini.r_string(sect_name, buff);
-        }
-    }else
-    {
-	    Scene->ReadObjectsLTX			(ini, sect_name, "ingroup", AppendObjectLoadCB, 0);
-    }
+			m_ObjectsInGroup.back().ObjectName	= sect.r_string(buff);
+		}
+	} else {
+		Scene->ReadObjectsLTX					(ini, *sect.Name, "ingroup", AppendObjectLoadCB, 0);
+	}
+
     VERIFY(m_ObjectsInGroup.size());
 
-   	m_ReferenceName = ini.r_string	(sect_name, "ref_name");
+	m_ReferenceName 							= sect.r_string("ref_name");
 
-    if(version<0x0012)
-    {
+	if(version<0x0012) {
         for (ObjectsInGroup::iterator it=m_ObjectsInGroup.begin(); it!=m_ObjectsInGroup.end(); ++it)
-            if(it->pObject)
-            {
+			if(it->pObject) {
             	it->pObject->m_CO_Flags.set(flObjectInGroup, TRUE);
             	it->pObject->m_CO_Flags.set(flObjectInGroupUnique, TRUE);
             }

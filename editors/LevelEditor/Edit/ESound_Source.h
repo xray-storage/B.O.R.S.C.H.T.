@@ -58,12 +58,12 @@ public:
 
 	virtual void 	Render			(int priority, bool strictB2F);
 	virtual bool 	RayPick			(float& dist, const Fvector& S, const Fvector& D, SRayPickInfo* pinf = NULL);
-    virtual bool 	FrustumPick		(const CFrustum& frustum);
-    virtual	void	OnFrame			();
-  	virtual bool 		LoadStream			(IReader&);
-  	virtual bool 		LoadLTX				(CInifile& ini, LPCSTR sect_name);
-	virtual void 		SaveStream			(IWriter&);
-  	virtual void 		SaveLTX				(CInifile& ini, LPCSTR sect_name);
+	virtual bool 	FrustumPick		(const CFrustum& frustum);
+	virtual	void	OnFrame			();
+	virtual bool	LoadStream		(IReader&);
+	virtual bool	LoadLTX			(CInifile& ini, CInifile::Sect& sect);
+	virtual void	SaveStream		(IWriter&);
+	virtual void 	SaveLTX			(CInifile& ini, LPCSTR sect_name);
 	virtual bool 	GetBox			(Fbox& box);
 	virtual void 	Scale			(Fvector& amount){;}
 	virtual void	FillProp		(LPCSTR pref, PropItemVec& values);

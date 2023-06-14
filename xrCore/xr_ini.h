@@ -30,6 +30,30 @@ public:
 		Items			Data;
 
 		BOOL			line_exist	(LPCSTR L, LPCSTR* val=0);
+
+		CLASS_ID		r_clsid		( LPCSTR L );
+		LPCSTR 			r_string	( LPCSTR L );		// оставляет кавычки
+		shared_str		r_string_wb	( LPCSTR L );		// убирает кавычки
+		u8	 			r_u8		( LPCSTR L );
+		u16	 			r_u16		( LPCSTR L );
+		u32	 			r_u32		( LPCSTR L );
+		u64	 			r_u64		( LPCSTR L );
+		s8	 			r_s8		( LPCSTR L );
+		s16	 			r_s16		( LPCSTR L );
+		s32	 			r_s32		( LPCSTR L );
+		s64	 			r_s64		( LPCSTR L );
+		float			r_float		( LPCSTR L );
+		Fcolor			r_fcolor	( LPCSTR L );
+		u32				r_color		( LPCSTR L );
+		Ivector2		r_ivector2	( LPCSTR L );
+		Ivector3		r_ivector3	( LPCSTR L );
+		Ivector4		r_ivector4	( LPCSTR L );
+		Fvector2		r_fvector2	( LPCSTR L );
+		Fvector3		r_fvector3	( LPCSTR L );
+		Fvector4		r_fvector4	( LPCSTR L );
+		BOOL			r_bool		( LPCSTR L );
+		int				r_token		( LPCSTR L,	const xr_token *token_list);
+		BOOL			r_line		( int L, LPCSTR* N, LPCSTR* V );
 	};
 	typedef	xr_vector<Sect*>		Root;
 	typedef Root::iterator			RootIt;
@@ -68,8 +92,8 @@ public:
 	CLASS_ID	r_clsid			( const shared_str& S, LPCSTR L )				{ return r_clsid(*S,L);			}
 	LPCSTR 		r_string		( LPCSTR S, LPCSTR L);															// оставляет кавычки
 	LPCSTR 		r_string		( const shared_str& S, LPCSTR L)				{ return r_string(*S,L);		}	// оставляет кавычки
-	shared_str		r_string_wb		( LPCSTR S, LPCSTR L);															// убирает кавычки
-	shared_str		r_string_wb		( const shared_str& S, LPCSTR L)				{ return r_string_wb(*S,L);		}	// убирает кавычки
+	shared_str	r_string_wb		( LPCSTR S, LPCSTR L);															// убирает кавычки
+	shared_str	r_string_wb		( const shared_str& S, LPCSTR L)				{ return r_string_wb(*S,L);		}	// убирает кавычки
 	u8	 		r_u8			( LPCSTR S, LPCSTR L );
 	u8	 		r_u8			( const shared_str& S, LPCSTR L )				{ return r_u8(*S,L);			}
 	u16	 		r_u16			( LPCSTR S, LPCSTR L );

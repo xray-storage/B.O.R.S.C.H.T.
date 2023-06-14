@@ -49,7 +49,7 @@ public:
 
     // file system function
   	virtual bool 		LoadStream			(IReader&);
-  	virtual bool 		LoadLTX				(CInifile& ini, LPCSTR sect_name);
+  	virtual bool 		LoadLTX				(CInifile& ini, CInifile::Sect& sect);
 	virtual void 		SaveStream			(IWriter&);
   	virtual void 		SaveLTX				(CInifile& ini, LPCSTR sect_name);
 

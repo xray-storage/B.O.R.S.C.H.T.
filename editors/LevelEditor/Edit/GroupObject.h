@@ -63,10 +63,10 @@ public:
     virtual void 	OnUpdateTransform();
 	virtual void 	OnFrame			();
 
-  	virtual bool 		LoadStream			(IReader&);
-  	virtual bool 		LoadLTX				(CInifile& ini, LPCSTR sect_name);
-	virtual void 		SaveStream			(IWriter&);
-  	virtual void 		SaveLTX				(CInifile& ini, LPCSTR sect_name);
+	virtual bool	LoadStream		(IReader&);
+	virtual bool	LoadLTX			(CInifile& ini, CInifile::Sect& sect);
+	virtual void	SaveStream		(IWriter&);
+	virtual void	SaveLTX			(CInifile& ini, LPCSTR sect_name);
 
     virtual bool	ExportGame		(SExportStreams* data);
 
