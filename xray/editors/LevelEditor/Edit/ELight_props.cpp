@@ -124,8 +124,8 @@ void 	CLight::OnPointDataChange(PropValue* value)
 
 void 	CLight::OnPointDataTestEqual(CanvasValue* a, CanvasValue* b, bool& res)
 {
-	CLight* A = (CLight*)(a->tag); VERIFY(A);
-	CLight* B = (CLight*)(b->tag); VERIFY(B);
+	CLight* A = a->GetTag<CLight*>(); VERIFY(A);
+	CLight* B = b->GetTag<CLight*>(); VERIFY(B);
 	res =	(fsimilar(A->m_Range,B->m_Range)&&
     		fsimilar(A->m_Attenuation0,B->m_Attenuation0)&&
     		fsimilar(A->m_Attenuation1,B->m_Attenuation1)&&
@@ -149,7 +149,7 @@ void CLight::FillAttProp(LPCSTR pref, PropItemVec& items)
     B->OnBtnClickEvent.bind	(this,&CLight::OnAutoClick);
 	CanvasValue* C=0;
     C=PHelper().CreateCanvas	(items,	PrepareKey(pref, "Attenuation\\Graphic"),	"", 64);
-    C->tag					= (int)this;
+    C->SetTag               (this);
     C->OnDrawCanvasEvent.bind(this,&CLight::OnAttenuationDraw);
     C->OnTestEqual.bind		(this,&CLight::OnPointDataTestEqual);
 }

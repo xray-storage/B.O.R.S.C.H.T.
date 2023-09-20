@@ -106,9 +106,9 @@ void SSceneSummary::STextureInfo::OnHighlightClick(ButtonValue* sender, bool& bD
     AnsiString item_name = sender->Owner()->Item()->Text;
 #endif
     switch (V->btn_num){
-    case 0: Scene->HighlightTexture	((LPCSTR)sender->tag,false,info.width,info.height,false); break;
-    case 1: Scene->HighlightTexture	((LPCSTR)sender->tag,true,info.width,info.height,false); break;
-    case 2: Scene->HighlightTexture	((LPCSTR)sender->tag,true,info.width,info.height,true); break;
+    case 0: Scene->HighlightTexture	(sender->GetTag<LPCSTR>(), false, info.width, info.height, false); break;
+    case 1: Scene->HighlightTexture	(sender->GetTag<LPCSTR>(),true,info.width,info.height,false); break;
+    case 2: Scene->HighlightTexture	(sender->GetTag<LPCSTR>(),true,info.width,info.height,true); break;
     case 3: ExecCommand(COMMAND_CLEAR_DEBUG_DRAW); break;
 	}
     bDataModified 	= false;
@@ -155,7 +155,7 @@ void SSceneSummary::STextureInfo::FillProp	(PropItemVec& items, LPCSTR main_pref
         }
         ButtonValue* B 		= PHelper().CreateButton(items,PrepareKey(pref.c_str(),"Highlight Texture"), "Select,Density =,Density +,Clear", 0);
 		B->OnBtnClickEvent.bind(this,&SSceneSummary::STextureInfo::OnHighlightClick);
-        B->tag 				= (int)(*file_name);
+        B->SetTag 			(*file_name);
     }
 }
 void SSceneSummary::STextureInfo::Export	(IWriter* F, u32& mem_use)
@@ -269,12 +269,12 @@ bool SSceneSummary::ExportSummaryInfo(LPCSTR fn)
 }
 bool SSceneSummary::OnWeightAfterEditClick(PropValue* sender, float& edit_val)
 {
-	if (sender->tag==0){
-    	return edit_val<pm_colors[sender->tag+1].pm;
-    }else if (sender->tag==pm_colors.size()-1){
-    	return edit_val>pm_colors[sender->tag-1].pm;
+	if (sender->GetTag<int>() == 0) {
+    	return edit_val<pm_colors[sender->GetTag<int>() +1].pm;
+    }else if (sender->GetTag<int>() ==pm_colors.size()-1){
+    	return edit_val>pm_colors[sender->GetTag<int>() -1].pm;
     }else{
-		return edit_val>pm_colors[sender->tag-1].pm && edit_val<pm_colors[sender->tag+1].pm;
+		return edit_val>pm_colors[sender->GetTag<int>() -1].pm && edit_val<pm_colors[sender->GetTag<int>() +1].pm;
     }
 }
 void SSceneSummary::FillProp(PropItemVec& items)
@@ -321,7 +321,7 @@ void SSceneSummary::FillProp(PropItemVec& items)
     	PHelper().CreateColor(items,PrepareKey(tmp,"Color").c_str(),&pd_it->color);
     	FloatValue* V		= PHelper().CreateFloat(items,PrepareKey(tmp,"Weight (p/m)").c_str(),&pd_it->pm,0,1000000,1,0);
         V->OnAfterEditEvent.bind(this,&SSceneSummary::OnWeightAfterEditClick);
-        V->tag				= pd_it-pm_colors.begin();
+        V->SetTag			(pd_it - pm_colors.begin());
     }
     for (u32 stt=sttFirst; stt<sttLast; stt++){
         LPCSTR nm			= get_token_name(summary_texture_type_tokens,stt);

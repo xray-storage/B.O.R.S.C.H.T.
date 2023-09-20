@@ -30,14 +30,14 @@ void CLevelPreferences::Save(CInifile* I)
 
 void CLevelPreferences::OnEnabledChange(PropValue* prop)
 {
-	ESceneToolBase* M		= Scene->GetTool(prop->tag); VERIFY(M);
-	ExecCommand				(COMMAND_ENABLE_TARGET,prop->tag,M->IsEnabled());
+	ESceneToolBase* M		= Scene->GetTool(prop->GetTag<ObjClassID>()); VERIFY(M);
+	ExecCommand				(COMMAND_ENABLE_TARGET,prop->GetTag<ObjClassID>(), M->IsEnabled());
 }
 
 void CLevelPreferences::OnReadonlyChange(PropValue* prop)
 {
-	ESceneToolBase* M		= Scene->GetTool(prop->tag); VERIFY(M);
-	ExecCommand				(COMMAND_READONLY_TARGET,prop->tag,M->IsForceReadonly());
+	ESceneToolBase* M		= Scene->GetTool(prop->GetTag<ObjClassID>()); VERIFY(M);
+	ExecCommand				(COMMAND_READONLY_TARGET,prop->GetTag<ObjClassID>(),M->IsForceReadonly());
 }
 
 void CLevelPreferences::FillProp(PropItemVec& items)
@@ -49,11 +49,11 @@ void CLevelPreferences::FillProp(PropItemVec& items)
         if (_I->second&&(_I->first!=OBJCLASS_DUMMY)){
         	if (_I->second->AllowEnabling()){
                 PropValue* V 	= PHelper().CreateFlag32(items,PrepareKey("Scene\\Targets\\Enable",_I->second->ClassDesc()),	&_I->second->m_EditFlags, ESceneToolBase::flEnable);
-                V->tag			= _I->second->ClassID;
+                V->SetTag		(_I->second->ClassID);
                 V->OnChangeEvent.bind(this,&CLevelPreferences::OnEnabledChange);
             }
 		    PropValue* V		= PHelper().CreateFlag32(items,PrepareKey("Scene\\Targets\\Read Only",_I->second->ClassDesc()),	&_I->second->m_EditFlags, ESceneToolBase::flForceReadonly);
-            V->tag				= _I->second->ClassID;
+            V->SetTag			(_I->second->ClassID);
             V->OnChangeEvent.bind(this,&CLevelPreferences::OnReadonlyChange);
         }
 }

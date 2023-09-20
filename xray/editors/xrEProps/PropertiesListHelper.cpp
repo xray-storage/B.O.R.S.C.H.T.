@@ -143,7 +143,7 @@ CTextValue* 	CPropHelper::CreateCName	(PropItemVec& items, shared_str key, LPSTR
     V->OnAfterEditEvent.bind		(this,&CPropHelper::CNameAfterEdit);
     V->OnBeforeEditEvent.bind		(this,&CPropHelper::CNameBeforeEdit);
     V->Owner()->OnDrawTextEvent.bind(this,&CPropHelper::CNameDraw);
-    V->tag							= (u32)owner; VERIFY(owner);
+    V->SetTag	(owner); VERIFY(owner);
     if (V->Owner()->m_Flags.is(PropItem::flMixed)) V->Owner()->m_Flags.set(PropItem::flDisabled,TRUE);
     return V;					
 }
@@ -168,7 +168,7 @@ RTextValue* 	CPropHelper::CreateName		(PropItemVec& items, shared_str key, share
     V->OnAfterEditEvent.bind		(this,&CPropHelper::NameAfterEdit);
     V->OnBeforeEditEvent.bind		(this,&CPropHelper::NameBeforeEdit);
     V->Owner()->OnDrawTextEvent.bind(this,&CPropHelper::NameDraw);
-    V->tag							= (u32)owner; VERIFY(owner);
+    V->SetTag	(owner); VERIFY(owner);
     if (V->Owner()->m_Flags.is(PropItem::flMixed)) V->Owner()->m_Flags.set(PropItem::flDisabled,TRUE);
     return V;					
 }

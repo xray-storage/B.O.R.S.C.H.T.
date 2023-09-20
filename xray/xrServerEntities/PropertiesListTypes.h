@@ -56,6 +56,8 @@ typedef fastdelegate::FastDelegate<void(PropValue*, xr_string&)> 	TOnDrawTextEve
 typedef fastdelegate::FastDelegate<void(PropItem*)> 				TOnClick;
 //------------------------------------------------------------------------------
 
+typedef uintptr_t TagType;
+
 class PropValue
 {
 	friend class		CPropHelper;
@@ -63,7 +65,10 @@ class PropValue
 protected:
 	PropItem*			m_Owner;
 public:
-	u32					tag;
+    void                SetTag          (u32 p) { tag = (TagType)p; }
+    void                SetTag          (const void* p) { tag = (TagType)p; }
+    template<typename T>
+    T                   GetTag          () const { return (T)tag; }
 public:
 	// base events
 	typedef fastdelegate::FastDelegate<void(PropValue*)> TOnChange;
@@ -75,6 +80,9 @@ public:
     virtual void		ResetValue		()=0;
     virtual bool		Equal			(PropValue* prop)=0;
     IC PropItem*		Owner			(){return m_Owner;}
+
+private:
+    TagType			    tag;
 };
 //------------------------------------------------------------------------------
 

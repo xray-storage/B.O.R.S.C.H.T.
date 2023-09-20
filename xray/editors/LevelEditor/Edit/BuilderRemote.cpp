@@ -1364,7 +1364,7 @@ BOOL SceneBuilder::CompileStatic(bool b_selected_only)
             tp.height			= merged_image.h;
             tp.fmt				= STextureParams::tfDXT5;
             tp.type				= STextureParams::ttImage;
-            tp.mip_filter		= STextureParams::kMIPFilterAdvanced;
+            tp.mip_filter		= STextureParams::kMIPFilterKaiser;
             tp.flags.assign		(STextureParams::flDitherColor|STextureParams::flGenerateMipMaps);
             ImageLib.MakeGameTexture		(fn_color.c_str(),merged_image.layers[0].data(), tp);
             ImageLib.MakeGameTexture		(fn_normal.c_str(),merged_image.layers[1].data(),tp);
