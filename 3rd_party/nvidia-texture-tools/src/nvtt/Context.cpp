@@ -235,7 +235,7 @@ bool Compressor::Private::compress(const InputOptions::Private & inputOptions, c
     // If the extents have not changed, then we can use source images for all mipmaps.
     bool canUseSourceImages = (inputOptions.width == width && inputOptions.height == height && inputOptions.depth == depth);
 
-    int mipmapCount = 1;
+    int mipmapCount = inputOptions.mipmapCount;
     if (inputOptions.generateMipmaps) {
         mipmapCount = countMipmaps(width, height, depth);
         if (inputOptions.maxLevel > 0) mipmapCount = min(mipmapCount, inputOptions.maxLevel);
