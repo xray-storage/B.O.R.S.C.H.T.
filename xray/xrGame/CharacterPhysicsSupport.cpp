@@ -30,6 +30,7 @@
 #include "activatingcharcollisiondelay.h"
 #include "ai/stalker/ai_stalker.h"
 #include "stalker_movement_manager_smart_cover.h"
+#include "xrServer_Objects_ALife_Monsters.h"
 
 //const float default_hinge_friction = 5.f;//gray_wolf comment
 #ifdef DEBUG
@@ -193,8 +194,14 @@ void CCharacterPhysicsSupport::in_NetSpawn( CSE_Abstract* e )
 	m_death_anims.setup( ka, *e->s_name , pSettings );
 	if( !m_EntityAlife.g_Alive() )
 	{
-		if( m_eType == etStalker )
-			ka->PlayCycle( "waunded_1_idle_0" );
+		if (m_eType == etStalker)
+		{
+			auto hasAnim = [](shared_str s) { 	return s.size() != 0 && s != "$editor"; };
+			if (auto o = e->cast_monster_abstract(); o && hasAnim(o->visual()->startup_animation))
+				ka->PlayCycle(o->visual()->startup_animation.c_str());
+			else
+				ka->PlayCycle("waunded_1_idle_0");
+		}
 		else
 			ka->PlayCycle( "death_init" );
 
