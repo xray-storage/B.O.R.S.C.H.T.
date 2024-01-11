@@ -4,7 +4,7 @@
     <ProjectGuid>{36b330c8-e27f-4882-8821-e4a80885e3ba}</ProjectGuid>
     <ProjectType>CppVCLApplication</ProjectType>
     <MainSource>ParticleEditor.cpp</MainSource>
-    <Config Condition="'$(Config)'==''">Debug Build</Config>
+    <Config Condition="'$(Config)'==''">Release Build</Config>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
     <Base>true</Base>
@@ -83,12 +83,12 @@
     <AllPackageLibs>xmlrtl.lib;vclactnband.lib;rtl.lib;vcl.lib;bcbsmp.lib;vclx.lib;editorB.lib;xmlrtl.lib;vclactnband.lib</AllPackageLibs>
     <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
     <ILINK_LibraryPath>..\ECore\Editor;..\..\xrEngine;$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\SDK\Components\alexmx;X:\SDK\components\LMD2018\lib\d11;X:\SDK\libraries;X:\stalker_addon\libraries</ILINK_LibraryPath>
-    <BCC_Defines>NO_STRICT;_EDITOR;_PARTICLE_EDITOR</BCC_Defines>
-    <Multithreaded>true</Multithreaded>
-    <BRCC_Defines>_EDITOR;_PARTICLE_EDITOR;_DEBUG</BRCC_Defines>
     <TASM_Defines>_EDITOR _PARTICLE_EDITOR _DEBUG</TASM_Defines>
-    <TASM_Debugging>None</TASM_Debugging>
+    <BRCC_Defines>_EDITOR;_PARTICLE_EDITOR;_DEBUG</BRCC_Defines>
+    <Multithreaded>true</Multithreaded>
+    <BCC_Defines>NO_STRICT;_EDITOR;_PARTICLE_EDITOR</BCC_Defines>
     <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+    <TASM_Debugging>None</TASM_Debugging>
     <BCC_CallingConvention>stdcall</BCC_CallingConvention>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -97,11 +97,11 @@
     <BCC_OutputDir>x:\intermediate_ed\pe\Debug</BCC_OutputDir>
     <BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
     <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
-    <DCC_DebugInformation>true</DCC_DebugInformation>
     <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+    <DCC_DebugInformation>true</DCC_DebugInformation>
     <IntermediateOutputDir>x:\intermediate_ed\pe\Debug</IntermediateOutputDir>
-    <TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
     <BCC_wpar>false</BCC_wpar>
+    <TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
     <BCC_StackFrames>true</BCC_StackFrames>
     <ILINK_LibraryPath>$(BDS)\lib\debug;$(ILINK_LibraryPath)</ILINK_LibraryPath>
     <BCC_Defines>_DEBUG;$(BCC_Defines)</BCC_Defines>

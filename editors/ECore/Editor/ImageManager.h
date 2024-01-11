@@ -37,7 +37,7 @@ public:
 	int 		GetLocalNewTextures	(FS_FileSet& files);
 	void		SafeCopyLocalToServer(FS_FileSet& files);
 
-	void		SynchronizeTextures	(bool sync_thm, bool sync_game, bool bForceGame, FS_FileSet* source_map, AStringVec* sync_list_without_extention, FS_FileSet* modif_map=0, bool bForceBaseAge=false);
+	void		SynchronizeTextures	(bool bForceGame, FS_FileSet* source_map, AStringVec* sync_list_without_extention, FS_FileSet* modif_map=0, bool bForceBaseAge=false);
     void 		SynchronizeTexture	(LPCSTR tex_name, int age);
 //	void		ChangeFileAgeTo		(FS_FileSet* source_map, int age);
 	// make/update routines

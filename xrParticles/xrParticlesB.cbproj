@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectGuid>{72e1b193-ddb5-4509-a068-f0824283e7a0}</ProjectGuid>
     <ProjectType>CppDynamicLibrary</ProjectType>
-    <Config Condition="'$(Config)'==''">Debug Build</Config>
+    <Config Condition="'$(Config)'==''">Release Build</Config>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
     <Base>true</Base>
@@ -21,53 +21,53 @@
   <PropertyGroup Condition="'$(Base)'!=''">
     <BCC_ExceptionLocationInfo>true</BCC_ExceptionLocationInfo>
     <OutputExt>dll</OutputExt>
-    <ILINK_IntermediateOutputPath>x:\intermediate_ed\particles</ILINK_IntermediateOutputPath>
     <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+    <ILINK_IntermediateOutputPath>x:\intermediate_ed\particles</ILINK_IntermediateOutputPath>
     <BCC_OutputDir>x:\intermediate_ed\particles\</BCC_OutputDir>
-    <DynamicRTL>true</DynamicRTL>
     <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
-    <BCC_InstructionSet>6</BCC_InstructionSet>
+    <DynamicRTL>true</DynamicRTL>
     <BCC_FastExceptionPrologs>true</BCC_FastExceptionPrologs>
+    <BCC_InstructionSet>6</BCC_InstructionSet>
     <BRCC_OutputDir>x:\intermediate_ed\particles\</BRCC_OutputDir>
     <ILINK_AppType>Windows</ILINK_AppType>
-    <ILINK_GenerateImportLibrary>true</ILINK_GenerateImportLibrary>
     <DCC_DebugInformation>false</DCC_DebugInformation>
-    <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+    <ILINK_GenerateImportLibrary>true</ILINK_GenerateImportLibrary>
     <UsePackages>true</UsePackages>
-    <BCC_ZeroLengthEmptyMemberFuncs>true</BCC_ZeroLengthEmptyMemberFuncs>
+    <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
     <DCC_MakeModifiedUnits>true</DCC_MakeModifiedUnits>
+    <BCC_ZeroLengthEmptyMemberFuncs>true</BCC_ZeroLengthEmptyMemberFuncs>
     <FinalOutputDir>x:\stalker_addon\binaries</FinalOutputDir>
-    <BCC_ExtendedErrorInfo>true</BCC_ExtendedErrorInfo>
-    <TASM_AdditionalSwitches> /w2 x:\intermediate_ed\particles\</TASM_AdditionalSwitches>
     <PackageImports>rtl.bpi;vcl.bpi;vclx.bpi;bcbsmp.bpi</PackageImports>
+    <TASM_AdditionalSwitches> /w2 x:\intermediate_ed\particles\</TASM_AdditionalSwitches>
+    <BCC_ExtendedErrorInfo>true</BCC_ExtendedErrorInfo>
     <DCC_UnitSearchPath>.\;$(BDS)\lib;$(BDS)\lib\obj</DCC_UnitSearchPath>
     <BCC_wpar>false</BCC_wpar>
-    <BCC_GenerateMultithreaded>true</BCC_GenerateMultithreaded>
-    <ILINK_WinAppType>DLL</ILINK_WinAppType>
     <BRCC_UserSuppliedOptions> -I$(BDS)\include;$(BDS)\include\vcl;..\..\xrCore;$(BDS)\include\dinkumware</BRCC_UserSuppliedOptions>
+    <ILINK_WinAppType>DLL</ILINK_WinAppType>
+    <BCC_GenerateMultithreaded>true</BCC_GenerateMultithreaded>
     <BCC_DataAlignment>DWord</BCC_DataAlignment>
-    <BCC_PCHCache>true</BCC_PCHCache>
     <DCC_DcuOutput>x:\intermediate_ed\particles\</DCC_DcuOutput>
-    <BCC_IntegerSizedEnums>false</BCC_IntegerSizedEnums>
+    <BCC_PCHCache>true</BCC_PCHCache>
     <ILINK_BpiLibOutputDir>x:\stalker_addon\libraries</ILINK_BpiLibOutputDir>
-    <BCC_IncludePath>$(BDS)\include;$(BDS)\include\vcl;..\..\xrCore;$(BDS)\include\dinkumware</BCC_IncludePath>
-    <TASM_IncludePath>$(BDS)\include;$(BDS)\include\vcl;..\..\xrCore;$(BDS)\include\dinkumware</TASM_IncludePath>
-    <AllPackageLibs>rtl.lib;vcl.lib;bcbsmp.lib;vclx.lib</AllPackageLibs>
-    <BRCC_IncludePath>$(BDS)\include;$(BDS)\include\vcl;..\..\xrCore;$(BDS)\include\dinkumware</BRCC_IncludePath>
+    <BCC_IntegerSizedEnums>false</BCC_IntegerSizedEnums>
     <DCC_IncludePath>.\;$(BDS)\lib;$(BDS)\lib\obj</DCC_IncludePath>
-    <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
-    <BCC_ZeroLengthEmptyBaseClass>true</BCC_ZeroLengthEmptyBaseClass>
+    <BRCC_IncludePath>$(BDS)\include;$(BDS)\include\vcl;..\..\xrCore;$(BDS)\include\dinkumware</BRCC_IncludePath>
+    <AllPackageLibs>rtl.lib;vcl.lib;bcbsmp.lib;vclx.lib</AllPackageLibs>
+    <TASM_IncludePath>$(BDS)\include;$(BDS)\include\vcl;..\..\xrCore;$(BDS)\include\dinkumware</TASM_IncludePath>
+    <BCC_IncludePath>$(BDS)\include;$(BDS)\include\vcl;..\..\xrCore;$(BDS)\include\dinkumware</BCC_IncludePath>
     <ILINK_LibraryPath>f:\program files\borland\cbuilder6\lib\release;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;$(BDS)\Lib\Psdk;x:\stalker_addon\libraries;X:\SDK\libraries;X:\SDK\components\ElPack\Code</ILINK_LibraryPath>
-    <BCC_Defines>NO_STRICT;_EDITOR;XR_PARTICLES_EXPORTS</BCC_Defines>
-    <BCC_GenerateDLL>true</BCC_GenerateDLL>
-    <DCC_ObjOutput>x:\intermediate_ed\particles\</DCC_ObjOutput>
-    <BRCC_Defines>_EDITOR;XR_PARTICLES_EXPORTS;_DEBUG</BRCC_Defines>
-    <TASM_Defines>_EDITOR XR_PARTICLES_EXPORTS _DEBUG</TASM_Defines>
+    <BCC_ZeroLengthEmptyBaseClass>true</BCC_ZeroLengthEmptyBaseClass>
+    <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
     <Multithreaded>true</Multithreaded>
-    <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+    <TASM_Defines>_EDITOR XR_PARTICLES_EXPORTS _DEBUG</TASM_Defines>
+    <BRCC_Defines>_EDITOR;XR_PARTICLES_EXPORTS;_DEBUG</BRCC_Defines>
+    <DCC_ObjOutput>x:\intermediate_ed\particles\</DCC_ObjOutput>
+    <BCC_GenerateDLL>true</BCC_GenerateDLL>
+    <BCC_Defines>NO_STRICT;_EDITOR;XR_PARTICLES_EXPORTS</BCC_Defines>
     <TASM_Debugging>None</TASM_Debugging>
-    <BCC_CallingConvention>stdcall</BCC_CallingConvention>
+    <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
     <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
+    <BCC_CallingConvention>stdcall</BCC_CallingConvention>
     <DCC_SymbolReferenceInfo>2</DCC_SymbolReferenceInfo>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -76,8 +76,8 @@
     <BCC_OutputDir>x:\intermediate_ed\particles\Debug</BCC_OutputDir>
     <BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
     <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
-    <DCC_DebugInformation>true</DCC_DebugInformation>
     <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+    <DCC_DebugInformation>true</DCC_DebugInformation>
     <FinalOutputDir>x:\stalker_addon\binaries</FinalOutputDir>
     <IntermediateOutputDir>x:\intermediate_ed\particles\Debug</IntermediateOutputDir>
     <TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>

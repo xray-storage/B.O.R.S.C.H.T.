@@ -298,7 +298,7 @@ void CImageManager::SafeCopyLocalToServer(FS_FileSet& files)
 // source_list - содержит список текстур с расширениями
 // sync_list - реально сохраненные файлы (после использования освободить)
 //------------------------------------------------------------------------------
-void CImageManager::SynchronizeTextures(bool sync_thm, bool sync_game, bool bForceGame, FS_FileSet* source_list, AStringVec* sync_list, FS_FileSet* modif_map, bool bForceBaseAge)
+void CImageManager::SynchronizeTextures(bool bForceGame, FS_FileSet* source_list, AStringVec* sync_list, FS_FileSet* modif_map, bool bForceBaseAge)
 {   
     FS_FileSet M_BASE;
     FS_FileSet M_THUM;
@@ -307,8 +307,8 @@ void CImageManager::SynchronizeTextures(bool sync_thm, bool sync_game, bool bFor
     if (source_list) M_BASE = *source_list;
     else FS.file_list(M_BASE,_textures_,FS_ListFiles|FS_ClampExt,"*.tga");
     if (M_BASE.empty()) return;
-    if (sync_thm) 	FS.file_list(M_THUM,_textures_,FS_ListFiles|FS_ClampExt,"*.thm");
-    if (sync_game) 	FS.file_list(M_GAME,_game_textures_,FS_ListFiles|FS_ClampExt,"*.dds");
+	FS.file_list(M_THUM,_textures_,FS_ListFiles|FS_ClampExt,"*.thm");
+	FS.file_list(M_GAME,_game_textures_,FS_ListFiles|FS_ClampExt,"*.dds");
 
     bool bProgress 	= M_BASE.size()>1;
     
@@ -317,39 +317,60 @@ void CImageManager::SynchronizeTextures(bool sync_thm, bool sync_game, bool bFor
 
     // sync assoc
 	SPBItem* pb=0;
-    if (bProgress) pb = UI->ProgressStart(M_BASE.size(),"Synchronize textures...");
-    FS_FileSetIt it=M_BASE.begin();
+	if (bProgress) pb = UI->ProgressStart(M_BASE.size(),"Synchronize textures...");
+	
+	for (int stage = 0; stage < 2; stage++) {
+
+	FS_FileSetIt it=M_BASE.begin();
 	FS_FileSetIt _E = M_BASE.end();
 	for (; it!=_E; it++){
 	    U32Vec data;
     	u32 w, h, a;
 
-        xr_string base_name	= EFS.ChangeFileExt(it->name,""); xr_strlwr(base_name);
-        string_path				fn;
+		xr_string base_name	= EFS.ChangeFileExt(it->name,""); xr_strlwr(base_name);
+		string_path				fn;
         FS.update_path			(fn,_textures_,EFS.ChangeFileExt(base_name,".tga").c_str());
-    	if (!FS.exist(fn)) continue;
+		if (!FS.exist(fn)) continue;
 
 		FS_FileSetIt th 	= M_THUM.find(base_name);
     	bool bThm = ((th==M_THUM.end()) || ((th!=M_THUM.end())&&(th->time_write!=it->time_write)));
-  		FS_FileSetIt gm = M_GAME.find(base_name);
-    	bool bGame= bThm || ((gm==M_GAME.end()) || ((gm!=M_GAME.end())&&(gm->time_write!=it->time_write)));
+		FS_FileSetIt gm = M_GAME.find(base_name);
+		bool bGame= bThm || ((gm==M_GAME.end()) || ((gm!=M_GAME.end())&&(gm->time_write!=it->time_write)));
 
 		ETextureThumbnail* THM=0;
 
         BOOL bUpdated 	= FALSE;
         BOOL bFailed 	= FALSE;
-    	// check thumbnail
-    	if (sync_thm&&bThm){
-        	THM = xr_new<ETextureThumbnail>(it->name.c_str());
-		bool bRes = Surface_Load(fn,data,w,h,a); R_ASSERT(bRes);
-//.             MakeThumbnailImage(THM,data.begin(),w,h,a);
+		// check thumbnail
+		if (bThm){
+			THM = xr_new<ETextureThumbnail>(it->name.c_str());
+			
+			/* normal maps have priority, so they're precessed at stage 0,
+			   everything else is processed at stage 1 */
+        	if(stage == 0 && THM->_Format().type != STextureParams::ttNormalMap)
+				{ xr_delete(THM); continue; }
+			if(stage != 0 && THM->_Format().type == STextureParams::ttNormalMap)
+				{ xr_delete(THM); continue; }
+
+//.			bool bRes = Surface_Load(fn,data,w,h,a); R_ASSERT(bRes);
+//.			MakeThumbnailImage(THM,data.begin(),w,h,a);
             THM->Save	(it->time_write);
             bUpdated = TRUE;
         }
-        // check game textures
-    	if (bForceGame||(sync_game&&bGame)){
-        	if (!THM) THM = xr_new<ETextureThumbnail>(it->name.c_str());
-            R_ASSERT(THM);
+		// check game textures
+		if (bForceGame||bGame){
+        	if (!THM){ 
+        		THM = xr_new<ETextureThumbnail>(it->name.c_str());
+            	R_ASSERT(THM);
+            	
+				/* normal maps have priority, so they're precessed at stage 0,
+				   everything else is processed at stage 1 */
+				if(stage == 0 && THM->_Format().type != STextureParams::ttNormalMap)
+					{ xr_delete(THM); continue; }
+            	if(stage != 0 && THM->_Format().type == STextureParams::ttNormalMap)
+            		{ xr_delete(THM); continue; }       	
+            }
+            
             if (data.empty()){ bool bRes = Surface_Load(fn,data,w,h,a); R_ASSERT(bRes);}
 			if (IsValidSize(w,h)){
                 string_path 			game_name;
@@ -366,10 +387,10 @@ void CImageManager::SynchronizeTextures(bool sync_thm, bool sync_game, bool bFor
                 bUpdated 				= TRUE;
             }else{
 		    	ELog.DlgMsg(mtError,"Can't make game texture '%s'.\nInvalid size (%dx%d).",base_name.c_str(),w,h);
-            }
+			}
 		}
 		if (THM) xr_delete(THM);
-		if (UI->NeedAbort()) break;
+		if (UI->NeedAbort()) goto break_recieved;
         
         if (bProgress) 
 		    pb->Inc(bUpdated?xr_string(base_name+(bFailed?" - FAILED":" - UPDATED.")).c_str():base_name.c_str(),bUpdated);
@@ -391,6 +412,10 @@ void CImageManager::SynchronizeTextures(bool sync_thm, bool sync_game, bool bFor
             }
         }
     }
+    
+	} // for(stage = ...)
+	break_recieved:
+    
     if (bProgress) 	UI->ProgressEnd(pb);
 }
 /*
@@ -429,7 +454,7 @@ void CImageManager::SynchronizeTexture(LPCSTR tex_name, int age)
     FS_FileSet t_map;
     FS_File				F(tex_name); F.time_write = age;
     t_map.insert		(F);
-    SynchronizeTextures	(true,true,true,&t_map,&modif,0,age);
+    SynchronizeTextures	(true,&t_map,&modif,0,age);
     RefreshTextures		(&modif);
 }
 //------------------------------------------------------------------------------
@@ -674,7 +699,7 @@ void CImageManager::RefreshTextures(AStringVec* modif)
         else{
             UI->SetStatus("Refresh textures...");
             AStringVec modif_files;
-            ImageLib.SynchronizeTextures(true,true,false,0,&modif_files);
+            ImageLib.SynchronizeTextures(false,0,&modif_files);
             Device.Resources->ED_UpdateTextures(&modif_files);
             UI->SetStatus("");
         }

@@ -154,7 +154,7 @@ void __fastcall TfrmImageLib::UpdateLib()
             texture_map.insert  (F);
         }
         // sync
-		ImageLib.SynchronizeTextures(true,true,true,&texture_map,&modif);
+		ImageLib.SynchronizeTextures(true,&texture_map,&modif);
         UnlockForm              ();
     	ImageLib.RefreshTextures(&modif);
     }else
@@ -164,7 +164,7 @@ void __fastcall TfrmImageLib::UpdateLib()
         {
             AStringVec modif;
 	    	LockForm();
-            ImageLib.SynchronizeTextures(true,true,true,&modif_map,&modif);
+            ImageLib.SynchronizeTextures(true,&modif_map,&modif);
             UnlockForm();
             ImageLib.RefreshTextures(&modif);
         }

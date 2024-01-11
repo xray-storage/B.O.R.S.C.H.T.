@@ -4,7 +4,7 @@
     <ProjectGuid>{c12d9691-3c74-47fc-b8b6-3a0a9c1b554d}</ProjectGuid>
     <ProjectType>CppVCLApplication</ProjectType>
     <MainSource>ActorEditor.cpp</MainSource>
-    <Config Condition="'$(Config)'==''">Debug Build</Config>
+    <Config Condition="'$(Config)'==''">Release Build</Config>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
     <Base>true</Base>
@@ -81,12 +81,12 @@
     <AllPackageLibs>xmlrtl.lib;vclactnband.lib;rtl.lib;vcl.lib;bcbsmp.lib;vclx.lib;editorB.lib;xmlrtl.lib;vclactnband.lib;lmdrtelcore.lib;lmdrtrtlx.lib;lmdrtl.lib</AllPackageLibs>
     <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
     <ILINK_LibraryPath>$(BDS)\Projects;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\Projects\Lib;X:\SDK\Components\alexmx;X:\SDK\components\LMD2018\lib\d11;X:\stalker_addon\libraries;$(DXSDK_DIR)\Lib\x86;X:\SDK\libraries</ILINK_LibraryPath>
+    <BRCC_Defines>_EDITOR;_ACTOR_EDITOR;_DEBUG</BRCC_Defines>
     <BCC_Defines>NO_STRICT;_EDITOR;_ACTOR_EDITOR</BCC_Defines>
     <Multithreaded>true</Multithreaded>
     <TASM_Defines>_EDITOR _ACTOR_EDITOR _DEBUG</TASM_Defines>
-    <BRCC_Defines>_EDITOR;_ACTOR_EDITOR;_DEBUG</BRCC_Defines>
-    <TASM_Debugging>None</TASM_Debugging>
     <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+    <TASM_Debugging>None</TASM_Debugging>
     <BCC_CallingConvention>stdcall</BCC_CallingConvention>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -95,8 +95,8 @@
     <BCC_OutputDir>x:\intermediate_ed\ae\Debug</BCC_OutputDir>
     <BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
     <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
-    <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     <DCC_DebugInformation>true</DCC_DebugInformation>
+    <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     <IntermediateOutputDir>x:\intermediate_ed\ae\Debug</IntermediateOutputDir>
     <TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
     <BCC_StackFrames>true</BCC_StackFrames>
@@ -109,8 +109,8 @@
     <BCC_OutputDir>x:\intermediate_ed\ae\Release</BCC_OutputDir>
     <IntermediateOutputDir>x:\intermediate_ed\ae\Release</IntermediateOutputDir>
     <ILINK_LibraryPath>$(BDS)\lib\release;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-    <DCC_ObjOutput>x:\intermediate_ed\ae\Release</DCC_ObjOutput>
     <BCC_Defines>NDEBUG;$(BCC_Defines)</BCC_Defines>
+    <DCC_ObjOutput>x:\intermediate_ed\ae\Release</DCC_ObjOutput>
   </PropertyGroup>
   <ProjectExtensions>
     <Borland.Personality>CPlusPlusBuilder.Personality</Borland.Personality>

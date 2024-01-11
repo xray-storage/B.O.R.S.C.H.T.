@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectGuid>{ec1952ee-5216-4a37-bfb8-2820254abb97}</ProjectGuid>
     <ProjectType>CppDynamicLibrary</ProjectType>
-    <Config Condition="'$(Config)'==''">Debug Build</Config>
+    <Config Condition="'$(Config)'==''">Release Build</Config>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
     <Base>true</Base>
@@ -120,31 +120,31 @@
   <Import Project="$(MSBuildBinPath)\Borland.Cpp.Targets" />
   <ItemGroup>
     <CppCompile Include="blackbox\BlackBoxUI.cpp">
-      <BuildOrder>90</BuildOrder>
+      <BuildOrder>79</BuildOrder>
     </CppCompile>
     <CppCompile Include="blackbox\BSUFunctions.cpp">
-      <BuildOrder>91</BuildOrder>
+      <BuildOrder>80</BuildOrder>
     </CppCompile>
     <CppCompile Include="blackbox\CrashHandler.cpp">
-      <BuildOrder>92</BuildOrder>
+      <BuildOrder>81</BuildOrder>
     </CppCompile>
     <CppCompile Include="blackbox\DiagAssert.cpp">
-      <BuildOrder>93</BuildOrder>
+      <BuildOrder>82</BuildOrder>
     </CppCompile>
     <CppCompile Include="blackbox\GetLoadedModules.cpp">
-      <BuildOrder>94</BuildOrder>
+      <BuildOrder>83</BuildOrder>
     </CppCompile>
     <CppCompile Include="blackbox\IsNT.cpp">
-      <BuildOrder>95</BuildOrder>
+      <BuildOrder>84</BuildOrder>
     </CppCompile>
     <CppCompile Include="blackbox\NT4ProcessInfo.cpp">
-      <BuildOrder>96</BuildOrder>
+      <BuildOrder>85</BuildOrder>
     </CppCompile>
     <CppCompile Include="blackbox\stdafx_.cpp">
-      <BuildOrder>97</BuildOrder>
+      <BuildOrder>86</BuildOrder>
     </CppCompile>
     <CppCompile Include="blackbox\TLHELPProcessInfo.cpp">
-      <BuildOrder>89</BuildOrder>
+      <BuildOrder>78</BuildOrder>
     </CppCompile>
     <CppCompile Include="clsid.cpp">
       <BuildOrder>16</BuildOrder>
@@ -153,13 +153,13 @@
       <BuildOrder>3</BuildOrder>
     </CppCompile>
     <CppCompile Include="crc32.cpp">
-      <BuildOrder>81</BuildOrder>
+      <BuildOrder>71</BuildOrder>
     </CppCompile>
     <CppCompile Include="ELocatorAPI.cpp">
-      <BuildOrder>84</BuildOrder>
+      <BuildOrder>74</BuildOrder>
     </CppCompile>
     <CppCompile Include="FileDialog.cpp">
-      <BuildOrder>99</BuildOrder>
+      <BuildOrder>88</BuildOrder>
     </CppCompile>
     <CppCompile Include="FileSystem.cpp">
       <BuildOrder>18</BuildOrder>
@@ -174,7 +174,7 @@
       <BuildOrder>22</BuildOrder>
     </CppCompile>
     <CppCompile Include="LocatorAPI_defs.cpp">
-      <BuildOrder>86</BuildOrder>
+      <BuildOrder>75</BuildOrder>
     </CppCompile>
     <CppCompile Include="log.cpp">
       <BuildOrder>12</BuildOrder>
@@ -183,7 +183,7 @@
       <BuildOrder>11</BuildOrder>
     </CppCompile>
     <CppCompile Include="os_clipboard.cpp">
-      <BuildOrder>98</BuildOrder>
+      <BuildOrder>87</BuildOrder>
     </CppCompile>
     <CppCompile Include="stdafx.cpp">
       <BuildOrder>4</BuildOrder>
@@ -192,10 +192,10 @@
       <BuildOrder>5</BuildOrder>
     </CppCompile>
     <CppCompile Include="xrDebug.cpp">
-      <BuildOrder>87</BuildOrder>
+      <BuildOrder>76</BuildOrder>
     </CppCompile>
     <CppCompile Include="xrDebugNew.cpp">
-      <BuildOrder>88</BuildOrder>
+      <BuildOrder>77</BuildOrder>
     </CppCompile>
     <CppCompile Include="xrMemory.cpp">
       <BuildOrder>6</BuildOrder>
@@ -228,7 +228,7 @@
       <BuildOrder>23</BuildOrder>
     </CppCompile>
     <CppCompile Include="xrSyncronize.cpp">
-      <BuildOrder>83</BuildOrder>
+      <BuildOrder>73</BuildOrder>
     </CppCompile>
     <CppCompile Include="Xr_ini.cpp">
       <BuildOrder>15</BuildOrder>
@@ -246,178 +246,145 @@
       <BuildOrder>2</BuildOrder>
     </CppCompile>
     <CppCompile Include="_std_extensions.cpp">
-      <BuildOrder>80</BuildOrder>
+      <BuildOrder>70</BuildOrder>
     </CppCompile>
     <None Include="clsid.h">
-      <BuildOrder>49</BuildOrder>
+      <BuildOrder>48</BuildOrder>
     </None>
     <None Include="cpuid.h">
-      <BuildOrder>50</BuildOrder>
+      <BuildOrder>49</BuildOrder>
     </None>
     <None Include="fastdelegate.h">
-      <BuildOrder>82</BuildOrder>
-    </None>
-    <None Include="FileSystem.h">
-      <BuildOrder>51</BuildOrder>
-    </None>
-    <None Include="FixedMap.h">
-      <BuildOrder>52</BuildOrder>
-    </None>
-    <None Include="FixedSet.h">
-      <BuildOrder>53</BuildOrder>
-    </None>
-    <None Include="FixedVector.h">
-      <BuildOrder>54</BuildOrder>
-    </None>
-    <None Include="FS.h">
-      <BuildOrder>55</BuildOrder>
-    </None>
-    <None Include="FS_internal.h">
-      <BuildOrder>56</BuildOrder>
-    </None>
-    <None Include="FTimer.h">
-      <BuildOrder>57</BuildOrder>
-    </None>
-    <None Include="LocatorAPI_defs.h">
-      <BuildOrder>85</BuildOrder>
-    </None>
-    <None Include="log.h">
-      <BuildOrder>58</BuildOrder>
-    </None>
-    <None Include="lzhuf.h">
-      <BuildOrder>59</BuildOrder>
-    </None>
-    <None Include="resource.h">
-      <BuildOrder>60</BuildOrder>
-    </None>
-    <None Include="rt_compressor.h">
-      <BuildOrder>61</BuildOrder>
-    </None>
-    <None Include="rt_lzo.h">
-      <BuildOrder>62</BuildOrder>
-    </None>
-    <None Include="rt_lzo_config.h">
-      <BuildOrder>63</BuildOrder>
-    </None>
-    <None Include="stdafx.h">
-      <BuildOrder>64</BuildOrder>
-    </None>
-    <None Include="vector.h">
-      <BuildOrder>65</BuildOrder>
-    </None>
-    <None Include="xrCore.h">
-      <BuildOrder>68</BuildOrder>
-    </None>
-    <None Include="xrCPU_Pipe.h">
-      <BuildOrder>69</BuildOrder>
-    </None>
-    <None Include="xrDebug_macros.h">
-      <BuildOrder>70</BuildOrder>
-    </None>
-    <None Include="xrMemory.h">
-      <BuildOrder>71</BuildOrder>
-    </None>
-    <None Include="xrMemory_align.h">
       <BuildOrder>72</BuildOrder>
     </None>
+    <None Include="FileSystem.h">
+      <BuildOrder>50</BuildOrder>
+    </None>
+    <None Include="FixedMap.h">
+      <BuildOrder>51</BuildOrder>
+    </None>
+    <None Include="FixedSet.h">
+      <BuildOrder>52</BuildOrder>
+    </None>
+    <None Include="FixedVector.h">
+      <BuildOrder>53</BuildOrder>
+    </None>
+    <None Include="FS_internal.h">
+      <BuildOrder>54</BuildOrder>
+    </None>
+    <None Include="log.h">
+      <BuildOrder>55</BuildOrder>
+    </None>
+    <None Include="lzhuf.h">
+      <BuildOrder>56</BuildOrder>
+    </None>
+    <None Include="resource.h">
+      <BuildOrder>57</BuildOrder>
+    </None>
+    <None Include="rt_compressor.h">
+      <BuildOrder>58</BuildOrder>
+    </None>
+    <None Include="rt_lzo.h">
+      <BuildOrder>59</BuildOrder>
+    </None>
+    <None Include="rt_lzo_config.h">
+      <BuildOrder>60</BuildOrder>
+    </None>
+    <None Include="vector.h">
+      <BuildOrder>61</BuildOrder>
+    </None>
+    <None Include="xrDebug_macros.h">
+      <BuildOrder>62</BuildOrder>
+    </None>
+    <None Include="xrMemory.h">
+      <BuildOrder>63</BuildOrder>
+    </None>
+    <None Include="xrMemory_align.h">
+      <BuildOrder>64</BuildOrder>
+    </None>
     <None Include="xrMemory_POOL.h">
-      <BuildOrder>73</BuildOrder>
+      <BuildOrder>65</BuildOrder>
     </None>
     <None Include="xrMemory_pso.h">
-      <BuildOrder>74</BuildOrder>
-    </None>
-    <None Include="xrMemory_subst_borland.h">
-      <BuildOrder>75</BuildOrder>
-    </None>
-    <None Include="xrMemory_subst_msvc.h">
-      <BuildOrder>76</BuildOrder>
-    </None>
-    <None Include="xrPool.h">
-      <BuildOrder>77</BuildOrder>
-    </None>
-    <None Include="xrsharedmem.h">
-      <BuildOrder>78</BuildOrder>
-    </None>
-    <None Include="xrstring.h">
-      <BuildOrder>79</BuildOrder>
-    </None>
-    <None Include="xrSyncronize.h">
-      <BuildOrder>25</BuildOrder>
-    </None>
-    <None Include="Xr_ini.h">
       <BuildOrder>66</BuildOrder>
     </None>
-    <None Include="xr_trims.h">
+    <None Include="xrMemory_subst_borland.h">
       <BuildOrder>67</BuildOrder>
     </None>
+    <None Include="xrMemory_subst_msvc.h">
+      <BuildOrder>68</BuildOrder>
+    </None>
+    <None Include="xrPool.h">
+      <BuildOrder>69</BuildOrder>
+    </None>
     <None Include="_bitwise.h">
-      <BuildOrder>26</BuildOrder>
+      <BuildOrder>25</BuildOrder>
     </None>
     <None Include="_color.h">
-      <BuildOrder>27</BuildOrder>
+      <BuildOrder>26</BuildOrder>
     </None>
     <None Include="_compressed_normal.h">
-      <BuildOrder>28</BuildOrder>
+      <BuildOrder>27</BuildOrder>
     </None>
     <None Include="_cylinder.h">
-      <BuildOrder>29</BuildOrder>
+      <BuildOrder>28</BuildOrder>
     </None>
     <None Include="_fbox.h">
-      <BuildOrder>31</BuildOrder>
-    </None>
-    <None Include="_fbox2.h">
       <BuildOrder>30</BuildOrder>
     </None>
+    <None Include="_fbox2.h">
+      <BuildOrder>29</BuildOrder>
+    </None>
     <None Include="_flags.h">
-      <BuildOrder>32</BuildOrder>
+      <BuildOrder>31</BuildOrder>
     </None>
     <None Include="_math.h">
-      <BuildOrder>33</BuildOrder>
+      <BuildOrder>32</BuildOrder>
     </None>
     <None Include="_matrix.h">
-      <BuildOrder>35</BuildOrder>
-    </None>
-    <None Include="_matrix33.h">
       <BuildOrder>34</BuildOrder>
     </None>
+    <None Include="_matrix33.h">
+      <BuildOrder>33</BuildOrder>
+    </None>
     <None Include="_obb.h">
-      <BuildOrder>36</BuildOrder>
+      <BuildOrder>35</BuildOrder>
     </None>
     <None Include="_plane.h">
-      <BuildOrder>37</BuildOrder>
+      <BuildOrder>36</BuildOrder>
     </None>
     <None Include="_quaternion.h">
-      <BuildOrder>38</BuildOrder>
+      <BuildOrder>37</BuildOrder>
     </None>
     <None Include="_random.h">
-      <BuildOrder>39</BuildOrder>
+      <BuildOrder>38</BuildOrder>
     </None>
     <None Include="_rect.h">
-      <BuildOrder>40</BuildOrder>
+      <BuildOrder>39</BuildOrder>
     </None>
     <None Include="_sphere.h">
-      <BuildOrder>41</BuildOrder>
+      <BuildOrder>40</BuildOrder>
     </None>
     <None Include="_std_extensions.h">
-      <BuildOrder>42</BuildOrder>
+      <BuildOrder>41</BuildOrder>
     </None>
     <None Include="_stl_extensions.h">
-      <BuildOrder>43</BuildOrder>
+      <BuildOrder>42</BuildOrder>
     </None>
     <None Include="_types.h">
-      <BuildOrder>45</BuildOrder>
-    </None>
-    <None Include="_type_traits.h">
       <BuildOrder>44</BuildOrder>
     </None>
+    <None Include="_type_traits.h">
+      <BuildOrder>43</BuildOrder>
+    </None>
     <None Include="_vector2.h">
-      <BuildOrder>46</BuildOrder>
+      <BuildOrder>45</BuildOrder>
     </None>
     <None Include="_vector3d.h">
-      <BuildOrder>47</BuildOrder>
+      <BuildOrder>46</BuildOrder>
     </None>
     <None Include="_vector4.h">
-      <BuildOrder>48</BuildOrder>
+      <BuildOrder>47</BuildOrder>
     </None>
     <BuildConfiguration Include="Debug Build">
       <Key>Cfg_1</Key>
