@@ -678,16 +678,6 @@ void CImageManager::RemoveTexture(LPCSTR fname, EItemType type, bool& res)
     res 						= false;
 }
 
-EImageThumbnail* CImageManager::CreateThumbnail(LPCSTR src_name, ECustomThumbnail::THMType type, bool bLoad)
-{
-    switch (type){
-    case ECustomThumbnail::ETObject: 	return xr_new<EObjectThumbnail>	(src_name,bLoad);
-    case ECustomThumbnail::ETTexture:	return xr_new<ETextureThumbnail>(src_name,bLoad);
-    default: NODEFAULT;
-    }
-    return 0;
-}
-
 //------------------------------------------------------------------------------
 // если передан параметр modif - обновляем DX-Surface only и только из списка
 // иначе полная синхронизация

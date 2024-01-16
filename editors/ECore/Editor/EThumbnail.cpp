@@ -94,7 +94,7 @@ void EImageThumbnail::Draw(HDC hdc, const Irect& r)
     	FHelper.DrawThumbnail(hdc,r,Pixels(),THUMB_WIDTH,THUMB_HEIGHT);
 }
 
-EImageThumbnail* CreateThumbnail(LPCSTR src_name, ECustomThumbnail::THMType type, bool bLoad)
+ECORE_API EImageThumbnail* CreateThumbnail(LPCSTR src_name, ECustomThumbnail::THMType type, bool bLoad)
 {
     switch (type){
     case ECustomThumbnail::ETObject: 	return xr_new<EObjectThumbnail>	(src_name,bLoad);

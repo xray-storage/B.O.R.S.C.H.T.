@@ -84,7 +84,7 @@ void SSceneSummary::STextureInfo::Prepare	()
 {
 	bReady					= true;
 	if (file_name.size()){
-        ETextureThumbnail* T= (ETextureThumbnail*)ImageLib.CreateThumbnail(file_name.c_str(),ECustomThumbnail::ETTexture,true);
+        ETextureThumbnail* T= (ETextureThumbnail*)CreateThumbnail(file_name.c_str(),ECustomThumbnail::ETTexture,true);
         if (!T->Valid()){
             Msg("!Can't get info from texture: '%s'",file_name.c_str());
         }else{

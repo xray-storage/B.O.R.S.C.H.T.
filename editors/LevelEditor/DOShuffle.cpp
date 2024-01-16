@@ -209,7 +209,7 @@ void TfrmDOShuffle::OnItemFocused(TElTree* tv)
     PropItemVec items;
 	if (Item&&Item->Data){
 		AnsiString nm 		= Item->Text;
-        m_Thm			 	= ImageLib.CreateThumbnail(nm.c_str(),EImageThumbnail::ETObject);
+        m_Thm			 	= CreateThumbnail(nm.c_str(),EImageThumbnail::ETObject);
         EDetail* dd			= (EDetail*)Item->Data;
 		PHelper().CreateCaption	(items,"Ref Name",	dd->GetName());
 		PHelper().CreateFloat	(items,"Density",	&dd->m_fDensityFactor, 	0.1f, 1.0f);

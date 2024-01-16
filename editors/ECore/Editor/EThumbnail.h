@@ -165,7 +165,7 @@ public:
 };
 //------------------------------------------------------------------------------
 
-EImageThumbnail* CreateThumbnail	(LPCSTR src_name, ECustomThumbnail::THMType type, bool bLoad=true);
+ECORE_API EImageThumbnail* CreateThumbnail	(LPCSTR src_name, ECustomThumbnail::THMType type, bool bLoad=true);
 
 #endif
 
