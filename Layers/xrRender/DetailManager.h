@@ -116,7 +116,6 @@ public:
 	PSS								poolSI;										// pool из которого выдел€ютс€ SlotItem
 
 	void							UpdateVisibleM	();
-	void							UpdateVisibleS	();
 public:
 #ifdef _EDITOR
 	virtual ObjectList* 			GetSnapList		()=0;

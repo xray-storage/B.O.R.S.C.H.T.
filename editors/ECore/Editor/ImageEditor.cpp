@@ -60,13 +60,11 @@ void __fastcall TfrmImageLib::EditLib(AnsiString& title, bool bImport)
         form->Caption 		= title;
 	    form->bImportMode 	= bImport;
         form->ebRemoveTexture->Enabled 		= !bImport;
-//.        form->ebRebuildAssociation->Enabled = !bImport;
         form->bReadonlyMode	= !FS.can_write_to_alias(_textures_);
         if (form->bReadonlyMode){
         	Log				("#!You don't have permisions to modify textures.");
 	        form->ebOk->Enabled 				= false;
             form->ebRemoveTexture->Enabled 		= false;
-//.	        form->ebRebuildAssociation->Enabled = false;
             form->m_ItemProps->SetReadOnly		(TRUE);
         }
 		form->modif_map.clear	();
