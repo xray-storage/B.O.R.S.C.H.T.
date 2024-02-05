@@ -3,8 +3,8 @@ object AboutForm: TAboutForm
   Top = 346
   BorderStyle = bsSingle
   Caption = 'About'
-  ClientHeight = 164
-  ClientWidth = 245
+  ClientHeight = 170
+  ClientWidth = 346
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,8 @@ object AboutForm: TAboutForm
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
-    Left = 184
-    Top = 24
+    Left = 255
+    Top = 28
     Width = 41
     Height = 41
     Picture.Data = {
@@ -95,40 +95,40 @@ object AboutForm: TAboutForm
     Stretch = True
   end
   object Label1: TLabel
-    Left = 8
+    Left = 55
     Top = 8
     Width = 106
     Height = 13
     Caption = 'X-Ray 1.5 Level Editor'
   end
   object lbBuildID: TLabel
-    Left = 8
+    Left = 55
     Top = 32
     Width = 42
     Height = 13
     Caption = 'lbBuildID'
   end
   object Label2: TLabel
-    Left = 8
+    Left = 55
     Top = 56
     Width = 127
     Height = 13
     Caption = '(C) GSC Game World 2008'
   end
   object Label3: TLabel
-    Left = 8
+    Left = 55
     Top = 72
     Width = 121
     Height = 13
-    Caption = '(C) BORSCHT team 2023'
+    Caption = '(C) BORSCHT team 2024'
   end
   object lbURL: TLabel
-    Left = 16
-    Top = 96
-    Width = 209
+    Left = 20
+    Top = 104
+    Width = 307
     Height = 13
     Cursor = crHandPoint
-    Caption = 'http://www.bitbucket.org/borscht/xray-csky'
+    Caption = 'https://bitbucket.org/stalker/xray-csky_borscht_sdk/src/master/'
     Color = clBtnFace
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlue
@@ -140,8 +140,8 @@ object AboutForm: TAboutForm
     OnClick = lbURLClick
   end
   object btnOk: TButton
-    Left = 72
-    Top = 128
+    Left = 128
+    Top = 137
     Width = 89
     Height = 25
     Caption = 'OK'

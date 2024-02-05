@@ -556,11 +556,18 @@ object frmMain: TfrmMain
         Caption = 'Preferences'
         OnClick = Preferences1Click
       end
+    end
+    object Help1: TMenuItem
+      Caption = 'Help'
+      object OnlineHelp1: TMenuItem
+        Caption = 'Online Help...'
+        OnClick = OnlineHelp1Click
+      end
       object N23: TMenuItem
         Caption = '-'
       end
       object About1: TMenuItem
-        Caption = 'About...'
+        Caption = 'About'
         OnClick = About1Click
       end
     end

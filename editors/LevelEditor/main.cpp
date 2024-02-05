@@ -725,3 +725,16 @@ void __fastcall TfrmMain::miMakeSoundEnvironmentClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmMain::OnlineHelp1Click(TObject *Sender)
+{
+	ShellExecute(
+		NULL,
+		"open",
+		"https://xray-engine.org/index.php?title=Category:Level_Editor",
+		NULL,
+		NULL,
+		SW_SHOW
+	);
+}
+//---------------------------------------------------------------------------
+
