@@ -84,7 +84,7 @@ private:	// User declarations
 	void 				OutBOOL					(BOOL val, TCanvas* Surface, const TRect& R);
 	void 				OutText					(LPCSTR text, TCanvas* Surface, TRect R, TGraphic* g=0, bool bArrow=false);
 
-    void __fastcall		OnMouseEnter			(TMessage)	{ if(m_Flags.is(ilFocusOnHover)) tvItems->SetFocus(); }
+	void __fastcall		OnMouseEnter			(TMessage)	{ if(m_Flags.is(ilFocusOnHover) && !tvItems->IsEditing()) tvItems->SetFocus(); }
 public:
     s32					iLocked;
     Flags32				m_Flags;
