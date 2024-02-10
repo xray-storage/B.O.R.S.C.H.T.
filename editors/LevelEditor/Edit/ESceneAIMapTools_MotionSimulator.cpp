@@ -508,7 +508,9 @@ void ESceneAIMapTool::MotionSimulate(Fvector& result, Fvector& start, Fvector& e
 //.				SGameMtl* mtl 		= GMLib.GetMaterialByID(surf->_GameMtl());
 //.				if (mtl->Flags.is(SGameMtl::flPassable))continue;
                 Shader_xrLC* c_sh	= Device.ShaderXRLC.Get(surf->_ShaderXRLCName());
-                if (!c_sh->flags.bCollision) 			continue;
+				if (!c_sh->flags.bCollision && !c_sh->flags.bAIObstacle){
+					continue;
+				}
             }
             clContactedT.push_back(cl_tri());
 			cl_tri& T			= clContactedT.back();

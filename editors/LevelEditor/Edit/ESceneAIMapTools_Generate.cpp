@@ -77,8 +77,10 @@ BOOL ESceneAIMapTool::CreateNode(Fvector& vAt, SAINode& N, bool bIC)
 
 
             Shader_xrLC* c_sh	= Device.ShaderXRLC.Get(surf->_ShaderXRLCName());
-            if (!c_sh->flags.bCollision) 			continue;
-        }
+			if (!c_sh->flags.bCollision && !c_sh->flags.bAIObstacle){
+				continue;
+			}
+		}
 /*
 		if(m_CFModel)
         {
@@ -649,8 +651,10 @@ bool ESceneAIMapTool::GenerateMap(bool bFromSelectedOnly)
 						if(std::find(start, end, surf->_GameMtl()) != end)
 							continue;
 
-                        Shader_xrLC* c_sh	= Device.ShaderXRLC.Get(surf->_ShaderXRLCName());
-                        if (!c_sh->flags.bCollision) 			continue;
+						Shader_xrLC* c_sh	= Device.ShaderXRLC.Get(surf->_ShaderXRLCName());
+						if (!c_sh->flags.bCollision && !c_sh->flags.bAIObstacle){
+							continue;
+						}
                         // collect tris
                         const IntVec& face_lst 	= sp_it->second;
                         for (IntVec::const_iterator it=face_lst.begin(); it!=face_lst.end(); it++)
