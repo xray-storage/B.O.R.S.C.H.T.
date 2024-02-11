@@ -138,19 +138,23 @@ void __fastcall TfraAIMap::btnAddIgnoredMaterialClick(TObject *Sender)
 {
     LPCSTR new_val = 0;
     if ( TfrmChoseItem::SelectItem(smGameMaterial,new_val,1) )
-    {
-        lbIgnoreMaterialsList->AddItem(new_val, NULL);
-        SGameMtl* mtl		= GMLib.GetMaterial(new_val);
-        tools->m_ignored_materials.push_back(mtl->GetID());
-    }
+	{
+		lbIgnoreMaterialsList->AddItem(new_val, NULL);
+		SGameMtl* mtl		= GMLib.GetMaterial(new_val);
+		tools->m_ignored_materials.push_back(mtl->GetID());
+	}
+
+	Scene->UndoSave();
 }
 
 //---------------------------------------------------------------------------
 
 void __fastcall TfraAIMap::btnIgnoreMaterialClearClick(TObject *Sender)
 {
-    lbIgnoreMaterialsList->Clear();
-    tools->m_ignored_materials.clear();
+	lbIgnoreMaterialsList->Clear();
+	tools->m_ignored_materials.clear();
+
+	Scene->UndoSave();
 }
 //---------------------------------------------------------------------------
 
@@ -178,6 +182,19 @@ void __fastcall TfraAIMap::ebClearErrorListClick(TObject *Sender)
 void __fastcall TfraAIMap::ebSelectErrorNodesClick(TObject *Sender)
 {
 	tools->SelectErrorNodes();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfraAIMap::UpdateIgnoredMaterials(void)
+{
+	xr_vector<u16>::iterator it = tools->m_ignored_materials.begin();
+	xr_vector<u16>::iterator end = tools->m_ignored_materials.end();
+
+	lbIgnoreMaterialsList->Clear();
+	for(; it != end; it++) {
+		SGameMtl* mtl = GMLib.GetMaterialByID(*it);
+		if(mtl) lbIgnoreMaterialsList->AddItem(*mtl->m_Name, NULL);
+	}
 }
 //---------------------------------------------------------------------------
 

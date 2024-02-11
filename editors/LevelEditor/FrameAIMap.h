@@ -77,7 +77,8 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	ESceneAIMapTool* tools;
 public:		// User declarations
-        __fastcall 	TfraAIMap(TComponent* Owner, ESceneAIMapTool* _tools);
+		__fastcall 	TfraAIMap(TComponent* Owner, ESceneAIMapTool* _tools);
+	void __fastcall	UpdateIgnoredMaterials(void);
 };
 //---------------------------------------------------------------------------
 #endif

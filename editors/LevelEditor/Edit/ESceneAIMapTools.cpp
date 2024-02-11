@@ -8,6 +8,7 @@
 #include "ui_leveltools.h"
 #include "ESceneAIMapControls.h"
 #include "xrPool.h"
+#include "FrameAIMap.h"
 
 // chunks
 #define AIMAP_VERSION  				0x0003
@@ -20,6 +21,7 @@
 #define AIMAP_CHUNK_SNAP_OBJECTS	0x0007
 #define AIMAP_CHUNK_INTERNAL_DATA	0x0008
 #define AIMAP_CHUNK_INTERNAL_DATA2	0x0009
+#define AIMAP_CHUNK_IGNORED_MTLS	0x000A
 //----------------------------------------------------
 
 poolSS<SAINode,1024> g_ainode_pool;
@@ -348,20 +350,33 @@ bool ESceneAIMapTool::LoadStream(IReader& F)
     }
 
 	// snap objects
-    if (F.find_chunk(AIMAP_CHUNK_SNAP_OBJECTS)){
-    	shared_str 	buf;
+	if (F.find_chunk(AIMAP_CHUNK_SNAP_OBJECTS)){
+		shared_str 	buf;
 		int cnt 	= F.r_u32();
         if (cnt){
 	        for (int i=0; i<cnt; i++){
-    	    	F.r_stringZ	(buf);
+				F.r_stringZ	(buf);
         	    CCustomObject* O = Scene->FindObjectByName(buf.c_str(),OBJCLASS_SCENEOBJECT);
             	if (!O)		ELog.Msg(mtError,"AIMap: Can't find snap object '%s'.",buf.c_str());
 	            else		m_SnapObjects.push_back(O);
     	    }
         }
-    }
+	}
 
-    hash_FillFromNodes		();
+	m_ignored_materials.clear();
+	if (F.find_chunk(AIMAP_CHUNK_IGNORED_MTLS)) {
+		shared_str buf;
+		u32 cnt = F.r_u32();
+		for(u32 i = 0; i < cnt; i++) {
+			F.r_stringZ(buf);
+
+			SGameMtl* mtl = GMLib.GetMaterial(*buf);
+			if(mtl) m_ignored_materials.push_back(mtl->GetID());
+		}
+	}
+	((TfraAIMap*)pFrame)->UpdateIgnoredMaterials();
+
+	hash_FillFromNodes		();
 
     return true;
 }
@@ -419,7 +434,19 @@ void ESceneAIMapTool::SaveStream(IWriter& F)
     F.w_u32			(m_SnapObjects.size());
     for (ObjectIt o_it=m_SnapObjects.begin(); o_it!=m_SnapObjects.end(); o_it++)
     	F.w_stringZ	((*o_it)->Name);
-    F.close_chunk	();
+	F.close_chunk	();
+
+	F.open_chunk	(AIMAP_CHUNK_IGNORED_MTLS);
+	F.w_u32			(m_ignored_materials.size());
+
+	xr_vector<u16>::iterator it = m_ignored_materials.begin();
+	xr_vector<u16>::iterator end = m_ignored_materials.end();
+	for(; it != end; it++) {
+		SGameMtl* mtl = GMLib.GetMaterialByID(*it); R_ASSERT(mtl);
+		F.w_stringZ	(*mtl->m_Name);
+	}
+
+	F.close_chunk	();
 }
 //----------------------------------------------------
 
