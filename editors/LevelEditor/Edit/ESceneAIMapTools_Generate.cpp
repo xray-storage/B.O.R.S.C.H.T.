@@ -75,27 +75,20 @@ BOOL ESceneAIMapTool::CreateNode(Fvector& vAt, SAINode& N, bool bIC)
 //.			SGameMtl* mtl 		= GMLib.GetMaterialByID(surf->_GameMtl());
 //.			if (mtl->Flags.is(SGameMtl::flPassable))continue;
 
-
-            Shader_xrLC* c_sh	= Device.ShaderXRLC.Get(surf->_ShaderXRLCName());
+			Shader_xrLC* c_sh	= Device.ShaderXRLC.Get(surf->_ShaderXRLCName());
 			if (!c_sh->flags.bCollision && !c_sh->flags.bAIObstacle){
 				continue;
 			}
-		}
-/*
-		if(m_CFModel)
-        {
-            u16 mtl_id 	= R->material;
 
-            if(std::find(m_ignored_materials.begin(), m_ignored_materials.end(), mtl_id) != m_ignored_materials.end() )
-            {
-//.                Msg("--ignore");
-                continue;
-            }
-        }
-*/
-    	tris.push_back	(tri());
+			xr_vector<u16>::iterator start = m_ignored_materials.begin();
+			xr_vector<u16>::iterator end = m_ignored_materials.end();
+			if(std::find(start, end, surf->_GameMtl()) != end)
+				continue;
+		}
+
+		tris.push_back	(tri());
 		tri&		D = tris.back();
-		Fvector*	V = R->verts;   
+		Fvector*	V = R->verts;
 
 		D.v[0]		= &V[0];
 		D.v[1]		= &V[1];
@@ -594,7 +587,6 @@ void ESceneAIMapTool::UpdateLinks(SAINode* N, bool bIC)
 
 bool ESceneAIMapTool::GenerateMap(bool bFromSelectedOnly)
 {
-	std::sort(m_ignored_materials.begin(),m_ignored_materials.end());
 	bool bRes = false;
 	if (!GetSnapList()->empty()){
 	    if (!RealUpdateSnapList()) return false;

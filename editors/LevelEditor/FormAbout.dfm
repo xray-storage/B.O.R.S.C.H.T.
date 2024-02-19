@@ -3,7 +3,7 @@ object AboutForm: TAboutForm
   Top = 346
   BorderStyle = bsSingle
   Caption = 'About'
-  ClientHeight = 170
+  ClientHeight = 186
   ClientWidth = 346
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -122,13 +122,13 @@ object AboutForm: TAboutForm
     Height = 13
     Caption = '(C) BORSCHT team 2024'
   end
-  object lbURL: TLabel
-    Left = 20
+  object lbURLsrc: TLabel
+    Left = 68
     Top = 104
-    Width = 307
+    Width = 256
     Height = 13
     Cursor = crHandPoint
-    Caption = 'https://bitbucket.org/stalker/xray-csky_borscht_sdk/src/master/'
+    Caption = 'https://bitbucket.org/stalker/xray-borscht/src/master/'
     Color = clBtnFace
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlue
@@ -137,11 +137,42 @@ object AboutForm: TAboutForm
     Font.Style = [fsUnderline]
     ParentColor = False
     ParentFont = False
-    OnClick = lbURLClick
+    OnClick = lbURLsrcClick
+  end
+  object lnURLupd: TLabel
+    Left = 68
+    Top = 123
+    Width = 237
+    Height = 13
+    Cursor = crHandPoint
+    Caption = 'https://forum.xray-engine.org/index.php/topic,252'
+    Color = clBtnFace
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    OnClick = lbURLsrcClick
+  end
+  object lbSource: TLabel
+    Left = 25
+    Top = 104
+    Width = 37
+    Height = 13
+    Caption = 'Source:'
+  end
+  object lbUpdates: TLabel
+    Left = 19
+    Top = 123
+    Width = 43
+    Height = 13
+    Caption = 'Updates:'
   end
   object btnOk: TButton
     Left = 128
-    Top = 137
+    Top = 153
     Width = 89
     Height = 25
     Caption = 'OK'

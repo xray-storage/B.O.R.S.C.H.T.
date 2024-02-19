@@ -142,6 +142,7 @@ void __fastcall TfraAIMap::btnAddIgnoredMaterialClick(TObject *Sender)
 		lbIgnoreMaterialsList->AddItem(new_val, NULL);
 		SGameMtl* mtl		= GMLib.GetMaterial(new_val);
 		tools->m_ignored_materials.push_back(mtl->GetID());
+		std::sort(tools->m_ignored_materials.begin(),tools->m_ignored_materials.end());
 	}
 
 	Scene->UndoSave();

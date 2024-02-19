@@ -27,10 +27,13 @@ void __fastcall TAboutForm::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TAboutForm::lbURLClick(TObject *Sender)
+void __fastcall TAboutForm::lbURLsrcClick(TObject *Sender)
 {
-	ShellExecute(Handle, "open", lbURL->Caption.c_str(), "", "", SW_SHOWNORMAL);
-    lbURL->Font->Color = clHotLight;
+	TLabel* label = dynamic_cast<TLabel*>(Sender);
+	if(label) {
+		ShellExecute(Handle, "open", label->Caption.c_str(), "", "", SW_SHOWNORMAL);
+		label->Font->Color = clHotLight;
+	}
 }
 //---------------------------------------------------------------------------
 

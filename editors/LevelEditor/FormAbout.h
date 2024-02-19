@@ -21,10 +21,13 @@ __published:	// IDE-managed Components
 	TLabel *Label2;
 	TButton *btnOk;
 	TLabel *Label3;
-	TLabel *lbURL;
+	TLabel *lbURLsrc;
+	TLabel *lnURLupd;
+	TLabel *lbSource;
+	TLabel *lbUpdates;
 	void __fastcall btnOkClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
-	void __fastcall lbURLClick(TObject *Sender);
+	void __fastcall lbURLsrcClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TAboutForm(TComponent* Owner);

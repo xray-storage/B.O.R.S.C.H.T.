@@ -113,7 +113,7 @@ for /F "tokens=1,3*" %%I in (scene_object.part) do if "%%I"=="name" if not "%%J"
 
 
 # Где скачать
-Актуальный билд можно найти в разделе [Загрузки](https://bitbucket.org/borscht/xray-csky/downloads/)
+Актуальный билд можно найти в [теме на форуме](https://forum.xray-engine.org/index.php/topic,252).
 
 
 # Лицензия

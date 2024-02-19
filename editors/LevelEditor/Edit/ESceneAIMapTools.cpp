@@ -374,6 +374,8 @@ bool ESceneAIMapTool::LoadStream(IReader& F)
 			if(mtl) m_ignored_materials.push_back(mtl->GetID());
 		}
 	}
+
+	std::sort(m_ignored_materials.begin(),m_ignored_materials.end());
 	((TfraAIMap*)pFrame)->UpdateIgnoredMaterials();
 
 	hash_FillFromNodes		();
