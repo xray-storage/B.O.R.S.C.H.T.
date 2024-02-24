@@ -701,6 +701,11 @@ bool EScene::ReadObjectStream(IReader& F, CCustomObject*& O)
 //----------------------------------------------------
 bool EScene::ReadObjectLTX(CInifile& ini, LPCSTR sect_name, CCustomObject*& O)
 {
+	if (!ini.section_exist(sect_name)){
+		ELog.Msg(mtError,"Warning! Object not found '%s'", sect_name);
+		return false;
+	}
+	
 	CInifile::Sect& sect    = ini.r_section(sect_name);
     ObjClassID clsid		= OBJCLASS_DUMMY;
 	clsid 					= (ObjClassID)sect.r_u32("clsid");
