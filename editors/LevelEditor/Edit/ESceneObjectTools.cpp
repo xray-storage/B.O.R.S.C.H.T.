@@ -61,13 +61,11 @@ bool ESceneObjectTool::Validate(bool full_test)
             xr_string lod_name 	= E->GetLODTextureName();
             xr_string l_name	= lod_name.c_str();
             string_path fn;
-            int age,age_nm;
-//.          FS.update_path		(fn,_textures_,EFS.ChangeFileExt(l_name,".tga").c_str());
+			int age,age_nm;
             FS.update_path		(fn,_game_textures_,EFS.ChangeFileExt(l_name,".dds").c_str());
             age					= FS.get_file_age(fn);
             if(age==-1)         Msg("!There is no texture '%s'", fn);
-            l_name 				+= "_nm";
-//.         FS.update_path		(fn,_textures_,EFS.ChangeFileExt(l_name,".tga").c_str());
+			l_name 				+= "_nm";
             FS.update_path		(fn,_game_textures_,EFS.ChangeFileExt(l_name,".dds").c_str());
             age_nm				= FS.get_file_age(fn);
             if(age_nm==-1)      Msg("!There is no texture '%s'", fn);
@@ -193,10 +191,10 @@ void ESceneObjectTool::FillAppendRandomProperties(bool bUpdateOnly)
 	V=PHelper().CreateChoose        (items,"Objects",&m_AppendRandomObjectsStr,smObject,0,0,128);
 	V->OnChangeEvent.bind           (this,&ESceneObjectTool::OnChangeAppendRandomFlags);
     
-	V=PHelper().CreateFlag32        (items,"Scatter Random Objects\\Normal Alignment", &m_Flags,                    flAppendRandomNormalAlignment);
-	V=PHelper().CreateFlag32        (items,"Scatter Random Objects\\Shape Restrict",   &m_Flags,                    flAppendRandomShapeRestrict);
-	V=PHelper().CreateFlag32        (items,"Scatter Random Objects\\Shape Emitter",    &m_Flags,                    flAppendRandomShapeEmitter);
-	V=PHelper().CreateFloat         (items,"Scatter Random Objects\\Objects per m^2",  &m_AppendRandomObjectsPerM2, 0.f, 10.f, 0.001f, 3);
+	PHelper().CreateFlag32          (items,"Scatter Random Objects\\Normal Alignment", &m_Flags,                    flAppendRandomNormalAlignment);
+	PHelper().CreateFlag32          (items,"Scatter Random Objects\\Shape Restrict",   &m_Flags,                    flAppendRandomShapeRestrict);
+	PHelper().CreateFlag32          (items,"Scatter Random Objects\\Shape Emitter",    &m_Flags,                    flAppendRandomShapeEmitter);
+	PHelper().CreateFloat           (items,"Scatter Random Objects\\Objects per m^2",  &m_AppendRandomObjectsPerM2, 0.f, 10.f, 0.001f, 3);
 
 	V=PHelper().CreateChoose        (items,"Scatter Random Objects\\Allowed Materials",&m_AppendRandomMaterialsStr, smGameMaterial, 0, 0, 32, cfAllowNone|cfMultiSelect);
 	V->OnChangeEvent.bind           (this,&ESceneObjectTool::OnChangeAppendRandomFlags);
@@ -204,25 +202,29 @@ void ESceneObjectTool::FillAppendRandomProperties(bool bUpdateOnly)
     ButtonValue* B = PHelper().CreateButton(items,"File","Load,Save", 0);
 	B->OnBtnClickEvent.bind(this,&ESceneObjectTool::OnAppendRandomFileBtnClick);
 
+	bool bWasModified = m_Props->IsModified(); // AssignItems resets Modified flag, so we have to remember it
 	m_Props->AssignItems            (items);
+	if(bWasModified)    m_Props->Modified();
 
 	if(!bUpdateOnly) {
-        if (mrOk==m_Props->ShowPropertiesModal())
+		m_Props->ShowPropertiesModal();
+		if(m_Props->IsModified())
 			Scene->UndoSave         ();
 		TProperties::DestroyForm    (m_Props);
-    }
+	}
 }
 //----------------------------------------------------
 
 void ESceneObjectTool::Clear		(bool bSpecific)
 {
 	inherited::Clear				(bSpecific);
-    m_AppendRandomMinScale.set		(1.f,1.f,1.f);
+	m_AppendRandomMinScale.set		(1.f,1.f,1.f);
     m_AppendRandomMaxScale.set		(1.f,1.f,1.f);
     m_AppendRandomMinRotation.set	(0.f,0.f,0.f);
     m_AppendRandomMaxRotation.set	(0.f,0.f,0.f);
-    m_AppendRandomObjects.clear		();
-    m_Flags.zero					();
+	m_AppendRandomObjects.clear		();
+	m_AppendRandomMaterials.clear	();
+	m_Flags.zero					();
 }
 
 bool ESceneObjectTool::GetBox		(Fbox& bb)
