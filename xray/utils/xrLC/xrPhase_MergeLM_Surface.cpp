@@ -70,7 +70,7 @@ bool Place_Perpixel	(L_rect& R, lm_layer* D, BOOL bRotate)
 }
 
 // Check for intersection
-BOOL _rect_place(L_rect &r, lm_layer* D)
+bool _rect_place(L_rect &r, lm_layer* D, bool& rotated)
 {
 	L_rect R;
 
@@ -85,9 +85,9 @@ BOOL _rect_place(L_rect &r, lm_layer* D)
 				if (surface[_Y*c_LMAP_size+_X]) continue;
 				R.init(_X,_Y,_X+r.b.x,_Y+r.b.y);
 				if (Place_Perpixel	(R,D,FALSE)) {
-					_rect_register	(R,D,FALSE);
 					r.set			(R);
-					return TRUE;
+					rotated			= false;
+					return true;
 				}
 			}
 		}
@@ -105,14 +105,92 @@ BOOL _rect_place(L_rect &r, lm_layer* D)
 				
 				R.init(_X,_Y,_X+r.b.y,_Y+r.b.x);
 				if (Place_Perpixel	(R,D,TRUE)) {
-					_rect_register	(R,D,TRUE);
 					r.set			(R);
-					return TRUE;
+					rotated			= true;
+					return true;
 				}
 			}
 		}
 	}
 	
-	return FALSE;
+	return false;
 };
 
+bool rectPlaceY(u32 y, L_rect& r, lm_layer* D, bool& rotated)
+{
+    L_rect R;
+
+    // Normal
+    u32 y_max = c_LMAP_size - r.b.y;
+    if (y < y_max) {
+        u32 x_max = c_LMAP_size - r.b.x;
+        for (u32 _X = 0; _X < x_max; _X++) {
+            if (surface[y * c_LMAP_size + _X])
+                continue;
+            R.init(_X, y, _X + r.b.x, y + r.b.y);
+            if (Place_Perpixel(R, D, FALSE)) {
+                r.set(R);
+                rotated = false;
+                return true;
+            }
+        }
+    }
+
+    // Rotated
+    y_max = c_LMAP_size - r.b.x;
+    if (y < y_max) {
+        u32 x_max = c_LMAP_size - r.b.y;
+        for (u32 _X = 0; _X < x_max; _X++) {
+            if (surface[y * c_LMAP_size + _X])
+                continue;
+
+            R.init(_X, y, _X + r.b.y, y + r.b.x);
+            if (Place_Perpixel(R, D, TRUE)) {
+                r.set(R);
+                rotated = true;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void fillSpace(BYTE* begin, BYTE* end)
+{
+    for (auto it = begin; it != end; ++it)
+        *it = 255;
+}
+
+bool checkFreeRect(BYTE* p, u32 size)
+{
+    for (u32 y = 0; y != size; y++) {
+        for (u32 x = 0; x != size; x++)
+            if (p[x] != 0)
+                return false;
+        p += c_LMAP_size;
+    }
+    return true;
+}
+
+bool checkFreeSpace(u32 minCell)
+{
+    for (auto bLine = std::begin(surface); bLine != std::end(surface) - minCell * c_LMAP_size; bLine += c_LMAP_size) {
+        auto eLine = bLine + c_LMAP_size - minCell;
+        for (auto bFree = bLine; bFree != eLine;) {
+            bFree = std::find(bLine, eLine, 0);
+            auto eFree = std::find(bFree, eLine, 255);
+            if (eFree - bFree < minCell)
+                fillSpace(bFree, eFree);
+            else {
+                for (auto it = bFree; it != eFree; ++it)
+                    if (checkFreeRect(it, minCell))
+                        return true;
+                    else
+                        fillSpace(it, it + 1);
+            }
+            bFree = eFree;
+        }
+    }
+    return false;
+}

@@ -348,6 +348,30 @@ void CRenderDevice::End()
 	CHK_DX(HW.pDevice->Present( NULL, NULL, NULL, NULL ));
 }
 
+void CRenderDevice::End2_0()
+{
+    seqRender.Process(rp_Render);
+
+    Statistic->Show(pSystemFont);
+    Device.SetRS(D3DRS_FILLMODE, D3DFILL_SOLID);
+    pSystemFont->OnRender();
+    Device.SetRS(D3DRS_FILLMODE, Device.dwFillMode);
+}
+
+void CRenderDevice::End2_1()
+{
+    VERIFY(HW.pDevice);
+    VERIFY(b_is_Ready);
+
+    g_bRendering = FALSE;
+
+    // end scene
+    RCache.OnFrameEnd();
+    CHK_DX(HW.pDevice->EndScene());
+
+    CHK_DX(HW.pDevice->Present(NULL, NULL, NULL, NULL));
+}
+
 void CRenderDevice::UpdateView()
 {
 // set camera matrix

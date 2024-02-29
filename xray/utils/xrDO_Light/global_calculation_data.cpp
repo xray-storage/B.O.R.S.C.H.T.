@@ -32,6 +32,14 @@ extern void		Surface_Init	();
 
 void global_claculation_data::xrLoad()
 {
+    {
+        slots_data.Load();
+    }
+
+	bool noLighting = b_norgb && b_nosun && b_nohemi;
+    if (noLighting)
+        return;
+
 	string_path					N;
 	FS.update_path				( N, "$game_data$", "shaders_xrlc.xr" );
 	g_shaders_xrlc				= xr_new<Shader_xrLC_LIB> ();
@@ -58,10 +66,7 @@ void global_claculation_data::xrLoad()
 
 		LevelBB.set			(H.aabb);
 	}
-	
-	{
-		slots_data.Load( );
-	}
+
 	// Lights
 	{
 		IReader*			fs = FS.r_open("$level$","build.lights");
@@ -186,8 +191,11 @@ void global_claculation_data::xrLoad()
 								is_tga_missing = true;
 								continue;
 							}
-							if ((w != BT.dwWidth) || (h != BT.dwHeight))
-								Msg		("! THM doesn't correspond to the texture: %dx%d -> %dx%d", BT.dwWidth, BT.dwHeight, w, h);
+							if ((w != BT.dwWidth) || (h != BT.dwHeight)) {
+								Msg		("! THM doesn't correspond to the texture: THM [%dx%d] != TEX[%dx%d]", BT.dwWidth, BT.dwHeight, w, h);
+								BT.dwWidth	= BT.THM.width = w;
+								BT.dwHeight	= BT.THM.height = h;
+							}
 							BT.Vflip	();
 						} else {
 							// Free surface memory

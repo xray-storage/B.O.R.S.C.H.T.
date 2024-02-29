@@ -2,6 +2,8 @@
 #define	dx103DFluidObstacles_included
 #pragma once
 
+#ifdef HAS_3DFLUID
+
 class dx103DFluidGrid;
 class dx103DFluidData;
 __interface IPhysicsShell;
@@ -52,5 +54,7 @@ private:
 	xr_vector<const IPhysicsShell*>	m_lstShells;
 	xr_vector<const IPhysicsElement*>	m_lstElements;
 };
+
+#endif // HAS_3DFLUID
 
 #endif	//	dx103DFluidObstacles_included

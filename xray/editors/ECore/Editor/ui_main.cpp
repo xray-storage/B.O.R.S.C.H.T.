@@ -517,11 +517,6 @@ void TUI::Redraw()
 		    	ELog.DlgMsg(mtError, "Please notify AlexMX!!! Critical error has occured in render routine!!! [Type B]");
             }
 
-            if(!b_imgui_rendering) {
-            	ImGui::Render();
-                ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-            }
-
             // draw selection rect
             if(m_SelectionRect) 	DUImpl.DrawSelectionRect(m_SelStart,m_SelEnd);
 
@@ -530,7 +525,12 @@ void TUI::Redraw()
 
             try{
 	            // end draw
-    	        Device.End();
+                Device.End2_0();
+                if(!b_imgui_rendering) {
+                    ImGui::Render();
+                    ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+                }
+                Device.End2_1();
 		    }catch(...){
 		    	ELog.DlgMsg(mtError, "Please notify AlexMX!!! Critical error has occured in render routine!!! [Type C]");
             }

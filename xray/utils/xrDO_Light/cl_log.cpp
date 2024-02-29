@@ -179,7 +179,7 @@ void logThread(void *dummy)
 			bWasChanges		= TRUE;
 			for (; LogSize<LogFile->size(); LogSize++)
 			{
-				const char *S = *(*LogFile)[LogSize];
+				const char *S = *(*LogFile)[LogSize].second;
 				if (0==S)	S = "";
 				SendMessage	( hwLog, LB_ADDSTRING, 0, (LPARAM) S);
 			}

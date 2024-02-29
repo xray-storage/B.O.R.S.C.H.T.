@@ -43,9 +43,6 @@ public:
 IC	u8	u8_clr				(float a)	{ s32 _a = iFloor(a*255.f); clamp(_a,0,255); return u8(_a);		};
 
 
-//-----------------------------------------------------------------------------------------------------------------
-const int	LIGHT_Count				=	7;
-
 //-----------------------------------------------------------------
 __declspec(thread)		u64			t_start	= 0;
 __declspec(thread)		u64			t_time	= 0;
@@ -287,6 +284,12 @@ void LightPoint(CDB::COLLIDER* DB, base_color &C, Fvector &P, Fvector &N, base_l
 
 void	LightThread::	Execute()
 	{
+
+		u32 flags = 0;
+		if (gl_data.b_norgb) flags |= LP_dont_rgb;
+		if (gl_data.b_nosun) flags |= LP_dont_sun;
+		if (gl_data.b_nohemi) flags |= LP_dont_hemi;
+
 //		DetailSlot::verify	();
 		CDB::COLLIDER		DB;
 		DB.ray_options		( CDB::OPT_CULL	);
@@ -327,14 +330,14 @@ void	LightThread::	Execute()
 				// lighting itself
 				base_color		amount;
 				u32				count	= 0;
-				float coeff		= DETAIL_SLOT_SIZE_2/float(LIGHT_Count);
+				float coeff		= gl_data.sampleCount ? (DETAIL_SLOT_SIZE_2/float(gl_data.sampleCount)) : 1;
 				FPU::m64r		();
-				for (int x=-LIGHT_Count; x<=LIGHT_Count; x++) 
+				for (int x=-gl_data.sampleCount; x<=gl_data.sampleCount; x++) 
 				{
 					Fvector		P;
 					P.x			= bbC.x + coeff*float(x);
 
-					for (int z=-LIGHT_Count; z<=LIGHT_Count; z++) 
+					for (int z = -gl_data.sampleCount; z <= gl_data.sampleCount; z++) 
 					{
 						// compute position
 						Fvector t_n;	t_n.set(0,1,0);
@@ -362,11 +365,6 @@ void	LightThread::	Execute()
 						if (P.y<BB.min.y) continue;
 						
 						// light point
-						u32 flags = 0;
-						if (gl_data.b_norgb)
-							flags |= LP_dont_rgb;
-						if (gl_data.b_nosun)
-							flags |= LP_dont_sun;
 						LightPoint(&DB, amount, P, t_n, Selected, flags);
 						count			+= 1;
 					}

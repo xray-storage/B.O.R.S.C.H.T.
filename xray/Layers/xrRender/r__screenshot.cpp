@@ -6,7 +6,7 @@
 #include "../../xrEngine/xrImage_Resampler.h"
 
 #ifdef	USE_DX10
-#include <d3dx/d3dx10tex.h>
+#include <d3dx/d3dx11tex.h>
 #endif	//	USE_DX10
 
 #define	GAMESAVE_SIZE	128
@@ -65,7 +65,7 @@ struct {
 #ifdef	USE_DX10
 void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* memory_writer)
 {
-	ID3D10Resource		*pSrcTexture;
+	ID3D11Resource		*pSrcTexture;
 	HW.pBaseRT->GetResource(&pSrcTexture);
 
 	VERIFY(pSrcTexture);
@@ -75,9 +75,9 @@ void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* m
 	{
 		case IRender_interface::SM_FOR_GAMESAVE:
 			{
-				ID3D10Texture2D		*pSrcSmallTexture;
+				ID3D11Texture2D		*pSrcSmallTexture;
 	
-				D3D10_TEXTURE2D_DESC desc;
+				D3D11_TEXTURE2D_DESC desc;
 				ZeroMemory( &desc, sizeof(desc) );
 				desc.Width = GAMESAVE_SIZE;
 				desc.Height = GAMESAVE_SIZE;
@@ -85,18 +85,18 @@ void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* m
 				desc.ArraySize = 1;
 				desc.Format = DXGI_FORMAT_BC1_UNORM;
 				desc.SampleDesc.Count = 1;
-				desc.Usage = D3D10_USAGE_DEFAULT;
-				desc.BindFlags = D3D10_BIND_SHADER_RESOURCE;
+				desc.Usage = D3D11_USAGE_DEFAULT;
+				desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 				CHK_DX( HW.pDevice->CreateTexture2D( &desc, NULL, &pSrcSmallTexture ) );
 
 				//	D3DX10_TEXTURE_LOAD_INFO *pLoadInfo
 
-				CHK_DX(D3DX10LoadTextureFromTexture( pSrcTexture,
+				CHK_DX(D3DX11LoadTextureFromTexture( HW.pContext, pSrcTexture,
 					NULL, pSrcSmallTexture ));
 
 				// save (logical & physical)
 				ID3DBlob*		saved	= 0;
-				HRESULT hr					= D3DX10SaveTextureToMemory( pSrcSmallTexture, D3DX10_IFF_DDS, &saved, 0);
+				HRESULT hr					= D3DX11SaveTextureToMemory( HW.pContext, pSrcSmallTexture, D3DX11_IFF_DDS, &saved, 0);
 				//HRESULT hr					= D3DXSaveTextureToFileInMemory (&saved,D3DXIFF_DDS,texture,0);
 				if(hr==D3D_OK)
 				{
@@ -116,9 +116,9 @@ void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* m
 		case IRender_interface::SM_FOR_MPSENDING:
 			{
 				
-				ID3D10Texture2D		*pSrcSmallTexture;
+				ID3D11Texture2D		*pSrcSmallTexture;
 	
-				D3D10_TEXTURE2D_DESC desc;
+				D3D11_TEXTURE2D_DESC desc;
 				ZeroMemory( &desc, sizeof(desc) );
 				desc.Width = SM_FOR_SEND_WIDTH;
 				desc.Height = SM_FOR_SEND_HEIGHT;
@@ -126,18 +126,18 @@ void CRender::ScreenshotImpl	(ScreenshotMode mode, LPCSTR name, CMemoryWriter* m
 				desc.ArraySize = 1;
 				desc.Format = DXGI_FORMAT_BC1_UNORM;
 				desc.SampleDesc.Count = 1;
-				desc.Usage = D3D10_USAGE_DEFAULT;
-				desc.BindFlags = D3D10_BIND_SHADER_RESOURCE;
+				desc.Usage = D3D11_USAGE_DEFAULT;
+				desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 				CHK_DX( HW.pDevice->CreateTexture2D( &desc, NULL, &pSrcSmallTexture ) );
 
 				//	D3DX10_TEXTURE_LOAD_INFO *pLoadInfo
 
-				CHK_DX(D3DX10LoadTextureFromTexture( pSrcTexture,
+				CHK_DX(D3DX11LoadTextureFromTexture( HW.pContext, pSrcTexture,
 					NULL, pSrcSmallTexture ));
 
 				// save (logical & physical)
 				ID3DBlob*		saved	= 0;
-				HRESULT hr					= D3DX10SaveTextureToMemory( pSrcSmallTexture, D3DX10_IFF_DDS, &saved, 0);
+				HRESULT hr					= D3DX11SaveTextureToMemory( HW.pContext, pSrcSmallTexture, D3DX11_IFF_DDS, &saved, 0);
 				//HRESULT hr					= D3DXSaveTextureToFileInMemory (&saved,D3DXIFF_DDS,texture,0);
 				if(hr==D3D_OK)
 				{
@@ -423,9 +423,9 @@ void CRender::ScreenshotAsyncEnd(CMemoryWriter &memory_writer)
 	//	Don't own. No need to release.
 	ID3DTexture2D*	pTex = Target->t_ss_async;
 
-	D3D10_MAPPED_TEXTURE2D	MappedData;
+	D3D11_MAPPED_SUBRESOURCE	MappedData;
 
-	pTex->Map(0, D3D10_MAP_READ, 0, &MappedData);
+	HW.pContext->Map(pTex, 0, D3D11_MAP_READ, 0, &MappedData);
 
 	{
 
@@ -448,7 +448,7 @@ void CRender::ScreenshotAsyncEnd(CMemoryWriter &memory_writer)
 		memory_writer.w( MappedData.pData, (Device.dwWidth*Device.dwHeight)*4 );
 	}
 
-	pTex->Unmap(0);
+	HW.pContext->Unmap(pTex, 0);
 }
 
 #else	//	USE_DX10

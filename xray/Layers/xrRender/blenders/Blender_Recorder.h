@@ -43,9 +43,9 @@ private:
 
 	string128			pass_vs;
 	string128			pass_ps;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	string128			pass_gs;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 
 	u32					BC					(BOOL v)	{ return v?0x01:0; }
 public:
@@ -109,8 +109,10 @@ public:
 	// R1/R2-compiler	[programmable]		- templates
 	void				r_Pass				(LPCSTR vs,		LPCSTR ps,		bool bFog,	BOOL	bZtest=TRUE,				BOOL	bZwrite=TRUE,			BOOL	bABlend=FALSE,			D3DBLEND	abSRC=D3DBLEND_ONE,		D3DBLEND abDST=D3DBLEND_ZERO,	BOOL aTest=FALSE,	u32 aRef=0);
 	void				r_Constant			(LPCSTR name,	R_constant_setup* s);
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	void				r_Pass				(LPCSTR vs,		LPCSTR gs, LPCSTR ps,		bool bFog,	BOOL	bZtest=TRUE,				BOOL	bZwrite=TRUE,			BOOL	bABlend=FALSE,			D3DBLEND	abSRC=D3DBLEND_ONE,		D3DBLEND abDST=D3DBLEND_ZERO,	BOOL aTest=FALSE,	u32 aRef=0);
+#endif // HAS_GS
+#ifdef USE_DX10
 	void				r_Stencil(BOOL Enable, u32 Func=D3DCMP_ALWAYS, u32 Mask=0x00, u32 WriteMask=0x00, u32 Fail=D3DSTENCILOP_KEEP, u32 Pass=D3DSTENCILOP_KEEP, u32 ZFail=D3DSTENCILOP_KEEP);
 	void				r_StencilRef(u32 Ref);
 	void				r_CullMode(D3DCULL Mode);

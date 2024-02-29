@@ -188,9 +188,9 @@ void xrLoad(LPCSTR name, bool draft_mode)
 									continue;
 								}
 								if ((w != BT.dwWidth) || (h != BT.dwHeight)) {
-									Msg("! THM doesn't correspond to the texture: %dx%d -> %dx%d", BT.dwWidth, BT.dwHeight, w, h);
-									BT.dwWidth = w;
-									BT.dwHeight = h;
+									Msg("! THM doesn't correspond to the texture: THM [%dx%d] != TEX[%dx%d]", BT.dwWidth, BT.dwHeight, w, h);
+									BT.dwWidth	= BT.THM.width = w;
+									BT.dwHeight	= BT.THM.height = h;
 								}
 								BT.Vflip	();
 							} else {

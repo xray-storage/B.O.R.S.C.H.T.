@@ -4,6 +4,8 @@
 #include "math.h"
 #include "build.h"
 #include "../xrLC_Light/xrLC_GlobalData.h"
+#include "cl_log.h"
+#include "../xrLC_Light/xrDeflector.h"
 
 #define PROTECTED_BUILD
 
@@ -44,51 +46,14 @@ void Help()
 	MessageBox(0,h_str,"Command line options",MB_OK|MB_ICONINFORMATION);
 }
 
-// computing build id
-XRCORE_API	LPCSTR	build_date;
-XRCORE_API	u32		build_id;
-static LPSTR month_id[12] = {
-	"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"
-};
-
-static int days_in_month[12] = {
-	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-};
-
-static int start_day = 31;	// 31
-static int start_month = 1;	// January
-static int start_year = 1999;	// 1999
-
-void compute_build_id()
-{
-	build_date = __DATE__;
-
-	int					days;
-	int					months = 0;
-	int					years;
-	string16			month;
-	string256			buffer;
-	strcpy_s(buffer, __DATE__);
-	sscanf(buffer, "%s %d %d", month, &days, &years);
-
-	for (int i = 0; i<12; i++) {
-		if (_stricmp(month_id[i], month))
-			continue;
-
-		months = i;
-		break;
-	}
-
-	build_id = (years - start_year) * 365 + days - start_day;
-
-	for (int i = 0; i<months; ++i)
-		build_id += days_in_month[i];
-
-	for (int i = 0; i<start_month - 1; ++i)
-		build_id -= days_in_month[i];
-}
-
 typedef int __cdecl xrOptions(b_params* params, u32 version, bool bRunBuild);
+
+void logParams(const b_params& param)
+{
+    Msg("light_pixel_per_meter = %.1f", param.m_lm_pixels_per_meter);
+    Msg("light_jitter_samples  = %lu", param.m_lm_jitter_samples);
+    Msg("light_quality         = %u", param.m_quality);
+}
 
 void Startup(LPSTR     lpCmdLine)
 {
@@ -179,6 +144,8 @@ void Startup(LPSTR     lpCmdLine)
 		sscanf(quality + sz, "%f", &Params.m_lm_pixels_per_meter);
 	}
 
+	logParams(Params);
+
 	// Show options if needed
 	if (bModifyOptions)		
 	{
@@ -208,10 +175,15 @@ void Startup(LPSTR     lpCmdLine)
 	xr_delete				(pBuild);
 
 	// Show statistic
-	extern	std::string make_time(u32 sec);
+	Msg						("Phase times:");
+	LogPhaseTimes			();
+    LogCounters				();
+	Msg						("");
+
 	u32	dwEndTime			= dwStartupTime.GetElapsed_ms();
 	sprintf					(inf,"Time elapsed: %s",make_time(dwEndTime/1000).c_str());
-	clMsg					("Build succesful!\n%s",inf);
+	Msg						("------------------------------------------\n%s",inf);
+	Msg						("Build succesful!");
 
 	if (!strstr(cmd,"-silent"))
 		MessageBox			(logWindow,inf,"Congratulation!",MB_OK|MB_ICONINFORMATION);
@@ -232,12 +204,12 @@ int APIENTRY WinMain(HINSTANCE hInst,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
+    Log_WriteTimestamp();
 //	g_temporary_stuff	= &trivial_encryptor::decode;
 //	g_dummy_stuff		= &trivial_encryptor::encode;
 
 	// Initialize debugging
 	Debug._initialize	(false);
-	compute_build_id();
 	Core._initialize	("xrLC");
 
 	if(strstr(Core.Params,"-nosmg"))

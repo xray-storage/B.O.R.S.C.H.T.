@@ -225,7 +225,7 @@ void xrDebug::backend	(const char *expression, const char *description, const ch
 #		endif // USE_BUG_TRAP
 #       ifndef DEBUG
 			if (strstr(GetCommandLine(),"-show_log"))
-				ShellExecute(nullptr, nullptr, logFullName(), nullptr, nullptr, SW_SHOWNORMAL);
+				ShellExecute(nullptr, nullptr, LogFullName(), nullptr, nullptr, SW_SHOWNORMAL);
 			//TerminateProcess(GetCurrentProcess(), 1);
 			DEBUG_INVOKE;
 #       else

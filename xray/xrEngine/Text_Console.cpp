@@ -282,7 +282,7 @@ void CTextConsole::DrawLog( HDC hDC, RECT* pRect )
 		{
 			break;
 		}
-		LPCSTR ls = ((*LogFile)[i]).c_str();
+		LPCSTR ls = (*LogFile)[i].second.c_str();
 
 		if ( !ls )
 		{

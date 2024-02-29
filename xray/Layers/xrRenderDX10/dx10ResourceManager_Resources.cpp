@@ -9,7 +9,7 @@
 #endif
 #pragma warning(default:4995)
 
-#include <d3dx/D3DX10Core.h>
+#include <d3dx/D3DX11Core.h>
 
 #include "../xrRender/ResourceManager.h"
 #include "../xrRender/tss.h"
@@ -94,10 +94,19 @@ void		CResourceManager::_DeleteState		(const SState* state)
 }
 
 //--------------------------------------------------------------------------------------------------------------
-SPass*		CResourceManager::_CreatePass			(ref_state& _state, ref_ps& _ps, ref_vs& _vs, ref_gs& _gs, ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C)
+
+SPass*		CResourceManager::_CreatePass			(ref_state& _state, ref_ps& _ps, ref_vs& _vs,
+#ifdef	HAS_GS
+	ref_gs& _gs,
+#endif
+	ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C)
 {
 	for (u32 it=0; it<v_passes.size(); it++)
-		if (v_passes[it]->equal(_state,_ps,_vs,_gs,_ctable,_T,_M,_C))
+		if (v_passes[it]->equal(_state,_ps,_vs,
+#ifdef HAS_GS
+			_gs,
+#endif
+			_ctable,_T,_M,_C))
 			return v_passes[it];
 
 	SPass*	P					=	xr_new<SPass>();
@@ -105,7 +114,9 @@ SPass*		CResourceManager::_CreatePass			(ref_state& _state, ref_ps& _ps, ref_vs&
 	P->state					=	_state;
 	P->ps						=	_ps;
 	P->vs						=	_vs;
+#ifdef HAS_GS
 	P->gs						=	_gs;
+#endif
 	P->constants				=	_ctable;
 	P->T						=	_T;
 #ifdef _EDITOR
@@ -191,7 +202,11 @@ SVS*	CResourceManager::_CreateVS		(LPCSTR _name)
 		R_ASSERT2					(fs,cname);
 		//_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, D3DXSHADER_DEBUG | D3DXSHADER_PACKMATRIX_ROWMAJOR /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
 //		_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, D3D10_SHADER_DEBUG | D3D10_SHADER_PACK_MATRIX_ROW_MAJOR /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
-		_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
+		DWORD flags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR;
+#ifdef DEBUG
+		flags |= D3DCOMPILE_DEBUG /*| D3DCOMPILE_WARNINGS_ARE_ERRORS*/ | D3DCOMPILE_ALL_RESOURCES_BOUND;
+#endif
+		_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, flags /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = ::Render->shader_compile(name,LPCSTR(fs->pointer()),fs->length(), NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR | D3D10_SHADER_AVOID_FLOW_CONTROL /*| D3DXSHADER_PREFER_FLOW_CONTROL*/, &pShaderBuf, &pErrorBuf, NULL);
 		FS.r_close					(fs);
 
@@ -199,12 +214,12 @@ SVS*	CResourceManager::_CreateVS		(LPCSTR _name)
 		{
 			if (pShaderBuf)
 			{
-				_hr = HW.pDevice->CreateVertexShader(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &_vs->vs);
+				_hr = HW.pDevice->CreateVertexShader(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), 0, &_vs->vs);
 				if (SUCCEEDED(_hr))	
 				{
-					ID3D10ShaderReflection *pReflection = 0;
+					ID3D11ShaderReflection *pReflection = 0;
 
-					_hr = D3D10ReflectShader( pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &pReflection);
+					_hr = D3DReflect( pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pReflection);
 					
 					//	Parse constant, texture, sampler binding
 					//	Store input signature blob
@@ -215,7 +230,7 @@ SVS*	CResourceManager::_CreateVS		(LPCSTR _name)
 						//	Store input signature (need only for VS)
 						//CHK_DX( D3D10GetInputSignatureBlob(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &_vs->signature) );
 						ID3DBlob*	pSignatureBlob;
-						CHK_DX( D3D10GetInputSignatureBlob(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &pSignatureBlob) );
+						CHK_DX( D3DGetInputSignatureBlob(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &pSignatureBlob) );
 						VERIFY(pSignatureBlob);
 
 						_vs->signature = _CreateInputSignature(pSignatureBlob);
@@ -257,7 +272,7 @@ void	CResourceManager::_DeleteVS			(const SVS* vs)
 		xr_vector<SDeclaration*>::iterator iDecl;
 		for (iDecl = v_declarations.begin(); iDecl!=v_declarations.end(); ++iDecl)
 		{
-			xr_map<ID3DBlob*, ID3D10InputLayout*>::iterator iLayout;
+			xr_map<ID3DBlob*, ID3D11InputLayout*>::iterator iLayout;
 			iLayout = (*iDecl)->vs_to_layout.find(vs->signature->signature);
 			if (iLayout!=(*iDecl)->vs_to_layout.end())
 			{
@@ -340,7 +355,11 @@ SPS*	CResourceManager::_CreatePS			(LPCSTR _name)
 		HRESULT						_hr			= S_OK;
 		//_hr = ::Render->shader_compile	(name,data,size, NULL, &Includer, c_entry, c_target, D3DXSHADER_DEBUG | D3DXSHADER_PACKMATRIX_ROWMAJOR, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_DEBUG | D3D10_SHADER_PACK_MATRIX_ROW_MAJOR, &pShaderBuf, &pErrorBuf, NULL);
-		_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR, &pShaderBuf, &pErrorBuf, NULL);
+		DWORD flags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR;
+#ifdef DEBUG
+		flags |= D3DCOMPILE_DEBUG /*| D3DCOMPILE_WARNINGS_ARE_ERRORS*/ | D3DCOMPILE_ALL_RESOURCES_BOUND;
+#endif
+		_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, flags, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR | D3D10_SHADER_AVOID_FLOW_CONTROL, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = D3DXCompileShader		(text,text_size, NULL, &Includer, c_entry, c_target, D3DXSHADER_DEBUG | D3DXSHADER_PACKMATRIX_ROWMAJOR, &pShaderBuf, &pErrorBuf, NULL);
 		xr_free						(data);
@@ -349,11 +368,11 @@ SPS*	CResourceManager::_CreatePS			(LPCSTR _name)
 		{
 			if (pShaderBuf)
 			{
-				_hr = HW.pDevice->CreatePixelShader	(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &_ps->ps);
+				_hr = HW.pDevice->CreatePixelShader	(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), 0, &_ps->ps);
 
-				ID3D10ShaderReflection *pReflection = 0;
+				ID3D11ShaderReflection *pReflection = 0;
 
-				_hr = D3D10ReflectShader( pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &pReflection);
+				_hr = D3DReflect( pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pReflection);
 
 				//	Parse constant, texture, sampler binding
 				//	Store input signature blob
@@ -410,6 +429,7 @@ void	CResourceManager::_DeletePS			(const SPS* ps)
 }
 
 //--------------------------------------------------------------------------------------------------------------
+#ifdef	HAS_GS
 SGS*	CResourceManager::_CreateGS			(LPCSTR name)
 {
 	LPSTR N				= LPSTR(name);
@@ -460,7 +480,11 @@ SGS*	CResourceManager::_CreateGS			(LPCSTR name)
 		ID3DBlob*					pShaderBuf	= NULL;
 		ID3DBlob*					pErrorBuf	= NULL;
 		HRESULT						_hr			= S_OK;
-		_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR, &pShaderBuf, &pErrorBuf, NULL);
+		DWORD flags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR;
+#ifdef DEBUG
+		flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_WARNINGS_ARE_ERRORS;
+#endif
+		_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, flags, &pShaderBuf, &pErrorBuf, NULL);
 		//_hr = ::Render->shader_compile(name,data,size, NULL, &Includer, c_entry, c_target, D3D10_SHADER_PACK_MATRIX_ROW_MAJOR | D3D10_SHADER_AVOID_FLOW_CONTROL, &pShaderBuf, &pErrorBuf, NULL);
 		xr_free						(data);
 
@@ -468,11 +492,11 @@ SGS*	CResourceManager::_CreateGS			(LPCSTR name)
 		{
 			if (pShaderBuf)
 			{
-				_hr = HW.pDevice->CreateGeometryShader	(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &_gs->gs);
+				_hr = HW.pDevice->CreateGeometryShader	(pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), 0, &_gs->gs);
 
-				ID3D10ShaderReflection *pReflection = 0;
+				ID3D11ShaderReflection *pReflection = 0;
 
-				_hr = D3D10ReflectShader( pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), &pReflection);
+				_hr = D3DReflect( pShaderBuf->GetBufferPointer(), pShaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pReflection);
 
 				//	Parse constant, texture, sampler binding
 				//	Store input signature blob
@@ -489,6 +513,7 @@ SGS*	CResourceManager::_CreateGS			(LPCSTR name)
 			else	_hr = E_FAIL;
 		}else
 		{
+			Log		("! GS: ", name);
 			Msg("error is %s", (LPCSTR)pErrorBuf->GetBufferPointer());
 		}
 		_RELEASE		(pShaderBuf);
@@ -515,7 +540,7 @@ void	CResourceManager::_DeleteGS			(const SGS* gs)
 	}
 	Msg	("! ERROR: Failed to find compiled geometry shader '%s'",*gs->cName);
 }
-
+#endif
 //--------------------------------------------------------------------------------------------------------------
 static BOOL	dcl_equal			(D3DVERTEXELEMENT9* a, D3DVERTEXELEMENT9* b)
 {
@@ -880,7 +905,7 @@ void			CResourceManager::_DeleteConstantList(const SConstantList* L )
 	Msg	("! ERROR: Failed to find compiled list of r1-constant-defs");
 }
 //--------------------------------------------------------------------------------------------------------------
-dx10ConstantBuffer* CResourceManager::_CreateConstantBuffer(ID3D10ShaderReflectionConstantBuffer* pTable)
+dx10ConstantBuffer* CResourceManager::_CreateConstantBuffer(ID3D11ShaderReflectionConstantBuffer* pTable)
 {
 	VERIFY(pTable);
 	dx10ConstantBuffer	*pTempBuffer = xr_new<dx10ConstantBuffer>(pTable);

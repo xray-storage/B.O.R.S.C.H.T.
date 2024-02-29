@@ -5,9 +5,17 @@
 #include "../xrlc_light/xrdeflector.h"
 #include "../xrlc_light/xrlc_globaldata.h"
 #include "../xrlc_light/lightmap.h"
+
+#include <tbb/tbb.h>
+
+#include <optional>
+
 // Surface access
 extern void _InitSurface	();
-extern BOOL _rect_place		(L_rect &r, lm_layer*		D);
+extern bool _rect_place(L_rect& r, lm_layer* D, bool& rotated);
+extern void _rect_register(L_rect& R, lm_layer* D, BOOL bRotate);
+extern bool rectPlaceY(u32 y, L_rect& r, lm_layer* D, bool& rotated);
+extern bool checkFreeSpace(u32 minCell);
 
 IC int	compare_defl		(CDeflector* D1, CDeflector* D2)
 {
@@ -68,8 +76,13 @@ IC bool	sort_defl_complex	(CDeflector* D1, CDeflector* D2)
 
 class	pred_remove { public: IC bool	operator() (CDeflector* D) { { if (0==D) return TRUE;}; if (D->bMerged) {D->bMerged=FALSE; return TRUE; } else return FALSE;  }; };
 
+bool rectPlaceTbb(L_rect& r, lm_layer* D, bool& rotated);
+
 void CBuild::xrPhase_MergeLM()
 {
+	using TRectPlace = bool(*)(L_rect &, lm_layer*, bool&);
+    TRectPlace rectPlace = lc_global_data()->useTbb() ? rectPlaceTbb : _rect_place;
+
 	vecDefl			Layer;
 
 	// **** Select all deflectors, which contain this light-layer
@@ -100,7 +113,6 @@ void CBuild::xrPhase_MergeLM()
 		std::stable_sort(Layer.begin(),Layer.end(),sort_defl_complex);
 
 		// Select first deflectors which can fit
-		Status		("Selection...");
 		u32 maxarea		= c_LMAP_size*c_LMAP_size*8;	// Max up to 8 lm selected
 		u32 curarea		= 0;
 		u32 merge_count	= 0;
@@ -121,27 +133,21 @@ void CBuild::xrPhase_MergeLM()
 		// Process 
 		for (u32 it=0; it<merge_count; it++) 
 		{
-			if (0==(it%1024))	Status	("Process [%d/%d]...",it,merge_count);
 			lm_layer&	L		= Layer[it]->layer;
 			L_rect		rT,rS; 
 			rS.a.set	(0,0);
 			rS.b.set	(L.width+2*BORDER-1, L.height+2*BORDER-1);
 			rS.iArea	= L.Area();
 			rT			= rS;
-			if (_rect_place(rT,&L)) 
+			bool rotated;
+			if (_rect_place(rT, &L, rotated)) 
 			{
-				BOOL		bRotated;
-				if (rT.SizeX() == rS.SizeX()) {
-					R_ASSERT(rT.SizeY() == rS.SizeY());
-					bRotated = FALSE;
-				} else {
-					R_ASSERT(rT.SizeX() == rS.SizeY());
-					R_ASSERT(rT.SizeY() == rS.SizeX());
-					bRotated = TRUE;
-				}
-				lmap->Capture		(Layer[it],rT.a.x,rT.a.y,rT.SizeX(),rT.SizeY(),bRotated);
+				_rect_register		(rT, &L, rotated);
+				lmap->Capture		(Layer[it],rT.a.x,rT.a.y,rT.SizeX(),rT.SizeY(),rotated);
 				Layer[it]->bMerged	= TRUE;
 			}
+			else if (!checkFreeSpace(1 + 2 * BORDER))
+				break;
 			Progress(_sqrt(float(it)/float(merge_count)));
 		}
 		Progress	(1.f);
@@ -165,4 +171,39 @@ void CBuild::xrPhase_MergeLM()
 	for (u32 it=0; it<lc_global_data()->g_deflectors().size(); it++)
 		xr_delete(lc_global_data()->g_deflectors()[it]);
 	lc_global_data()->g_deflectors().clear_and_free	();
+}
+
+struct Place {
+    L_rect rect;
+    bool rotated;
+};
+using PlaceResult = std::optional<Place>;
+void merge(PlaceResult& dest, const PlaceResult& x)
+{
+    if (!x)
+        return;
+    if (!dest || x.value().rect.a.y < dest.value().rect.a.y)
+        dest = x;
+}
+
+bool rectPlaceTbb(L_rect& tr, lm_layer* D, bool& rotated)
+{
+    tbb::combinable<PlaceResult> temp;
+    tbb::parallel_for(tbb::blocked_range<u32>(0, c_LMAP_size), [&temp, tr, D](const tbb::blocked_range<u32>& r) {
+        L_rect rect = tr;
+        for (u32 y = r.begin(); y != r.end(); ++y) {
+            bool rotated;
+            if (rectPlaceY(y, rect, D, rotated)) {
+                merge(temp.local(), Place { rect, rotated });
+                break;
+            }
+        }
+    });
+    PlaceResult result;
+    temp.combine_each([&result](const PlaceResult& x) { merge(result, x); });
+    if (result) {
+        tr = result.value().rect;
+        rotated = result.value().rotated;
+    }
+    return result.has_value();
 }

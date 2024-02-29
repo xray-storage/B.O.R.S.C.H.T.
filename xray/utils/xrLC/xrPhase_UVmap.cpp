@@ -79,8 +79,6 @@ void CBuild::xrPhase_UVmap_Legacy()
     }
 }
 
-template <typename Cont> void append(Cont& cont, const Cont& add) { cont.insert(cont.end(), add.begin(), add.end()); }
-
 struct UVmapResult {
     vec2Face newSplits;
     vecDefl deflectors;
@@ -98,68 +96,67 @@ void UVmapSplit(vecFace& split, UVmapResult& result)
     if (Fvl->hasImplicitLighting())
         return;
 
-    //   find first poly that doesn't has mapping and start recursion
-    while (TRUE) {
-        // Select maximal sized poly
-        Face* msF = NULL;
-        float msA = 0;
-        for (vecFaceIt it = split.begin(); it != split.end(); it++) {
-            if ((*it)->pDeflector == NULL) {
-                float a = (*it)->CalcArea();
-                if (a > msA) {
-                    msF = (*it);
-                    msA = a;
-                }
-            }
-        }
-        if (!msF)
-            break;
+    size_t start = result.deflectors.size();
 
+    struct FaceWithArea {
+        Face* f;
+        float area;
+    };
+    xr_vector<FaceWithArea> sortedByAreaDesc(split.size());
+    std::transform(split.begin(), split.end(), sortedByAreaDesc.begin(), [](Face* f) { return FaceWithArea {f, f->CalcArea()}; });
+    std::stable_sort(sortedByAreaDesc.begin(), sortedByAreaDesc.end(), [](const auto& x, const auto& y) { return x.area > y.area; });
+
+    for (auto [msF, _] : sortedByAreaDesc) {
+        if (msF->pDeflector)
+            continue;
         CDeflector* deflector = xr_new<CDeflector>();
         result.deflectors.push_back(deflector);
-
         deflector->OA_SetNormal(msF->N);
         msF->OA_Unwarp(deflector);
-
-        // break the cycle to startup again
         deflector->OA_Export();
-
-        // Detach affected faces
-        vecFace faces_affected;
-        std::copy_if(split.begin(), split.end(), std::back_inserter(faces_affected),
-            [deflector](Face* F) { return F->pDeflector == deflector; });
-        split.erase(
-            std::remove_if(split.begin(), split.end(), [deflector](Face* F) { return F->pDeflector == deflector; }),
-            split.end());
-
-        result.newSplits.push_back(xr_new<vecFace>(std::move(faces_affected)));
     }
+
+    for (size_t i = start; i != result.deflectors.size(); ++i) {
+        const auto& polys = result.deflectors[i]->UVpolys;
+        vecFace* subSplit = xr_new<vecFace>(polys.size());
+        std::transform(polys.begin(), polys.end(), subSplit->begin(), [](const auto& p) { return p.owner; });
+        result.newSplits.push_back(subSplit);
+    }
+    split.clear();
+}
+
+template <typename Cont> void append(Cont& cont, const Cont& add) { cont.insert(cont.end(), add.begin(), add.end()); }
+
+void RemoveEmptySplits()
+{
+    auto it = std::partition(g_XSplit.begin(), g_XSplit.end(), [](auto split) { return !split->empty(); });
+    std::for_each(it, g_XSplit.end(), [](auto& split) { xr_delete(split); });
+    g_XSplit.erase(it, g_XSplit.end());
 }
 
 void CBuild::xrPhase_UVmap_Tbb()
 {
     tbb::atomic<size_t> progress { 0 };
-    UVmapResult init {};
-    UVmapResult add = tbb::parallel_reduce(
-        tbb::blocked_range<size_t>(0, g_XSplit.size(), 10), init,
-        [&progress](const tbb::blocked_range<size_t>& r, UVmapResult init) -> UVmapResult {
+    tbb::combinable<UVmapResult> temp;
+    size_t grain = std::max(1u, g_XSplit.size() / tbb::task_arena().max_concurrency() / 10);
+    tbb::parallel_for(
+        tbb::blocked_range<size_t>(0, g_XSplit.size(), grain), [&progress, &temp](const tbb::blocked_range<size_t>& r) {
+            auto& local = temp.local();
             for (size_t SP = r.begin(); SP != r.end(); ++SP) {
-                UVmapSplit(*g_XSplit[SP], init);
+                UVmapSplit(*g_XSplit[SP], local);
                 progress.fetch_and_increment();
                 Progress(progress * 1.0f / g_XSplit.size());
             }
-            return init;
-        },
-        [](UVmapResult x, UVmapResult y) -> UVmapResult {
-            append(x.newSplits, y.newSplits);
-            append(x.deflectors, y.deflectors);
-            return x;
         });
+    UVmapResult add;
+    temp.combine_each([&add](UVmapResult x) {
+        append(add.newSplits, x.newSplits);
+        append(add.deflectors, x.deflectors);
+    });
     for (auto split : add.newSplits)
         Detach(split, lc_global_data()->g_vertices());
     IsolateVertices(FALSE);
-    g_XSplit.erase(
-        std::remove_if(g_XSplit.begin(), g_XSplit.end(), [](auto split) { return split->empty(); }), g_XSplit.end());
+    RemoveEmptySplits();
     append(g_XSplit, add.newSplits);
     append(lc_global_data()->g_deflectors(), add.deflectors);
 }

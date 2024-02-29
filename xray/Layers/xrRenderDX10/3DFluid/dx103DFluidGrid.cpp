@@ -3,6 +3,8 @@
 
 #include "../dx10BufferUtils.h"
 
+#ifdef HAS_3DFLUID
+
 struct VS_INPUT_FLUIDSIM_STRUCT
 {   
 	D3DXVECTOR3 Pos; // Clip space position for slice vertices
@@ -304,3 +306,5 @@ void dx103DFluidGrid::DrawBoundaryLines( void )
 	RCache.set_Geometry(m_GeomBoundaryLines);
 	RCache.Render( D3DPT_TRIANGLELIST, 0, m_iNumVerticesBoundaryLines/3);
 }
+
+#endif // HAS_3DFLUID

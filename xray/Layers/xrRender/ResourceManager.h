@@ -34,9 +34,9 @@ public:
 	DEFINE_MAP_PRED(const char*,CRT*,			map_RT,			map_RTIt,			str_pred);
 	//	DX10 cut DEFINE_MAP_PRED(const char*,CRTC*,			map_RTC,		map_RTCIt,			str_pred);
 	DEFINE_MAP_PRED(const char*,SVS*,			map_VS,			map_VSIt,			str_pred);
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	DEFINE_MAP_PRED(const char*,SGS*,			map_GS,			map_GSIt,			str_pred);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	DEFINE_MAP_PRED(const char*,SPS*,			map_PS,			map_PSIt,			str_pred);
 	DEFINE_MAP_PRED(const char*,texture_detail,	map_TD,			map_TDIt,			str_pred);
 private:
@@ -49,9 +49,9 @@ private:
 	//	DX10 cut map_RTC												m_rtargets_c;
 	map_VS												m_vs;
 	map_PS												m_ps;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	map_GS												m_gs;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	map_TD												m_td;
 
 	xr_vector<SState*>									v_states;
@@ -123,7 +123,7 @@ public:
 	void							_DeleteConstantTable(const R_constant_table* C);
 
 #ifdef	USE_DX10
-	dx10ConstantBuffer*				_CreateConstantBuffer(ID3D10ShaderReflectionConstantBuffer* pTable);
+	dx10ConstantBuffer*				_CreateConstantBuffer(ID3D11ShaderReflectionConstantBuffer* pTable);
 	void							_DeleteConstantBuffer(const dx10ConstantBuffer* pBuffer);
 
 	SInputSignature*				_CreateInputSignature(ID3DBlob* pBlob);
@@ -135,10 +135,10 @@ public:
 
 	//	DX10 cut CRTC*							_CreateRTC			(LPCSTR Name, u32 size,	D3DFORMAT f);
 	//	DX10 cut void							_DeleteRTC			(const CRTC*	RT	);
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	SGS*							_CreateGS			(LPCSTR Name);
 	void							_DeleteGS			(const SGS*	GS	);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 
 	SPS*							_CreatePS			(LPCSTR Name);
 	void							_DeletePS			(const SPS*	PS	);
@@ -146,11 +146,11 @@ public:
 	SVS*							_CreateVS			(LPCSTR Name);
 	void							_DeleteVS			(const SVS*	VS	);
 
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	SPass*							_CreatePass			(ref_state& _state, ref_ps& _ps, ref_vs& _vs, ref_gs& _gs, ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C);
-#else	//	USE_DX10
+#else	//	HAS_GS
 	SPass*							_CreatePass			(ref_state& _state, ref_ps& _ps, ref_vs& _vs, ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	void							_DeletePass			(const SPass* P	);
 
 	// Shader compiling / optimizing

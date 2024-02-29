@@ -5,6 +5,8 @@
 #include "dx103DFluidData.h"
 #include "../../xrRender/FBasicVisual.h"
 
+#ifdef HAS_3DFLUID
+
 class dx103DFluidVolume : public dxRender_Visual
 {
 public:
@@ -22,5 +24,7 @@ private:
 
 	dx103DFluidData	m_FluidData;
 };
+
+#endif // HAS_3DFLUID
 
 #endif	//	dx103DFluidVolume_included

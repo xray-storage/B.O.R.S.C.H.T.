@@ -91,7 +91,9 @@ void CRender::level_Load(IReader* fs)
 	LoadSectors					(fs);
 
 	// 3D Fluid
+#ifdef HAS_3DFLUID
 	Load3DFluid					();
+#endif
 
 	// HOM
 	HOM.Load					();
@@ -385,6 +387,7 @@ void CRender::LoadSWIs(CStreamReader* base_fs)
 	}
 }
 
+#ifdef HAS_3DFLUID
 void CRender::Load3DFluid()
 {
 	//if (strstr(Core.Params,"-no_volumetric_fog"))
@@ -422,3 +425,4 @@ void CRender::Load3DFluid()
 		FS.r_close(F);
 	}
 }
+#endif // HAS_3DFLUID

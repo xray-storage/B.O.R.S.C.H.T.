@@ -76,24 +76,6 @@ void IM_ChooseForm::OnNodeSelected(shared_str path, shared_str value, bool selec
     }
 
     m_selected.push_back(path);
-
-    if(m_selected.size() == 1 && m_events)
-    {
-    	if(m_events->on_thm)
-        {
-    		HDC hdc = m_thm.BeginPaint();
-        	m_events->on_thm(*path, hdc, Irect().set(0, 0, m_thm.Width(), m_thm.Height()));
-        	m_thm.EndPaint();
-        }
-
-        if(m_events->on_sel)
-        {
-        	PropItemVec items;
-            SChooseItem foo(*path, *value);
-            m_events->on_sel(&foo, items);
-            m_props.AssignItems(items, false, false);
-        }
-    }
 }
 
 void IM_ChooseForm::Close()
@@ -222,6 +204,23 @@ void IM_ChooseForm::Render()
 
             if(ImGui::IsItemHovered())
             	ImGui::SetTooltip("Clear selection");
+        }
+
+        if (m_selected.size() && m_current_item < m_selected.size())
+        {
+            auto path = m_selected[m_current_item];
+            if (m_events->on_thm) {
+                HDC hdc = m_thm.BeginPaint();
+                m_events->on_thm(*path, hdc, Irect().set(0, 0, m_thm.Width(), m_thm.Height()));
+                m_thm.EndPaint();
+            }
+
+            if (m_events->on_sel) {
+                PropItemVec items;
+                SChooseItem foo(*path, "");
+                m_events->on_sel(&foo, items);
+                m_props.AssignItems(items, false, false);
+            }
         }
 
         ImGui::TextUnformatted("Properties:");

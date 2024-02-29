@@ -39,13 +39,17 @@ enum
 	RC_dest_pixel					= (1<<0),
 	RC_dest_vertex					= (1<<1),
 	RC_dest_sampler					= (1<<2),	//	For DX10 it's either sampler or texture
+#ifdef	HAS_GS
 	RC_dest_geometry				= (1<<3),	//	DX10 only
+#endif
 	RC_dest_pixel_cb_index_mask		= 0xF000,	//	Buffer index == 0..14
 	RC_dest_pixel_cb_index_shift	= 12,
 	RC_dest_vertex_cb_index_mask	= 0x0F00,	//	Buffer index == 0..14
 	RC_dest_vertex_cb_index_shift	= 8,
+#ifdef	HAS_GS
 	RC_dest_geometry_cb_index_mask	= 0x00F0,	//	Buffer index == 0..14
 	RC_dest_geometry_cb_index_shift	= 4,
+#endif
 };
 
 enum	//	Constant buffer index masks
@@ -55,7 +59,9 @@ enum	//	Constant buffer index masks
 	CB_BufferTypeMask		= 0x30,
 	CB_BufferPixelShader	= 0x10,
 	CB_BufferVertexShader	= 0x20,
+#ifdef	HAS_GS
 	CB_BufferGeometryShader	= 0x30
+#endif
 };
 
 struct ECORE_API	R_constant_load
@@ -79,9 +85,9 @@ struct ECORE_API	R_constant			:public xr_resource
 
 	R_constant_load			ps;
 	R_constant_load			vs;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	R_constant_load			gs;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	R_constant_load			samp;
 	R_constant_setup*		handler;
 
@@ -95,6 +101,7 @@ struct ECORE_API	R_constant			:public xr_resource
 	{
 		return equal(*C);
 	}
+    R_constant_load&		get_load	(u16 destination);
 };
 typedef	resptr_core<R_constant,resptr_base<R_constant> > ref_constant;
 
@@ -120,8 +127,8 @@ private:
 	void					fatal		(LPCSTR s);
 
 #ifdef	USE_DX10
-	BOOL					parseConstants(ID3D10ShaderReflectionConstantBuffer* pTable, u16 destination);
-	BOOL					parseResources(ID3D10ShaderReflection* pReflection, int ResNum, u16 destination);
+	BOOL					parseConstants(ID3D11ShaderReflectionConstantBuffer* pTable, u16 destination);
+	BOOL					parseResources(ID3D11ShaderReflection* pReflection, int ResNum, u16 destination);
 #endif	//	USE_DX10
 
 public:
@@ -137,7 +144,8 @@ public:
 	BOOL					equal		(R_constant_table* C)	{	return equal(*C);		}
 	BOOL					empty		()						{	return 0==table.size();	}
 private:
-
+    int						get_shift	(u16 destination);
+	u32						get_buffer_offset(u16 destination);
 };
 typedef	resptr_core<R_constant_table,resptr_base<R_constant_table> >				ref_ctable;
 

@@ -39,11 +39,12 @@ SVS::~SVS()
 //	SPS
 SPS::~SPS								()			{	_RELEASE(ps);		DEV->_DeletePS			(this);	}
 
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 ///////////////////////////////////////////////////////////////////////
 //	SGS
 SGS::~SGS								()			{	_RELEASE(gs);		DEV->_DeleteGS			(this);	}
-
+#endif
+#ifdef USE_DX10
 ///////////////////////////////////////////////////////////////////////
 //	SInputSignature
 SInputSignature::SInputSignature(ID3DBlob* pBlob)	{ VERIFY(pBlob); signature=pBlob; signature->AddRef();};
@@ -60,7 +61,7 @@ SDeclaration::~SDeclaration()
 {	
 	DEV->_DeleteDecl(this);	
 #ifdef	USE_DX10
-	xr_map<ID3DBlob*, ID3D10InputLayout*>::iterator iLayout;
+	xr_map<ID3DBlob*, ID3D11InputLayout*>::iterator iLayout;
 	iLayout = vs_to_layout.begin();
 	for( ; iLayout != vs_to_layout.end(); ++iLayout)
 	{

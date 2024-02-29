@@ -345,7 +345,7 @@ IWriter* ELocatorAPI::w_open	(LPCSTR path, LPCSTR _fname)
 	string_path	fname;
 	xr_strlwr(strcpy(fname,_fname));//,".$");
 	if (path&&path[0]) update_path(fname,path,fname);
-    CFileWriter* W 	= xr_new<CFileWriter>(fname,false); 
+    CFileWriter* W 	= xr_new<CFileWriter>(fname,false, false); 
 //#ifdef _EDITOR
 	if (!W->valid()) xr_delete(W);
 //#endif    
@@ -357,11 +357,23 @@ IWriter* ELocatorAPI::w_open_ex	(LPCSTR path, LPCSTR _fname)
 	string_path	fname;
 	xr_strlwr(strcpy(fname,_fname));//,".$");
 	if (path&&path[0]) update_path(fname,path,fname);
-    CFileWriter* W 	= xr_new<CFileWriter>(fname,true); 
+    CFileWriter* W 	= xr_new<CFileWriter>(fname,true, false); 
 //#ifdef _EDITOR
 	if (!W->valid()) xr_delete(W);
 //#endif    
 	return W;
+}
+
+IWriter* ELocatorAPI::w_open_append(LPCSTR initial, LPCSTR N)
+{
+    string_path fname;
+    xr_strlwr(strcpy(fname, N));
+    if (initial && initial[0])
+        update_path(fname, initial, fname);
+    CFileWriter* W = xr_new<CFileWriter>(fname, false, true);
+    if (!W->valid())
+        xr_delete(W);
+    return W;
 }
 
 void	ELocatorAPI::w_close(IWriter* &S)

@@ -178,6 +178,7 @@ u32 CBlender_Compile::r_dx10Sampler(LPCSTR ResourceName)
 	return					stage;
 }
 
+#ifdef	HAS_GS
 void	CBlender_Compile::r_Pass		(LPCSTR _vs, LPCSTR _gs, LPCSTR _ps, bool bFog, BOOL bZtest, BOOL bZwrite,	BOOL bABlend, D3DBLEND abSRC, D3DBLEND abDST, BOOL aTest, u32 aRef)
 {
 	RS.Invalidate			();
@@ -210,6 +211,7 @@ void	CBlender_Compile::r_Pass		(LPCSTR _vs, LPCSTR _gs, LPCSTR _ps, bool bFog, B
 		RS.SetTSS				(0,D3DTSS_ALPHAOP,D3DTOP_DISABLE);
 	}
 }
+#endif
 
 void	CBlender_Compile::r_End			()
 {
@@ -218,5 +220,9 @@ void	CBlender_Compile::r_End			()
 	dest.T					= DEV->_CreateTextureList	(passTextures);
 	dest.C					= 0;
 	ref_matrix_list			temp(0);
+#ifdef HAS_GS
 	SH->passes.push_back	(DEV->_CreatePass(dest.state,dest.ps,dest.vs,dest.gs,dest.constants,dest.T,temp,dest.C));
+#else  // HAS_GS
+	SH->passes.push_back	(DEV->_CreatePass(dest.state,dest.ps,dest.vs,dest.constants,dest.T,temp,dest.C));
+#endif // HAS_GS
 }

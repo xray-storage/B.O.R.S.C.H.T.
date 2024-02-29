@@ -92,6 +92,14 @@ void Progress		(const float F)
 	*/
 }
 
+static xr_vector<xr_string> phaseTimes;
+
+void LogPhaseTimes()
+{
+    for (const auto& time : phaseTimes)
+        Msg("%s", time.c_str());
+}
+
 void Phase			(const char *phase_name)
 {
 	while (!(hwPhaseTime && hwStage)) Sleep(1);
@@ -100,10 +108,13 @@ void Phase			(const char *phase_name)
 	// Replace phase name with TIME:Name 
 	char	tbuf		[512];
 	bPhaseChange		= TRUE;
-	phase_total_time	= timeGetTime()-phase_start_time;
-	sprintf				( tbuf,"%s : %s",make_time(phase_total_time/1000).c_str(),	phase);
-	SendMessage			( hwPhaseTime, LB_DELETESTRING, SendMessage(hwPhaseTime,LB_GETCOUNT,0,0)-1,0);
-	SendMessage			( hwPhaseTime, LB_ADDSTRING, 0, (LPARAM) tbuf);
+	if (phase_start_time != 0 || phase[0] != '\0') {
+		phase_total_time	= timeGetTime()-phase_start_time;
+		sprintf				( tbuf,"%s : %s",make_time(phase_total_time/1000).c_str(),	phase);
+		SendMessage			( hwPhaseTime, LB_DELETESTRING, SendMessage(hwPhaseTime,LB_GETCOUNT,0,0)-1,0);
+		SendMessage			( hwPhaseTime, LB_ADDSTRING, 0, (LPARAM) tbuf);
+        phaseTimes.push_back(tbuf);
+	}
 
 	// Start _new phase
 	phase_start_time	= timeGetTime();
@@ -179,7 +190,7 @@ void logThread(void *dummy)
 			bWasChanges		= TRUE;
 			for (; LogSize<LogFile->size(); LogSize++)
 			{
-				const char *S = *(*LogFile)[LogSize];
+				const char *S = *(*LogFile)[LogSize].second;
 				if (0==S)	S = "";
 				SendMessage	( hwLog, LB_ADDSTRING, 0, (LPARAM) S);
 			}

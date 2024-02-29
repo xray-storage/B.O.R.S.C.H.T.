@@ -164,6 +164,7 @@ class ECORE_API IM_PropertiesWnd : public IM_Window
 	bool IsOpen();
 	void Open();
 	void Close();
+	void SetFocus();
 
 	IM_PropertyTree& Props();
 	void AssignItems(PropItemVec& items);

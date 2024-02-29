@@ -27,6 +27,41 @@ extern char g_application_path[256];
 
 //. extern xr_vector<shared_str>*	LogFile;
 
+// computing build id
+static LPSTR month_id[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+static int days_in_month[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+static int start_day = 31; // 31
+static int start_month = 1; // January
+static int start_year = 1999; // 1999
+void compute_build_id()
+{
+    build_date = __DATE__;
+
+    int days;
+    int months = 0;
+    int years;
+    string16 month;
+    string256 buffer;
+    strcpy_s(buffer, __DATE__);
+    sscanf(buffer, "%s %d %d", month, &days, &years);
+
+    for (int i = 0; i < 12; i++) {
+        if (_stricmp(month_id[i], month))
+            continue;
+
+        months = i;
+        break;
+    }
+
+    build_id = (years - start_year) * 365 + days - start_day;
+
+    for (int i = 0; i < months; ++i)
+        build_id += days_in_month[i];
+
+    for (int i = 0; i < start_month - 1; ++i)
+        build_id -= days_in_month[i];
+}
+
 void xrCore::_initialize	(LPCSTR _ApplicationName, LogCallback cb, BOOL init_fs, LPCSTR fs_fname, bool editor)
 {
 	strcpy_s					(ApplicationName,_ApplicationName);
@@ -89,6 +124,14 @@ void xrCore::_initialize	(LPCSTR _ApplicationName, LogCallback cb, BOOL init_fs,
 
 		xr_EFS				= xr_new<EFS_Utils>		();
 //.		R_ASSERT			(co_res==S_OK);
+		compute_build_id	();
+		Msg					("'%s' build %d, %s\n", "xrCore", build_id, build_date);
+#ifdef DEBUG
+#    ifndef _EDITOR
+		Msg					("CRT heap 0x%08x", _get_heap_handle());
+		Msg					("Process heap 0x%08x", GetProcessHeap());
+#    endif
+#endif // DEBUG
 	}
 	if (init_fs){
 		u32 flags			= 0;
@@ -108,14 +151,7 @@ void xrCore::_initialize	(LPCSTR _ApplicationName, LogCallback cb, BOOL init_fs,
 	#endif
         }
 		FS._initialize		(flags,0,fs_fname);
-		Msg					("'%s' build %d, %s\n","xrCore",build_id, build_date);
 		EFS._initialize		();
-#ifdef DEBUG
-    #ifndef	_EDITOR
-		Msg					("CRT heap 0x%08x",_get_heap_handle());
-		Msg					("Process heap 0x%08x",GetProcessHeap());
-    #endif
-#endif // DEBUG
 	}
 	SetLogCB				(cb);
 	init_counter++;

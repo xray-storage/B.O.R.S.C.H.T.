@@ -62,7 +62,7 @@ void st_LevelOptions::SetHighQuality()
 //------------------------------------------------------------------------------
 
 
-#define MAX_VISUALS 16384
+#define MAX_VISUALS (16384 * 4)
 
 EScene::EScene()
 {
@@ -256,6 +256,8 @@ void EScene::Clear(BOOL bEditableToolsOnly)
     m_CreateTime			= time(NULL);
 
     m_SaveCache.free		();
+
+	m_CountByName.clear		();
 }
 //----------------------------------------------------
 

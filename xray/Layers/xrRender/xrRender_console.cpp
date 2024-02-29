@@ -542,6 +542,7 @@ public:
 	}
 };
 
+#ifdef HAS_3DFLUID
 //	Allow real-time fog config reload
 #if	RENDER == R_R3
 #ifdef	DEBUG
@@ -559,6 +560,7 @@ public:
 };
 #endif	//	DEBUG
 #endif	//	RENDER == R_R3
+#endif  //  HAS_3DFLUID
 
 //-----------------------------------------------------------------------
 void		xrRender_initconsole	()
@@ -770,13 +772,14 @@ void		xrRender_initconsole	()
 	CMD3(CCC_Token,		"r3_minmax_sm",					&ps_r3_minmax_sm,			qminmax_sm_token);
 
 
-
+#ifdef HAS_3DFLUID
 	//	Allow real-time fog config reload
 #if	RENDER == R_R3
 #ifdef	DEBUG
 	CMD1(CCC_Fog_Reload,"r3_fog_reload");
 #endif	//	DEBUG
 #endif	//	RENDER == R_R3
+#endif  //  HAS_3DFLUID 
 
 	CMD3(CCC_Mask,		"r3_dynamic_wet_surfaces",		&ps_r2_ls_flags,			R3FLAG_DYN_WET_SURF);
 	CMD4(CCC_Float,		"r3_dynamic_wet_surfaces_near",	&ps_r3_dyn_wet_surf_near,	10,	70		);

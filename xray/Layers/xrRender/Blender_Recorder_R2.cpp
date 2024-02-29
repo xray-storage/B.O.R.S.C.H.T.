@@ -28,10 +28,10 @@ void	CBlender_Compile::r_Pass		(LPCSTR _vs, LPCSTR _ps, bool bFog, BOOL bZtest, 
 	SVS* vs					= DEV->_CreateVS			(_vs);
 	dest.ps					= ps;
 	dest.vs					= vs;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	SGS* gs					= DEV->_CreateGS			("null");
 	dest.gs					= gs;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	ctable.merge			(&ps->constants);
 	ctable.merge			(&vs->constants);
 	SetMapping				();

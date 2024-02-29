@@ -738,9 +738,6 @@
     <ClInclude Include="pch\stdafx.h">
       <Filter>Kernel</Filter>
     </ClInclude>
-    <ClInclude Include="..\xrRenderDX10\imgui_impl_dx10.h">
-      <Filter>imgui_render</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\3rd_party\NvMender2003\convert.h">
       <Filter>Models\Editor\NvMender2003</Filter>
     </ClInclude>
@@ -752,6 +749,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\3rd_party\NvMender2003\remove_isolated_verts.h">
       <Filter>Models\Editor\NvMender2003</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xrRenderDX10\imgui_impl_dx11.h">
+      <Filter>imgui_render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1376,11 +1376,11 @@
     <ClCompile Include="pch\stdafx.cpp">
       <Filter>Kernel</Filter>
     </ClCompile>
-    <ClCompile Include="..\xrRenderDX10\imgui_impl_dx10.cpp">
-      <Filter>imgui_render</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\3rd_party\NvMender2003\NVMeshMender.cpp">
       <Filter>Models\Editor\NvMender2003</Filter>
+    </ClCompile>
+    <ClCompile Include="..\xrRenderDX10\imgui_impl_dx11.cpp">
+      <Filter>imgui_render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

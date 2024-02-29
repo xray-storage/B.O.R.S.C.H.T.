@@ -169,20 +169,20 @@ void	CBlender_Compile::PassEnd			()
 	ref_vs		vs			= DEV->_CreateVS			(pass_vs);
 	ctable.merge			(&ps->constants);
 	ctable.merge			(&vs->constants);
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	ref_gs		gs			= DEV->_CreateGS			(pass_gs);
 	ctable.merge			(&gs->constants);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	SetMapping				();
 	ref_ctable			ct	= DEV->_CreateConstantTable(ctable);
 	ref_texture_list	T 	= DEV->_CreateTextureList	(passTextures);
 	ref_matrix_list		M	= DEV->_CreateMatrixList	(passMatrices);
 	ref_constant_list	C	= DEV->_CreateConstantList	(passConstants);
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	ref_pass	_pass_		= DEV->_CreatePass			(state,ps,vs,gs,ct,T,M,C);
-#else	//	USE_DX10
+#else	//	HAS_GS
 	ref_pass	_pass_		= DEV->_CreatePass			(state,ps,vs,ct,T,M,C);
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	SH->passes.push_back	(_pass_);
 }
 

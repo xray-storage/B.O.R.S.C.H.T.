@@ -311,10 +311,8 @@ void OGF::MakeProgressive	(float metric_limit)
 			float	_metric	=	float(_remove)/float(_full);
 			if		(_metric<metric_limit)		{
 				progressive_clear				()		;
-				clMsg	("* mesh simplified from [%4dv] to [%4dv], nf[%4d] ==> em[%0.2f]-discarded",_full,_simple,VR->indices.size()/3,metric_limit);
 				break									;
 			} else {
-				clMsg	("* mesh simplified from [%4dv] to [%4dv], nf[%4d] ==> em[%0.2f]-accepted", _full,_simple,VR->indices.size()/3,metric_limit);
 			}
 
 			// OK
@@ -382,7 +380,6 @@ void OGF::MakeProgressive	(float metric_limit)
 			u32		_remove	=	VR->swr_records.size()	;
 			u32		_simple	=	_full - _remove			;
 			float	_metric	=	float(_remove)/float(_full);
-			clMsg	("X mesh simplified from [%4dv] to [%4dv], nf[%4d]",_full,_simple,VR ? VR->indices.size()/3 : 0);
 
 			// OK
 			vec_XV					vertices_saved;

@@ -15,6 +15,8 @@
 #define SCENEOBJ_CHUNK_PLACEMENT     	0x0904
 #define SCENEOBJ_CHUNK_FLAGS			0x0905
 
+extern bool skipLoadAllErrorObjects;
+
 bool CSceneObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
 {
     bool bRes = true;
@@ -30,6 +32,9 @@ bool CSceneObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
         {
             ELog.Msg            ( mtError, "CSceneObject: '%s' not found in library", ref_name.c_str() );
             bRes                = false;
+            if (skipLoadAllErrorObjects)
+                break;
+
             int mr              = mrNone;
 
             xr_string       _new_name;
@@ -46,8 +51,12 @@ bool CSceneObject::LoadLTX(CInifile& ini, LPCSTR sect_name)
             }
             if(!bRes)
             {
-                if(mr == mrNone)
-                    mr = ELog.DlgMsg(mtConfirmation,TMsgDlgButtons() << mbYes << mbNo, "Object not found. Do you want to select it from library?");
+                if (mr == mrNone) {
+                    mr = ELog.DlgMsg(mtConfirmation, TMsgDlgButtons() << mbYes << mbNo << mbCancel,
+                        "Object not found. Do you want to select it from library?");
+                    if (mr == mrCancel)
+                        skipLoadAllErrorObjects = true;
+                }
                 else
                     mr = mrNone;
 

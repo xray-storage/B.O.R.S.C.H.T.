@@ -34,7 +34,7 @@ LPCSTR _CopyVal ( LPCSTR src, AnsiString& dst, char separator )
 	p			= strchr	( src, separator );
 	n			= p ? (p-src) : xr_strlen(src);
 	dst			= src;
-	dst			= dst.substr(n);
+	dst			= dst.substr(0, n);
 	return		dst.c_str();
 }
 
@@ -182,7 +182,6 @@ void IM_FrameObject::OnAdd()
 
     IM_Storage s(false, "level.ini", "IM_FrameObject");
 
-    m_random_append = s.GetBool("random_append");
     m_select_percent = s.GetInt("select_percent", 0);
 
 	m_objects_tree.Select(s.GetString("selected_object").c_str(), true);
@@ -196,7 +195,6 @@ void IM_FrameObject::OnRemove()
 {
 	IM_Storage s(true, "level.ini", "IM_FrameObject");
 
-    s.PutBool("random_append", m_random_append);
     s.PutInt("select_percent", m_select_percent);
 
     shared_str sel_obj = m_objects_tree.GetSelected();
@@ -223,10 +221,10 @@ void IM_FrameObject::Render()
 
         ImGui::Columns(2, "obj_commands", false);
 
-        if(ImGui::MenuItem("Random Append", NULL, m_random_append))
+        bool active = m_parent_tool->IsAppendRandomActive();
+        if (ImGui::MenuItem("Random Append", NULL, active))
         {
-        	m_random_append = !m_random_append;
-            m_parent_tool->ActivateAppendRandom(m_random_append);
+            m_parent_tool->ActivateAppendRandom(!active);
         }
 
         ImGui::NextColumn();

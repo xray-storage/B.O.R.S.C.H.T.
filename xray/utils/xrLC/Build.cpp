@@ -32,8 +32,6 @@ vec2Face				g_XSplit;
 
 CThreadManager			mu_base;
 CThreadManager			mu_secondary;
-#define		MU_THREADS	4
-
 
 //////////////////////////////////////////////////////////////////////
 
@@ -124,10 +122,11 @@ public:
 		}
 
 		// Light references
-		u32	stride			= pBuild->mu_refs().size()/MU_THREADS;
-		u32	last			= pBuild->mu_refs().size()-stride*(MU_THREADS-1);
-		for (u32 thID=0; thID<MU_THREADS; thID++)
-			mu_secondary.start	(xr_new<CMULight> (thID,thID*stride,thID*stride+((thID==(MU_THREADS-1))?last:stride)));
+        auto numThreads = lc_global_data()->numThread();
+		u32	stride			= pBuild->mu_refs().size()/numThreads;
+		u32	last			= pBuild->mu_refs().size()-stride*(numThreads-1);
+		for (u32 thID=0; thID<numThreads; thID++)
+			mu_secondary.start	(xr_new<CMULight> (thID,thID*stride,thID*stride+((thID==(numThreads-1))?last:stride)));
 	}
 };
 
@@ -375,6 +374,8 @@ void CBuild::err_save	()
 	err.w_u32		(err_invalid().size()/(3*sizeof(Fvector)));
 	err.w			(err_invalid().pointer(), err_invalid().size());
 	err.close_chunk	();
+	
+	FS.w_close(fs);
 }
 
 void CBuild::MU_ModelsCalculateNormals()

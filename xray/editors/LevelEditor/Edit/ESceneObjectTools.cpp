@@ -112,13 +112,18 @@ void ESceneObjectTool::FillAppendRandomProperties(bool bUpdateOnly)
 {
 	if(!bUpdateOnly)
 	{
-		m_Props = xr_new<IM_PropertiesWnd>("Random Append Properties");
-		m_Props->Modal = true;
-		m_Props->ShowButtonsBar = false;
-		m_Props->Open();
-		m_Props->OnClose.bind(this, &ESceneObjectTool::OnCloseProps);
-		
-		UI->AddIMWindow(m_Props);
+        if (!m_Props) {
+            m_Props = xr_new<IM_PropertiesWnd>("Random Append Properties");
+            m_Props->Modal = false;
+            m_Props->ShowButtonsBar = false;
+            m_Props->Open();
+            m_Props->OnClose.bind(this, &ESceneObjectTool::OnCloseProps);
+            UI->AddIMWindow(m_Props);
+        }
+        else
+        {
+            m_Props->SetFocus();
+        }
 	}
 
 	m_AppendRandomObjectsStr		= _ListToSequence(m_AppendRandomObjects).c_str();    
@@ -148,7 +153,7 @@ void ESceneObjectTool::FillAppendRandomProperties(bool bUpdateOnly)
 	V=PHelper().CreateChoose		(items,"Objects",&m_AppendRandomObjectsStr,smObject,0,0,32);
 	V->OnChangeEvent.bind			(this,&ESceneObjectTool::OnChangeAppendRandomFlags);
 
-	m_Props->AssignItems			(items);
+	m_Props->AssignItems(items);
 }
 //----------------------------------------------------
 

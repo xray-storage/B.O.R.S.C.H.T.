@@ -14,4 +14,6 @@ set RC_VERSION=%APP_VERSION:.=,%
 echo RC_VERSION=%RC_VERSION%
 set FULL_VERSION=%APP_VERSION%-%APP_BRANCH%-%APP_COMMIT%
 echo FULL_VERSION=%FULL_VERSION%
-msbuild.exe engine.sln /p:Configuration=Release /t:Clean,Build -target:xrGame -m
+rem msbuild.exe engine.sln /p:Configuration=Release -t:Clean -target:xrgame -m
+rem msbuild.exe engine.sln /p:Configuration=Release -t:Clean -target:utils\xrai;utils\xrlc;utils\xrdo_light -m
+msbuild.exe engine.sln /p:Configuration=Release -t:Clean -target:editors\LevelEditor -m

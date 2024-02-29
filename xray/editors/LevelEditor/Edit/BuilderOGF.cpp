@@ -15,7 +15,7 @@
 // some types
 bool SceneBuilder::BuildHOMModel()
 {
-	CMemoryWriter F;
+    CMemoryWriter F;
 
     F.open_chunk(0);
     F.w_u32(0);
@@ -23,35 +23,59 @@ bool SceneBuilder::BuildHOMModel()
 
     F.open_chunk(1);
     ObjectList& lst = Scene->ListObj(OBJCLASS_SCENEOBJECT);
-    for (ObjectIt it=lst.begin(); it!=lst.end(); it++){
-    	CSceneObject* S 	= (CSceneObject*)(*it);
-    	CEditableObject* E	= S->GetReference(); R_ASSERT(E);
-    	if (E->m_objectFlags.is(CEditableObject::eoHOM)){
-            Fvector 		v;
-            const Fmatrix&	parent = S->_Transform();
-            for (EditMeshIt m_it=E->FirstMesh(); m_it!=E->LastMesh(); m_it++){
-                for (SurfFacesPairIt sf_it=(*m_it)->m_SurfFaces.begin(); sf_it!=(*m_it)->m_SurfFaces.end(); sf_it++){
+    for (ObjectIt it = lst.begin(); it != lst.end(); ++it) {
+        CSceneObject* S = (CSceneObject*)(*it);
+        CEditableObject* E = S->GetReference();
+        R_ASSERT(E);
+        if (E->m_objectFlags.is(CEditableObject::eoHOM)) {
+            Fvector v;
+            const Fmatrix& parent = S->_Transform();
+            for (EditMeshIt m_it = E->FirstMesh(); m_it != E->LastMesh(); ++m_it) {
+                for (SurfFacesPairIt sf_it = (*m_it)->m_SurfFaces.begin(); sf_it != (*m_it)->m_SurfFaces.end();
+                     ++sf_it) {
                     BOOL b2Sided = sf_it->first->m_Flags.is(CSurface::sf2Sided);
-                    IntVec& i_lst= sf_it->second;
-                    for (IntIt i_it=i_lst.begin(); i_it!=i_lst.end(); i_it++){
+                    IntVec& i_lst = sf_it->second;
+                    for (IntIt i_it = i_lst.begin(); i_it != i_lst.end(); ++i_it) {
                         st_Face& face = (*m_it)->m_Faces[*i_it];
-                        for (int k=0; k<3; k++){
-                            parent.transform_tiny(v,(*m_it)->m_Vertices[face.pv[k].pindex]);
-                            F.w_fvector3	(v);
+                        for (int k = 0; k < 3; ++k) {
+                            parent.transform_tiny(v, (*m_it)->m_Vertices[face.pv[k].pindex]);
+                            F.w_fvector3(v);
                         }
                         F.w_u32(b2Sided);
                     }
                 }
             }
+        } else {
+            Fvector v;
+            const Fmatrix& parent = S->_Transform();
+            for (EditMeshIt m_it = E->FirstMesh(); m_it != E->LastMesh(); ++m_it) {
+                for (SurfFacesPairIt sf_it = (*m_it)->m_SurfFaces.begin(); sf_it != (*m_it)->m_SurfFaces.end();
+                     ++sf_it) {
+                    CSurface* S = sf_it->first;
+                    if (S->m_GameMtlName == "materials\\occ") {
+                        BOOL b2Sided = S->m_Flags.is(CSurface::sf2Sided);
+                        IntVec& i_lst = sf_it->second;
+                        for (IntIt i_it = i_lst.begin(); i_it != i_lst.end(); ++i_it) {
+                            st_Face& face = (*m_it)->m_Faces[*i_it];
+                            for (int k = 0; k < 3; ++k) {
+                                parent.transform_tiny(v, (*m_it)->m_Vertices[face.pv[k].pindex]);
+                                F.w_fvector3(v);
+                            }
+                            F.w_u32(b2Sided);
+                        }
+                    }
+                }
+            }
         }
     }
+
     BOOL bValid = !!F.chunk_size();
     F.close_chunk();
-    if (bValid){
-	    xr_string hom_name 	= MakeLevelPath("level.hom");
-	    bValid 				= F.save_to(hom_name.c_str());
+    if (bValid) {
+        xr_string hom_name = MakeLevelPath("level.hom");
+        bValid = F.save_to(hom_name.c_str());
     }
-	return bValid;
+    return bValid;
 }
 
 bool SceneBuilder::BuildSOMModel()

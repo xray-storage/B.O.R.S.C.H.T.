@@ -51,10 +51,10 @@ int MessageDlg(const AnsiString& Msg, TMsgDlgType DlgType, TMsgDlgButtons Button
         buttonType = MB_OK;
     else if (Buttons.Contains(mbRetry) && Buttons.Contains(mbCancel))
         buttonType = MB_RETRYCANCEL;
-    else if (Buttons.Contains(mbYes) && Buttons.Contains(mbNo))
-        buttonType = MB_YESNO;
     else if (Buttons.Contains(mbYes) && Buttons.Contains(mbNo) && Buttons.Contains(mbCancel))
         buttonType = MB_YESNOCANCEL;
+    else if (Buttons.Contains(mbYes) && Buttons.Contains(mbNo))
+        buttonType = MB_YESNO;
     else
         R_ASSERT(!"Unknown MessageDlg button type!");
     if (Buttons.Contains(mbHelp))

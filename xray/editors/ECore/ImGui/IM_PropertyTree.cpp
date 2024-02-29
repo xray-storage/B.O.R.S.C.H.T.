@@ -787,7 +787,7 @@ void IM_PropertyTree::RenderFlag(PropItem* item)
 		}
 	}
 	else
-		modified = ImGui::Checkbox("", &value);
+		modified = ImGui::Checkbox(" ", &value);
 
 	bool disabled = item->m_Flags.is(PropItem::flDisabled);
 
@@ -1403,6 +1403,11 @@ void IM_PropertiesWnd::Close()
 	
 	if(!OnClose.empty())
 		OnClose();
+}
+
+void IM_PropertiesWnd::SetFocus()
+{
+	ImGui::SetWindowFocus(Caption.c_str());
 }
 
 IM_PropertyTree& IM_PropertiesWnd::Props()

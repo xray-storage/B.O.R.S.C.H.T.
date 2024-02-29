@@ -43,18 +43,18 @@ void	resptrcode_geom::create			(D3DVERTEXELEMENT9* decl, ID3DVertexBuffer* vb, I
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 BOOL	SPass::equal	(ref_state& _state, ref_ps& _ps, ref_vs& _vs, ref_gs& _gs, ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C)
-#else	//	USE_DX10
+#else	//	HAS_GS
 BOOL	SPass::equal	(ref_state& _state, ref_ps& _ps, ref_vs& _vs, ref_ctable& _ctable, ref_texture_list& _T, ref_matrix_list& _M, ref_constant_list& _C)
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 {
 	if (state		!= _state)		return FALSE;
 	if (ps			!= _ps)			return FALSE;
 	if (vs			!= _vs)			return FALSE;
-#ifdef	USE_DX10
+#ifdef	HAS_GS
 	if (gs			!= _gs)			return FALSE;
-#endif	//	USE_DX10
+#endif	//	HAS_GS
 	if (constants	!= _ctable)		return FALSE;	// is this nessesary??? (ps+vs already combines)
 
 	if (T != _T)					return FALSE;

@@ -2,6 +2,8 @@
 #define	dx103DFluidManager_included
 #pragma once
 
+#ifdef HAS_3DFLUID
+
 class dx103DFluidData;
 class dx103DFluidGrid;
 class dx103DFluidObstacles;
@@ -84,7 +86,7 @@ private:
 	void	DestroyShaders();
 
 	void	PrepareTexture( int rtIndex );
-	void	CreateRTTextureAndViews( int rtIndex, D3D10_TEXTURE3D_DESC TexDesc );
+	void	CreateRTTextureAndViews( int rtIndex, D3D11_TEXTURE3D_DESC TexDesc );
 	void	DestroyRTTextureAndViews( int rtIndex );
 
 	void	Reset();
@@ -148,5 +150,7 @@ private:
 };
 
 extern dx103DFluidManager	FluidManager;
+
+#endif  // HAS_3DFLUID
 
 #endif	//	dx103DFluidManager_included

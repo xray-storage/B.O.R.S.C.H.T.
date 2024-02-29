@@ -831,8 +831,12 @@ bool EScene::OnLoadAppendObject(CCustomObject* O)
 }
 
 //----------------------------------------------------
+bool skipLoadAllErrorObjects = false;
+
 bool EScene::LoadLTX(LPCSTR map_name, bool bUndo)
 {
+    skipLoadAllErrorObjects = false;
+
     DWORD version = 0;
 	if (!map_name||(0==map_name[0])) return false;
 
