@@ -171,7 +171,7 @@ public:
 	shared_str		screen_font;
 protected:
 	void 	        OnKeyboardCommonFileClick	(ButtonValue* value, bool& bModif, bool& bSafe);
-	void 	__stdcall  OnClose	();
+	void 	        OnClose	();
     void			ApplyValues			();
 
     virtual void 	Load				(CInifile*);

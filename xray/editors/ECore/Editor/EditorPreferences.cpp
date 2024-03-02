@@ -75,7 +75,7 @@ void CCustomPreferences::ApplyValues()
 }
 //---------------------------------------------------------------------------
 
-void __stdcall CCustomPreferences::OnClose	()
+void CCustomPreferences::OnClose	()
 {
     ApplyValues	();	
     UI->RemoveIMWindow(IMProps);

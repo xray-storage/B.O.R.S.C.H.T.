@@ -38,7 +38,7 @@ void __fastcall TfrmAppendObjectInfo::btOverwriteClick(TObject *Sender)
 
 TfrmAppendObjectInfo* g_frmConflictLoadObject = NULL;
 
-INT_PTR TfrmAppendObjectInfo_DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK TfrmAppendObjectInfo_DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(msg == WM_INITDIALOG)
     {
