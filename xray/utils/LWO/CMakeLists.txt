@@ -20,3 +20,4 @@ target_sources(${PROJECT_NAME} PRIVATE
 	surface.c
 	vecmath.c
 	vmap.c)
+add_library(Xray::LWO ALIAS LWO)

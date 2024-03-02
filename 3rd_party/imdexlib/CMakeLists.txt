@@ -3,4 +3,5 @@ project(imdexlib LANGUAGES C CXX)
 
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE .)
+add_library(Imdexlib::Imdexlib ALIAS ${PROJECT_NAME})
 

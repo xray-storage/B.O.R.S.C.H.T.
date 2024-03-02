@@ -178,6 +178,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 	Edit/WayPoint.h
 #	Engine\
 #	Forms\
+	ImGui/IM_DetailShuffle.cpp
+	ImGui/IM_DetailShuffle.h
 	ImGui/IM_FrameAIMap.cpp
 	ImGui/IM_FrameAIMap.h
 	ImGui/IM_FrameDetail.cpp
@@ -210,6 +212,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 	ImGui/IM_ContextMenu.h
 	ImGui/IM_Manipulator.cpp
 	ImGui/IM_Manipulator.h
+	ImGui/IM_ObjectListWnd.cpp
+	ImGui/IM_ObjectListWnd.h
 	framework.h
 	iniStreamImpl.cpp
 	iniStreamImpl.h
@@ -236,4 +240,15 @@ target_sources(${PROJECT_NAME} PRIVATE
 	../../Layers/xrRender/DetailManager_Decompress.cpp
 	../../Layers/xrRender/DetailManager_soft.cpp
 	../../Layers/xrRender/DetailManager_VS.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore ECore xrEProps xrCDB ETools xrSound MagicFM comctl32)
+target_link_libraries(${PROJECT_NAME}
+	PRIVATE
+		Xray::Core
+		Xray::ECore
+		Xray::EProps
+		Xray::CDB
+		Xray::ETools
+		Xray::Sound
+		Xray::SE_Factory
+		MagicFM::MagicFM
+		comctl32
+)

@@ -27,4 +27,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/stack_content_by_name.cpp
 	src/weak_ref.cpp
 	src/wrapper_base.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE imdexlib lua51.lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE Imdexlib::Imdexlib lua51.lib)
+add_library(Luabind::Luabind ALIAS ${PROJECT_NAME})

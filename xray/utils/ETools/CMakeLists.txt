@@ -35,4 +35,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	StdAfx.h
 	xrXRC.cpp
 	xrXRC.h)
-target_link_libraries(${PROJECT_NAME} PRIVATE libvorbis_static libogg xrCore xrCDB xrQSlim DxErr d3dx9.lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core Xray::CDB Xray::QSlim Xiph::libvorbis_static Xiph::libogg DxErr::DxErr d3dx9.lib)
+add_library(Xray::ETools ALIAS ${PROJECT_NAME})

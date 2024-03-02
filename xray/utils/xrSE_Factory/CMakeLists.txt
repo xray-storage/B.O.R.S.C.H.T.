@@ -142,4 +142,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	../../xrServerEntities/xrServer_Objects_ALife_script3.cpp
 	../../xrServerEntities/xrServer_Objects_script.cpp
 	../../xrServerEntities/xrServer_Objects_script2.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore xrXMLParser xrSound luabind imdexlib lua51.lib shlwapi.lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core Xray::XMLParser Xray::Sound Luabind::Luabind Imdexlib::Imdexlib lua51.lib shlwapi.lib)
+add_library(Xray::SE_Factory ALIAS ${PROJECT_NAME})

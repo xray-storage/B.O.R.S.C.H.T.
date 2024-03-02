@@ -382,17 +382,18 @@ target_sources(${PROJECT_NAME} PRIVATE
 	"../../../3rd_party/NvMender2003/ReadMe.txt"
 	"../../../3rd_party/NvMender2003/remove_isolated_verts.h")
 target_link_libraries(${PROJECT_NAME} PRIVATE
-	xrCore
-	libtheora_static
-	libogg
-	xrSound
-	xrParticles
-	ETools
-	xrEProps
-	LWO
-	DXT
-	WildMagic
-	MagicFM
+	Xray::Core
+	Xray::Sound
+	Xray::Particles
+	Xray::CPU_Pipe
+	Xray::ETools
+	Xray::EProps
+	Xray::LWO
+	Xray::DXT
+	Xiph::libtheora_static
+	Xiph::libogg
+	WildMagic::WildMagic
+	MagicFM::MagicFM
 	FreeImage.lib
 	vfw32.lib
 	dxguid.lib
@@ -400,3 +401,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	d3dx9.lib
 	winmm.lib
 	Rpcrt4.lib)
+add_library(Xray::ECore ALIAS ${PROJECT_NAME})

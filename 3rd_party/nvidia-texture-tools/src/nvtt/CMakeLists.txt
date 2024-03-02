@@ -54,6 +54,7 @@ ELSE(NVTT_SHARED)
 ENDIF(NVTT_SHARED)
 
 TARGET_LINK_LIBRARIES(nvtt ${LIBS} nvcore nvimage nvthread squish bc6h bc7 nvmath rg_etc1)
+ADD_LIBRARY(Nvtt::Nvtt ALIAS nvtt)
 
 INSTALL(TARGETS nvtt 
     RUNTIME DESTINATION bin

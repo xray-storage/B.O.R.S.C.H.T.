@@ -23,4 +23,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 #	xrSkin2W_3DNow!.cpp
 #	xrSkin2W_SSE.cpp
 	xrTransfer.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core)
+add_library(Xray::CPU_Pipe ALIAS ${PROJECT_NAME})

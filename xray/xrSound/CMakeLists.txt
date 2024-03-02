@@ -49,4 +49,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 #	xr_streamsnd.cpp
 #	xr_streamsnd.h
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore xrCDB openal32 libvorbisfile libogg)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core Xray::CDB OpenAL32::OpenAL32 Xiph::libvorbisfile Xiph::libogg)
+add_library(Xray::Sound ALIAS ${PROJECT_NAME})

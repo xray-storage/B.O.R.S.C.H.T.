@@ -15,4 +15,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	tinyxmlparser.cpp
 	xrXMLParser.cpp
 	xrXMLParser.h)
-target_link_libraries(${PROJECT_NAME} PRIVATE xrCore)
+target_link_libraries(${PROJECT_NAME} PRIVATE Xray::Core)
+add_library(Xray::XMLParser ALIAS ${PROJECT_NAME})
