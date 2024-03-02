@@ -91,9 +91,7 @@ void CPendulum::shedule_Update(u32 dt)
         auto&& m = m_pendulum->mXFORM;
         ref_sound* tictac = nullptr;
         if (clockwise) {
-            if (m_working) {
-                m_pendulum->applyImpulse({ 1, 1, 1 }, 4);
-            }
+            m_pendulum->applyImpulse({ 1, 1, 1 }, 4);
             tictac = &m_ticSnd;
         } else {
             tictac = &m_tacSnd;
