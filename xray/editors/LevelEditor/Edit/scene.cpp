@@ -274,12 +274,17 @@ bool EScene::GetBox(Fbox& box, ObjectList& lst)
     for(ObjectIt it=lst.begin();it!=lst.end();it++){
         Fbox bb;
 
-        if((*it)->GetBox(bb))
-        {
-            box.modify(bb.min);
-            box.modify(bb.max);
-            bRes=true;
+        if (!(*it)->GetBox(bb))
+            continue;
+
+        if (bb.max.x > 100000.0f || bb.max.y > 100000.0f || bb.max.z > 100000.0f) {
+            ELog.Msg(mtError, "ERROR: Bounding box [%s]", (*it)->GetName());
+            continue;
         }
+
+        box.modify(bb.min);
+        box.modify(bb.max);
+        bRes=true;
     }
     return bRes;
 }
