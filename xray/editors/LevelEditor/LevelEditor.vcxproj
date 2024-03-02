@@ -229,6 +229,7 @@
     <ClInclude Include="Edit\WayPoint.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ImGui\IM_ContextMenu.h" />
+    <ClInclude Include="ImGui\IM_DetailShuffle.h" />
     <ClInclude Include="ImGui\IM_FrameAIMap.h" />
     <ClInclude Include="ImGui\IM_FrameDetail.h" />
     <ClInclude Include="ImGui\IM_FrameFogVol.h" />
@@ -363,6 +364,7 @@
     <ClCompile Include="Edit\UI_LevelTools.cpp" />
     <ClCompile Include="Edit\WayPoint.cpp" />
     <ClCompile Include="ImGui\IM_ContextMenu.cpp" />
+    <ClCompile Include="ImGui\IM_DetailShuffle.cpp" />
     <ClCompile Include="ImGui\IM_FrameAIMap.cpp" />
     <ClCompile Include="ImGui\IM_FrameDetail.cpp" />
     <ClCompile Include="ImGui\IM_FrameFogVol.cpp" />

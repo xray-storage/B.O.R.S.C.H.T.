@@ -92,8 +92,10 @@ bool FileExists(const AnsiString& fileName)
 
 AnsiString ExtractFileName(const AnsiString& fileName)
 {
-    R_ASSERT(false);
-    return 0;
+    AnsiString name(fileName.size(), '\0');
+    _splitpath(fileName.c_str(), 0, 0, name.data(), 0);
+    name.resize(strlen(name.data()));
+    return name;
 }
 
 POINT TWinControl::ScreenToClient(POINT pt)

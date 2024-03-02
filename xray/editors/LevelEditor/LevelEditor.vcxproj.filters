@@ -288,6 +288,9 @@
     <ClInclude Include="ImGui\IM_ObjectListWnd.h">
       <Filter>ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="ImGui\IM_DetailShuffle.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LevelEditor.cpp">
@@ -678,6 +681,9 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\IM_ObjectListWnd.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\IM_DetailShuffle.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
   </ItemGroup>

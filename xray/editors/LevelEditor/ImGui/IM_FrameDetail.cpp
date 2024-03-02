@@ -4,6 +4,7 @@
 #include "../ECore/ImGui/ImGui.h"
 
 #include "IM_FrameDetail.h"
+#include "IM_DetailShuffle.h"
 #include "../Edit/Scene.h"
 #include "../Edit/ESceneDOTools.h"
 #ifndef NO_VCL
@@ -75,7 +76,10 @@ void IM_FrameDetail::Render()
 
         if(ImGui::MenuItem("Object List"))
         {
-#ifndef NO_VCL
+#ifdef NO_VCL
+            auto wnd = xr_new<IM_DetailShuffle>(dynamic_cast<EDetailManager*>(Scene->GetTool(OBJCLASS_DO)));
+            UI->AddIMWindow(wnd);
+#else
         	if(TfrmDOShuffle::Run())
             	Scene->UndoSave();
 #endif
