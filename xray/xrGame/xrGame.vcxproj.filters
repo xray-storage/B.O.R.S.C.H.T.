@@ -2590,6 +2590,9 @@
     <Filter Include="Include">
       <UniqueIdentifier>{3b8b78c7-f43f-455e-84b2-a5441bb3f447}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Client\Objects\physics\Pendulum">
+      <UniqueIdentifier>{0b478ece-4d47-4f0f-b04a-94bcce2c697e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mt_config.h">
@@ -7521,6 +7524,9 @@
     <ClInclude Include="embedded_editor\embedded_editor.h">
       <Filter>Embedded editor</Filter>
     </ClInclude>
+    <ClInclude Include="objects\physics\Pendulum.h">
+      <Filter>Core\Client\Objects\physics\Pendulum</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="damage_manager.cpp">
@@ -9177,12 +9183,6 @@
       <Filter>Core\Client\Objects\actor\base</Filter>
     </ClCompile>
     <ClCompile Include="ActorInput.cpp">
-      <Filter>Core\Client\Objects\actor\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorMountedWeapon.cpp">
-      <Filter>Core\Client\Objects\actor\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorVehicle.cpp">
       <Filter>Core\Client\Objects\actor\base</Filter>
     </ClCompile>
     <ClCompile Include="fire_disp_controller.cpp">
@@ -11239,6 +11239,12 @@
     </ClCompile>
     <ClCompile Include="embedded_editor\infoportions.cpp">
       <Filter>Embedded editor</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\physics\Pendulum.cpp">
+      <Filter>Core\Client\Objects\physics\Pendulum</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorHolder.cpp">
+      <Filter>Core\Client\Objects\actor\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -294,52 +294,6 @@ void CActor::IR_OnMouseMove(int dx, int dy)
 		cam_Active()->Move((d>0)?kUP:kDOWN, _abs(d));
 	}
 }
-#include "HudItem.h"
-bool CActor::use_Holder				(CHolderCustom* holder)
-{
-
-	if(m_holder){
-		bool b = false;
-		CGameObject* holderGO			= smart_cast<CGameObject*>(m_holder);
-		
-		if(smart_cast<CCar*>(holderGO))
-			b = use_Vehicle(0);
-		else
-			if (holderGO->CLS_ID==CLSID_OBJECT_W_STATMGUN)
-				b = use_MountedWeapon(0);
-
-		if(inventory().ActiveItem()){
-			CHudItem* hi = smart_cast<CHudItem*>(inventory().ActiveItem());
-			if(hi) hi->OnAnimationEnd(hi->GetState());
-		}
-
-		return b;
-	}else{
-		bool b = false;
-		CGameObject* holderGO			= smart_cast<CGameObject*>(holder);
-		if(smart_cast<CCar*>(holder))
-			b = use_Vehicle(holder);
-
-		if (holderGO->CLS_ID==CLSID_OBJECT_W_STATMGUN)
-			b = use_MountedWeapon(holder);
-		
-		if(b){//used succesfully
-			// switch off torch...
-			CAttachableItem *I = CAttachmentOwner::attachedItem(CLSID_DEVICE_TORCH);
-			if (I){
-				CTorch* torch = smart_cast<CTorch*>(I);
-				if (torch) torch->Switch(false);
-			}
-		}
-
-		if(inventory().ActiveItem()){
-			CHudItem* hi = smart_cast<CHudItem*>(inventory().ActiveItem());
-			if(hi) hi->OnAnimationEnd(hi->GetState());
-		}
-
-		return b;
-	}
-}
 
 void CActor::ActorUse()
 {

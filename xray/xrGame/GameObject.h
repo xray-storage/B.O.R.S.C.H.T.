@@ -102,7 +102,7 @@ public:
 	
 	// Methods
 	virtual void			Load				(LPCSTR section);
-	virtual BOOL			net_Spawn			(CSE_Abstract* DC);
+	BOOL					net_Spawn			(CSE_Abstract* DC) override;
 	virtual void			net_Destroy			();
 	virtual	void			net_Relcase			( CObject* O );	
 	virtual void			UpdateCL			( );

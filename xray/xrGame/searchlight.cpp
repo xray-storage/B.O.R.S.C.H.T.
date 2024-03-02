@@ -5,6 +5,7 @@
 #include "xrServer_Objects_ALife.h"
 #include "../Include/xrRender/Kinematics.h"
 #include "game_object_space.h"
+#include "bone_callback_type.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

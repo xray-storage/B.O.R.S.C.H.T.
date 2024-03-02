@@ -1537,6 +1537,7 @@
     <ClInclude Include="objects\devices\Compass.h" />
     <ClInclude Include="objects\devices\Dosimeter.h" />
     <ClInclude Include="objects\devices\UIDosimeter.h" />
+    <ClInclude Include="objects\physics\Pendulum.h" />
     <ClInclude Include="object_actions.h" />
     <ClInclude Include="object_actions_inline.h" />
     <ClInclude Include="object_handler.h" />
@@ -3056,9 +3057,8 @@
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(ProjectName)_script.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <ClCompile Include="ActorFollowers.cpp" />
+    <ClCompile Include="ActorHolder.cpp" />
     <ClCompile Include="ActorInput.cpp" />
-    <ClCompile Include="ActorMountedWeapon.cpp" />
-    <ClCompile Include="ActorVehicle.cpp" />
     <ClCompile Include="actor_communication.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch_script.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug-LLVM|Win32'">pch_script.h</PrecompiledHeaderFile>
@@ -5831,6 +5831,7 @@
     <ClCompile Include="objects\devices\Compass.cpp" />
     <ClCompile Include="objects\devices\Dosimeter.cpp" />
     <ClCompile Include="objects\devices\UIDosimeter.cpp" />
+    <ClCompile Include="objects\physics\Pendulum.cpp" />
     <ClCompile Include="object_actions.cpp" />
     <ClCompile Include="object_handler.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch_script.h</PrecompiledHeaderFile>

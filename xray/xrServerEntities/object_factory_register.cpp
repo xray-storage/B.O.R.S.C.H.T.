@@ -154,6 +154,7 @@
 #	include "BreakableObject.h"
 #	include "PhysicsSkeletonObject.h"
 #	include "DestroyablePhysicsObject.h"
+#	include "objects/physics/Pendulum.h"
 
 #	include "game_sv_single.h"
 #	include "game_sv_deathmatch.h"
@@ -403,6 +404,7 @@ void CObjectFactory::register_classes	()
 	ADD(CClimableObject			,CSE_ALifeObjectClimable		,CLSID_OBJECT_CLIMABLE			,"obj_climable");
 	ADD(CPhysicsSkeletonObject	,CSE_ALifePHSkeletonObject		,CLSID_PH_SKELETON_OBJECT		,"obj_phskeleton");
 	ADD(CDestroyablePhysicsObject,CSE_ALifeObjectPhysic			,CLSID_PHYSICS_DESTROYABLE		,"obj_phys_destroyable");
+	ADD(CPendulum               ,CSE_ALifeObjectPhysic          ,CLSID_PENDULUM                 ,"obj_pendulum");
 
 	ADD(CInventoryBox			,CSE_InventoryBox				,CLSID_INVENTORY_BOX			,"inventory_box");
 #ifndef NO_SINGLE

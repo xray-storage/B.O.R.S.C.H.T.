@@ -13,6 +13,7 @@
 #include "stalker_movement_manager_smart_cover.h"
 #include "game_object_space.h"
 #include "effectorshot.h"
+#include "bone_callback_type.h"
 
 typedef CStalkerAnimationManager::callback_params	callback_params;
 

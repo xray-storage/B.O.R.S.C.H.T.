@@ -7,6 +7,7 @@
 #ifdef	 DEBUG
 #include "phdebug.h"
 #endif
+#include "bone_callback_type.h"
 
 void	DBG_DrawBones( const Fmatrix &xform,  IKinematics *K );
 #ifdef	 DEBUG

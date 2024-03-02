@@ -11,6 +11,7 @@
 #include "xr_level_controller.h"
 #include "game_object_space.h"
 #include "level.h"
+#include "bone_callback_type.h"
 
 void 	CWeaponStatMgun::BoneCallbackX		(CBoneInstance *B)
 {

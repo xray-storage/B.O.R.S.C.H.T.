@@ -15,6 +15,7 @@
 #include "aimers_bone.h"
 #include "stalker_animation_manager.h"
 #include "weapon.h"
+#include "bone_callback_type.h"
 
 using MonsterSpace::SBoneRotation;
 

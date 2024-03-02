@@ -11,6 +11,8 @@
 #include "../Include/xrRender/Kinematics.h"
 #include "MathUtils.h"
 #include "game_object_space.h"
+#include "bone_callback_type.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CCar::DoorHit(float P,s16 element,ALife::EHitType hit_type)
 {

@@ -253,9 +253,9 @@ public:
 	s32						GetShotRndSeed			()	{ return m_ShotRndSeed;	};
 
 public:
-	void					detach_Vehicle			();
+	void					detach_Holder			();
 	void					steer_Vehicle			(float angle);
-	void					attach_Vehicle			(CHolderCustom* vehicle);
+	void					attach_Holder			(CHolderCustom* vehicle);
 
 	virtual bool			can_attach				(const CInventoryItem *inventory_item) const;
 protected:
@@ -263,8 +263,6 @@ protected:
 	u16						m_holderID;
 	bool					use_Holder				(CHolderCustom* holder);
 
-	bool					use_Vehicle				(CHolderCustom* object);
-	bool					use_MountedWeapon		(CHolderCustom* object);
 	void					ActorUse				();
 
 protected:
