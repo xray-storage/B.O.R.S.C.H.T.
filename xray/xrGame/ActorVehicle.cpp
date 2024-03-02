@@ -20,6 +20,7 @@
 #include "game_object_space.h"
 #include "characterphysicssupport.h"
 #include "inventory.h"
+#include "bone_callback_type.h"
 
 void CActor::attach_Vehicle(CHolderCustom* vehicle)
 {

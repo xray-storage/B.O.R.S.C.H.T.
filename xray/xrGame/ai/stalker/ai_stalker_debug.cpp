@@ -55,6 +55,7 @@
 #include "../../aimers_weapon.h"
 #include "../../aimers_bone.h"
 #include "../../smart_cover_planner_target_selector.h"
+#include "../../bone_callback_type.h"
 
 CActor *g_debug_actor = 0;
 

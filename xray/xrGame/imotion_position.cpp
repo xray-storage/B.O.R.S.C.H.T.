@@ -14,6 +14,7 @@
 #ifdef	DEBUG
 #include "phdebug.h"
 #endif
+#include "bone_callback_type.h"
 
 #ifdef	DEBUG
 BOOL dbg_imotion_draw_skeleton = FALSE;

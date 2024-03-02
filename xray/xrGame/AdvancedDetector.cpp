@@ -4,6 +4,7 @@
 #include "../Include/xrRender/Kinematics.h"
 #include "player_hud.h"
 #include "game_object_space.h"
+#include "bone_callback_type.h"
 
 CAdvancedDetector::CAdvancedDetector()
 {

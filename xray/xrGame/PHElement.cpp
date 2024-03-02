@@ -16,6 +16,7 @@
 #	include "PHDebug.h"
 #	include "objectdump.h"
 #endif // DEBUG
+#include "bone_callback_type.h"
 
 ///////////////////////////////////////////////////////////////
 #pragma warning(disable:4995)

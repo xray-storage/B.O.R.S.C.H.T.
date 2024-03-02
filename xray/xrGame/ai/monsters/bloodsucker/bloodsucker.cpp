@@ -28,7 +28,7 @@
 #ifdef DEBUG
 #	include <dinput.h>
 #endif // DEBUG
-
+#include "../../../bone_callback_type.h"
 
 namespace detail
 {

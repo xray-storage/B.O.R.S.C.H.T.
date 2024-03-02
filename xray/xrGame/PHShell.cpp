@@ -36,6 +36,8 @@
 #ifdef DEBUG
 #include	"phdebug.h"
 #endif
+#include "bone_callback_type.h"
+
 IC		bool	PhOutOfBoundaries			(const Fvector& v)
 {
 	return v.y < phBoundaries.y1;

@@ -6,7 +6,7 @@
 #include "../../../game_object_space.h"
 #include "../control_animation_base.h"
 #include "../control_movement_base.h"
-
+#include "../../../bone_callback_type.h"
 
 CAI_Boar::CAI_Boar()
 {

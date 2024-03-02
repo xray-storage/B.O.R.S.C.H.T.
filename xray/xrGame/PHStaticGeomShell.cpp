@@ -6,6 +6,7 @@
 #include "../Include/xrRender/Kinematics.h"
 #include "PHCollideValidator.h"
 #include "game_object_space.h"
+#include "bone_callback_type.h"
 
 void CPHStaticGeomShell::get_spatial_params()
 {

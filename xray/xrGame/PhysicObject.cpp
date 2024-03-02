@@ -12,6 +12,7 @@
 #include "game_object_space.h"
 #include "PhysicsShellAnimator.h"
 #include "moving_bones_snd_player.h"
+#include "bone_callback_type.h"
 #ifdef	DEBUG
 #include "phdebug.h"
 #endif

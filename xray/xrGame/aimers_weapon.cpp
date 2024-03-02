@@ -14,6 +14,7 @@
 #include "gameobject.h"
 #include "animation_movement_controller.h"
 #include "weapon.h"
+#include "bone_callback_type.h"
 
 using aimers::weapon;
 

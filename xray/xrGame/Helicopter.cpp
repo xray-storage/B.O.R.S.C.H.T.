@@ -12,6 +12,8 @@
 #include "../xrEngine/LightAnimLibrary.h"
 #include "HudManager.h"
 #include "physicscommon.h"
+#include "bone_callback_type.h"
+
 //50fps fixed
 float STEP=0.02f;
 

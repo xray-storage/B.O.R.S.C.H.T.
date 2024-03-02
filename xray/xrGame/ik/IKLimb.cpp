@@ -15,7 +15,7 @@
 #ifdef DEBUG
 #include "../PHDebug.h"
 #endif
-
+#include "../bone_callback_type.h"
 
 extern int	ik_allign_free_foot;
 

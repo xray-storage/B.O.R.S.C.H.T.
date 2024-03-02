@@ -4,6 +4,7 @@
 #include "../Include/xrRender/Kinematics.h"
 #include "../xrEngine/bone.h"
 #include "game_object_space.h"
+#include "bone_callback_type.h"
 
 anim_bone_fix::anim_bone_fix()
 		: bone( NULL ), parent( NULL ), matrix(Fmatrix().identity())

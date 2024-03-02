@@ -32,6 +32,7 @@
 #include "PHActivationShape.h"
 #include "CharacterPhysicsSupport.h"
 #include "car_memory.h"
+#include "bone_callback_type.h"
 
 BONE_P_MAP CCar::bone_map=BONE_P_MAP();
 
