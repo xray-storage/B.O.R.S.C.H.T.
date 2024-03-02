@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../version.h"
+
 #define QRCDKEY_INTEGRATION
 #define SB_ICMP_SUPPORT
 
@@ -17,11 +19,7 @@
 	#define	GAMESPY_GAMENAME				"stalkercs"
 	#define GAMESPY_GAMEID					2264
 	#define GAMESPY_PRODUCTID				11528
-	#ifdef CI_VERSION
-		#define GAME_VERSION				CI_VERSION
-	#else
-		#define GAME_VERSION				"1.5.10-???"
-	#endif
+	#define GAME_VERSION					BORSCHT_APP_VERSION
 	#define REGISTRY_PATH					"Software\\GSC Game World\\STALKER-STCS\\"
 #endif
 

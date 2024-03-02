@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "dedicated_server_only.h"
+#include "../../version.h"
 
 extern LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 PROTECT_API void CRenderDevice::Initialize			()
 {
-	Msg("Initializing Engine %s %s...", CI_VERSION, __DATE__);
+	Msg("Initializing Engine %s %s...", BORSCHT_APP_VERSION, __DATE__);
 	TimerGlobal.Start			();
 	TimerMM.Start				();
 

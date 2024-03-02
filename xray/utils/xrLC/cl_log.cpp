@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "../../xrcore/log.h"
+#include "../../../version.h"
 #include <time.h>
 #include <mmsystem.h>
 
@@ -154,7 +155,7 @@ void logThread(void *dummy)
 	SendMessage(hwProgress, PBM_SETRANGE,	0, MAKELPARAM(0, 1000)); 
 	SendMessage(hwProgress, PBM_SETPOS,		0, 0); 
 
-	Msg("LevelBuilder %s %s\n", CI_VERSION, __DATE__);
+	Msg("LevelBuilder %s %s\n", BORSCHT_APP_VERSION, __DATE__);
 	{
 		char tmpbuf[128];
 		Msg("Startup time: %s",_strtime(tmpbuf));

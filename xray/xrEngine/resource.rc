@@ -1,6 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
+#include "../../version.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -118,12 +119,9 @@ END
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
-#define STR(x) XSTR(x)
-#define XSTR(x) #x
-
 VS_VERSION_INFO VERSIONINFO
-	FILEVERSION RC_VERSION
-	PRODUCTVERSION RC_VERSION
+	FILEVERSION BORSCHT_RC_VERSION
+	PRODUCTVERSION BORSCHT_RC_VERSION
 	FILEFLAGSMASK 0x3fL
 #ifdef NDEBUG
 	FILEFLAGS 0
@@ -140,10 +138,10 @@ VS_VERSION_INFO VERSIONINFO
 			BEGIN
 				VALUE "CompanyName", "Borscht Team\0"
 				VALUE "FileDescription", "xrEngine.exe"
-				VALUE "FileVersion", STR(APP_VERSION)
+				VALUE "FileVersion", BORSCHT_APP_VERSION
 				VALUE "OriginalFilename", "xrEngine.exe\0"
 				VALUE "ProductName", "S.T.A.L.K.E.R: Borscht Engine\0"
-				VALUE "ProductVersion", STR(FULL_VERSION)
+				VALUE "ProductVersion", BORSCHT_APP_VERSION
 			END
 		END
 		BLOCK "VarFileInfo"
