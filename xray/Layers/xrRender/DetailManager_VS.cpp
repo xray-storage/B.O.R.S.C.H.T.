@@ -14,13 +14,33 @@
 #include "../xrRenderDX10/dx10BufferUtils.h"
 
 const int			quant	= 16384;
-const int			c_hdr	= 10;
+const int			c_hdr	= 15;
 const int			c_size	= 4;
 
 static D3DVERTEXELEMENT9 dwDecl[] =
 {
 	{ 0, 0,  D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, 	D3DDECLUSAGE_POSITION,	0 },	// pos
 	{ 0, 12, D3DDECLTYPE_SHORT4,	D3DDECLMETHOD_DEFAULT, 	D3DDECLUSAGE_TEXCOORD,	0 },	// uv
+	D3DDECL_END()
+};
+
+struct HWInstanceData
+{
+	Fvector4 M1;
+	Fvector4 M2;
+	Fvector4 M3;
+	Fvector4 color;
+};
+const u32 dwInstanceSize = 64;
+
+static D3DVERTEXELEMENT9 dwDecl_instanced[] =
+{
+	{ 0, 0,  D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, 	D3DDECLUSAGE_POSITION,	0 },	// pos
+	{ 0, 12, D3DDECLTYPE_SHORT4,	D3DDECLMETHOD_DEFAULT, 	D3DDECLUSAGE_TEXCOORD,	0 },	// uv
+	{ 1, 0,  D3DDECLTYPE_FLOAT4,    D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,  1 },    // M1
+	{ 1, 16, D3DDECLTYPE_FLOAT4,	D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,  2 },    // M2
+	{ 1, 32, D3DDECLTYPE_FLOAT4,	D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,  3 },    // M3
+	{ 1, 48, D3DDECLTYPE_FLOAT4,	D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,  4 },    // color
 	D3DDECL_END()
 };
 
@@ -40,7 +60,15 @@ short QC (float v)
 
 void CDetailManager::hw_Load	()
 {
-	hw_Load_Geom();
+#ifndef USE_DX10
+	bInstancing = !!strstr(Core.Params,"-details_instanced");
+	dwMaxInstances = 2048;
+
+	if (bInstancing)
+		hw_Load_Geom_instanced();
+	else
+#endif
+		hw_Load_Geom();
 	hw_Load_Shaders();
 }
 
@@ -144,12 +172,85 @@ void CDetailManager::hw_Load_Geom()
 	hw_Geom.create		(dwDecl, hw_VB, hw_IB);
 }
 
+#ifndef USE_DX10
+void CDetailManager::hw_Load_Geom_instanced()
+{
+	Msg("* [DETAILS] Instanced(%d)", dwMaxInstances);
+
+	// Pre-process objects
+	u32			dwVerts = 0;
+	u32			dwIndices = 0;
+	for (u32 o = 0; o < objects.size(); o++)
+	{
+		const CDetail& D = *objects[o];
+		dwVerts += D.number_vertices;
+		dwIndices += D.number_indices;
+	}
+	u32			vSize = sizeof(vertHW);
+	Msg("* [DETAILS] %d v(%d), %d p", dwVerts, vSize, dwIndices / 3);
+
+	// Determine POOL & USAGE
+	u32 dwUsage = D3DUSAGE_WRITEONLY;
+
+	// Create VB/IB
+	R_CHK(HW.pDevice->CreateVertexBuffer(dwInstanceSize * dwMaxInstances, dwUsage, 0, D3DPOOL_MANAGED, &hw_VBInstances, 0));
+	R_CHK(HW.pDevice->CreateVertexBuffer(dwVerts * vSize, dwUsage, 0, D3DPOOL_MANAGED, &hw_VB, 0));
+	R_CHK(HW.pDevice->CreateIndexBuffer(dwIndices * 2, dwUsage, D3DFMT_INDEX16, D3DPOOL_MANAGED, &hw_IB, 0));
+
+	Msg("* [DETAILS] Instanced(%d), VB(%dK), IB(%dK)", dwMaxInstances, (dwVerts * vSize) / 1024, (dwIndices * 2) / 1024);
+
+	// Fill VB
+	{
+		vertHW* pV;
+		R_CHK(hw_VB->Lock(0, 0, (void**)&pV, 0));
+		for (u32 o = 0; o < objects.size(); o++)
+		{
+			const CDetail& D = *objects[o];
+			for (u32 v = 0; v < D.number_vertices; v++)
+			{
+				const Fvector& vP = D.vertices[v].P;
+				pV->x = vP.x;
+				pV->y = vP.y;
+				pV->z = vP.z;
+				pV->u = QC(D.vertices[v].u);
+				pV->v = QC(D.vertices[v].v);
+				pV->t = QC(vP.y / (D.bv_bb.max.y - D.bv_bb.min.y));
+				pV->mid = 0;
+				pV++;
+			}
+		}
+		R_CHK(hw_VB->Unlock());
+	}
+
+	// Fill IB
+	{
+		u16* pI;
+		R_CHK(hw_IB->Lock(0, 0, (void**)(&pI), 0));
+		for (u32 o = 0; o < objects.size(); o++)
+		{
+			const CDetail& D = *objects[o];
+			for (u32 i = 0; i < u32(D.number_indices); i++)
+				*pI++ = u16(D.indices[i]);
+		}
+		R_CHK(hw_IB->Unlock());
+	}
+
+	// Declare geometry
+	hw_Geom.create(dwDecl_instanced, hw_VB, hw_IB);
+}
+#endif
+
 void CDetailManager::hw_Unload()
 {
 	// Destroy VS/VB/IB
 	hw_Geom.destroy				();
 	_RELEASE					(hw_IB);
 	_RELEASE					(hw_VB);
+
+#ifndef USE_DX10
+	if (bInstancing)
+		_RELEASE(hw_VBInstances);
+#endif
 }
 
 #ifndef	USE_DX10
@@ -166,9 +267,23 @@ void CDetailManager::hw_Load_Shaders()
 	hwc_s_consts		= T1.get("consts");
 	hwc_s_xform			= T1.get("xform");
 	hwc_s_array			= T1.get("array");
+
+#if RENDER==R_R1
+	R_constant_table&	T2	= *(S->E[SE_R1_LPOINT]->passes[0]->constants);
+	hwc_lp_consts		= T2.get("consts");
+	hwc_lp_wave			= T2.get("wave");
+	hwc_lp_wind			= T2.get("dir2D");
+	hwc_lp_array		= T2.get("array");
+
+	R_constant_table&	T3	= *(S->E[SE_R1_LSPOT]->passes[0]->constants);
+	hwc_ls_consts		= T3.get("consts");
+	hwc_ls_wave			= T3.get("wave");
+	hwc_ls_wind			= T3.get("dir2D");
+	hwc_ls_array		= T3.get("array");
+#endif
 }
 
-void CDetailManager::hw_Render()
+void CDetailManager::hw_Render(u16 dlight_flag)
 {
 	// Render-prepare
 	//	Update timer
@@ -192,31 +307,115 @@ void CDetailManager::hw_Render()
 
 	// Setup geometry and DMA
 	RCache.set_Geometry		(hw_Geom);
+	if (bInstancing)
+	{
+		R_CHK(HW.pDevice->SetStreamSource(1, hw_VBInstances, 0, 64));
+		R_CHK(HW.pDevice->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1));
+	}
 
 	// Wave0
 	float		scale			=	1.f/float(quant);
 	Fvector4	wave;
-	//wave.set				(1.f/5.f,		1.f/7.f,	1.f/3.f,	Device.fTimeGlobal*swing_current.speed);
-	wave.set				(1.f/5.f,		1.f/7.f,	1.f/3.f,	m_time_pos);
-	RCache.set_c			(&*hwc_consts,	scale,		scale,		ps_r__Detail_l_aniso,	ps_r__Detail_l_ambient);				// consts
-	RCache.set_c			(&*hwc_wave,	wave.div(PI_MUL_2));	// wave
-	RCache.set_c			(&*hwc_wind,	dir1);																					// wind-dir
-	hw_Render_dump			(&*hwc_array,	1, 0, c_hdr );
 
-	// Wave1
-	//wave.set				(1.f/3.f,		1.f/7.f,	1.f/5.f,	Device.fTimeGlobal*swing_current.speed);
-	wave.set				(1.f/3.f,		1.f/7.f,	1.f/5.f,	m_time_pos);
-	RCache.set_c			(&*hwc_wave,	wave.div(PI_MUL_2));	// wave
-	RCache.set_c			(&*hwc_wind,	dir2);																					// wind-dir
-	hw_Render_dump			(&*hwc_array,	2, 0, c_hdr );
+	if (dlight_flag == 1) 
+	{ 
+		//wave.set				(1.f/5.f,		1.f/7.f,	1.f/3.f,	Device.fTimeGlobal*swing_current.speed);
+		wave.set				(1.f/5.f,		1.f/7.f,	1.f/3.f,	m_time_pos);
+		RCache.set_c			(&*hwc_lp_consts,	scale,		scale,		ps_r__Detail_l_aniso,	ps_r__Detail_l_ambient);	// consts
+		RCache.set_c			(&*hwc_lp_wave,	wave.div(PI_MUL_2));															// wave
+		RCache.set_c			(&*hwc_lp_wind,	dir1);																			// wind-dir
+		if (bInstancing)
+			hw_Render_instanced	(1, SE_R1_LPOINT, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_lp_array,	1, SE_R1_LPOINT, dlight_flag );
 
-	// Still
-	RCache.set_c			(&*hwc_s_consts,scale,		scale,		scale,				1.f);
-	RCache.set_c			(&*hwc_s_xform,	Device.mFullTransform);
-	hw_Render_dump			(&*hwc_s_array,	0, 1, c_hdr );
+		// Wave1
+		//wave.set				(1.f/3.f,		1.f/7.f,	1.f/5.f,	Device.fTimeGlobal*swing_current.speed);
+		wave.set				(1.f/3.f,		1.f/7.f,	1.f/5.f,	m_time_pos);
+		RCache.set_c			(&*hwc_lp_wave,	wave.div(PI_MUL_2));															// wave
+		RCache.set_c			(&*hwc_lp_wind,	dir2);																			// wind-dir
+		if (bInstancing)
+			hw_Render_instanced	(2, SE_R1_LPOINT, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_lp_array,	2, SE_R1_LPOINT, dlight_flag );
+
+		// Still
+		RCache.set_c			(&*hwc_lp_wind,		0.f, 0.f, 0.f, 0.f);
+		if (bInstancing)
+			hw_Render_instanced	(0, SE_R1_LPOINT, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_lp_array,	0, SE_R1_LPOINT, dlight_flag );
+	} 
+	else if (dlight_flag == 2) 
+	{ 
+		//wave.set				(1.f/5.f,		1.f/7.f,	1.f/3.f,	Device.fTimeGlobal*swing_current.speed);
+		wave.set				(1.f/5.f,		1.f/7.f,	1.f/3.f,	m_time_pos);
+		RCache.set_c			(&*hwc_ls_consts,	scale,		scale,		ps_r__Detail_l_aniso,	ps_r__Detail_l_ambient);	// consts
+		RCache.set_c			(&*hwc_ls_wave,	wave.div(PI_MUL_2));															// wave
+		RCache.set_c			(&*hwc_ls_wind,	dir1);																			// wind-dir
+		if (bInstancing)
+			hw_Render_instanced	(1, SE_R1_LSPOT, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_ls_array,	1, SE_R1_LSPOT, dlight_flag );
+
+		// Wave1
+		//wave.set				(1.f/3.f,		1.f/7.f,	1.f/5.f,	Device.fTimeGlobal*swing_current.speed);
+		wave.set				(1.f/3.f,		1.f/7.f,	1.f/5.f,	m_time_pos);
+		RCache.set_c			(&*hwc_ls_wave,	wave.div(PI_MUL_2));															// wave
+		RCache.set_c			(&*hwc_ls_wind,	dir2);																			// wind-dir
+		if (bInstancing)
+			hw_Render_instanced	(2, SE_R1_LSPOT, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_ls_array,	2, SE_R1_LSPOT, dlight_flag );
+
+		// Still
+		RCache.set_c			(&*hwc_ls_wind,		0.f, 0.f, 0.f, 0.f);
+		if (bInstancing)
+			hw_Render_instanced	(0, SE_R1_LSPOT, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_ls_array,	0, SE_R1_LSPOT, dlight_flag );
+	} 
+	else 
+	{
+		//wave.set				(1.f/5.f,		1.f/7.f,	1.f/3.f,	Device.fTimeGlobal*swing_current.speed);
+		wave.set				(1.f/5.f,		1.f/7.f,	1.f/3.f,	m_time_pos);
+		RCache.set_c			(&*hwc_consts,	scale,		scale,		ps_r__Detail_l_aniso,	ps_r__Detail_l_ambient);				// consts
+		RCache.set_c			(&*hwc_wave,	wave.div(PI_MUL_2));	// wave
+		RCache.set_c			(&*hwc_wind,	dir1);																					// wind-dir
+		if (bInstancing)
+			hw_Render_instanced	(1, 0, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_array,	1, 0, dlight_flag );
+
+		// Wave1
+		//wave.set				(1.f/3.f,		1.f/7.f,	1.f/5.f,	Device.fTimeGlobal*swing_current.speed);
+		wave.set				(1.f/3.f,		1.f/7.f,	1.f/5.f,	m_time_pos);
+		RCache.set_c			(&*hwc_wave,	wave.div(PI_MUL_2));	// wave
+		RCache.set_c			(&*hwc_wind,	dir2);																					// wind-dir
+		if (bInstancing)
+			hw_Render_instanced	(2, 0, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_array,	2, 0, dlight_flag );
+
+		// Still
+		RCache.set_c			(&*hwc_s_consts,scale,		scale,		scale,				1.f);
+		RCache.set_c			(&*hwc_s_xform,	Device.mFullTransform);
+		if (bInstancing)
+			hw_Render_instanced	(0, 1, dlight_flag);
+		else
+			hw_Render_dump		(&*hwc_array,	0, 1, dlight_flag );
+	}
+
+
+	if (bInstancing)
+	{
+		R_CHK(HW.pDevice->SetStreamSource(1, 0, 0, 0));
+		R_CHK(HW.pDevice->SetStreamSourceFreq(0, 1));
+		R_CHK(HW.pDevice->SetStreamSourceFreq(1, 1));
+	}
 }
 
-void	CDetailManager::hw_Render_dump		(ref_constant x_array, u32 var_id, u32 lod_id, u32 c_offset)
+void	CDetailManager::hw_Render_dump		(ref_constant x_array, u32 var_id, u32 lod_id, u16 dlight_flag)
 {
 #ifdef _EDITOR
 	Device.Statistic->RenderDUMP_DT_Count	= 0;
@@ -266,6 +465,9 @@ void	CDetailManager::hw_Render_dump		(ref_constant x_array, u32 var_id, u32 lod_
 				for (; _iI!=_iE; _iI++){
 					SlotItem&	Instance	= **_iI;
 					u32			base		= dwBatch*4;
+
+					if (dlight_flag != 1234)
+					if (Instance.dlight_flag!=dlight_flag) continue;
 
 					// Build matrix ( 3x4 matrix, last row - color )
 					float		scale		= Instance.scale_calculated;
@@ -326,6 +528,129 @@ void	CDetailManager::hw_Render_dump		(ref_constant x_array, u32 var_id, u32 lod_
 		}
 		vOffset		+=	hw_BatchSize * Object.number_vertices;
 		iOffset		+=	hw_BatchSize * Object.number_indices;
+	}
+}
+
+void	CDetailManager::hw_Render_instanced	(u32 var_id, u32 lod_id, u16 dlight_flag)
+{
+#ifdef _EDITOR
+	Device.Statistic->RenderDUMP_DT_Count	= 0;
+#else
+	Statistic.RenderDUMP_DT_Count	= 0;
+#endif
+
+	// Matrices and offsets
+	u32		vOffset	=	0;
+	u32		iOffset	=	0;
+
+	vis_list& list	=	m_visibles	[var_id];
+
+	Fvector					c_sun,c_ambient,c_hemi;
+#ifndef _EDITOR
+	CEnvDescriptor&	desc	= *g_pGamePersistent->Environment().CurrentEnv;
+	c_sun.set				(desc.sun_color.x,	desc.sun_color.y,	desc.sun_color.z);	c_sun.mul(.5f);
+	c_ambient.set			(desc.ambient.x,	desc.ambient.y,		desc.ambient.z);
+	c_hemi.set				(desc.hemi_color.x, desc.hemi_color.y,	desc.hemi_color.z);
+#else
+	c_sun.set				(1,1,1);	c_sun.mul(.5f);
+	c_ambient.set			(1,1,1);
+	c_hemi.set				(1,1,1);
+#endif    
+
+	VERIFY(objects.size()<=list.size());
+
+	// Iterate
+	for (u32 O=0; O<objects.size(); O++){
+		CDetail&	Object				= *objects	[O];
+		xr_vector <SlotItemVec* >& vis	= list		[O];
+		if (!vis.empty()){
+			// Setup matrices + colors (and flush it as nesessary)
+			RCache.set_Element				(Object.shader->E[lod_id]);
+			RImplementation.apply_lmaterial	();
+
+			HWInstanceData* pInstData;
+			R_CHK(hw_VBInstances->Lock(0, dwMaxInstances*dwInstanceSize, (void**)&pInstData, D3DLOCK_DISCARD));
+			u32 dwInstance = 0;
+
+			xr_vector <SlotItemVec* >::iterator _vI = vis.begin();
+			xr_vector <SlotItemVec* >::iterator _vE = vis.end();
+			for (; _vI!=_vE; _vI++){
+				SlotItemVec*	items		= *_vI;
+				SlotItemVecIt _iI			= items->begin();
+				SlotItemVecIt _iE			= items->end();
+				for (; _iI!=_iE; _iI++){
+					SlotItem&	Instance	= **_iI;
+					HWInstanceData& InstData = pInstData[dwInstance];
+
+					if (dlight_flag != 1234)
+					if (Instance.dlight_flag!=dlight_flag) continue;
+
+					// Build matrix ( 3x4 matrix, last row - color )
+					float		scale		= Instance.scale_calculated;
+					Fmatrix&	M			= Instance.mRotY;
+					InstData.M1.set			(M._11*scale,	M._21*scale,	M._31*scale,	M._41	);
+					InstData.M2.set			(M._12*scale,	M._22*scale,	M._32*scale,	M._42	);
+					InstData.M3.set			(M._13*scale,	M._23*scale,	M._33*scale,	M._43	);
+
+					// Build color
+#if RENDER==R_R1
+					Fvector C;
+					C.set					(c_ambient);
+//					C.mad					(c_lmap,Instance.c_rgb);
+					C.mad					(c_hemi,Instance.c_hemi);
+					C.mad					(c_sun,	Instance.c_sun);
+					InstData.color.set		(C.x,			C.y,			C.z,			1.f		);
+#else
+					// R2 only needs hemisphere
+					float		h			= Instance.c_hemi;
+					float		s			= Instance.c_sun;
+					InstData.color.set		(s,				s,				s,				h		);
+#endif
+					dwInstance++;
+					if (dwInstance == dwMaxInstances)	{
+						// flush
+#ifdef _EDITOR
+						Device.Statistic->RenderDUMP_DT_Count			+=	dwInstance;
+#else
+						Statistic.RenderDUMP_DT_Count					+=	dwInstance;
+#endif
+						u32 dwCNT_verts			= Object.number_vertices;
+						u32 dwCNT_prims			= Object.number_indices/3;
+
+						R_CHK(hw_VBInstances->Unlock());
+						R_CHK(HW.pDevice->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | dwInstance));
+
+						RCache.Render			(D3DPT_TRIANGLELIST,vOffset,0,dwCNT_verts,iOffset,dwCNT_prims);
+						RCache.stat.r.s_details.add	(dwCNT_verts);
+
+						// restart
+						dwInstance					= 0;
+						R_CHK(hw_VBInstances->Lock(0, dwMaxInstances*dwInstanceSize, (void**)&pInstData, D3DLOCK_DISCARD));
+					}
+				}
+			}
+
+			R_CHK(hw_VBInstances->Unlock());
+
+			// flush if nessecary
+			if (dwInstance)
+			{
+				// flush
+#ifdef _EDITOR
+				Device.Statistic->RenderDUMP_DT_Count			+=	dwInstance;
+#else
+				Statistic.RenderDUMP_DT_Count					+=	dwInstance;
+#endif
+				u32 dwCNT_verts			= Object.number_vertices;
+				u32 dwCNT_prims			= Object.number_indices/3;
+
+				R_CHK(HW.pDevice->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | dwInstance));
+				RCache.Render			(D3DPT_TRIANGLELIST,vOffset,0,dwCNT_verts,iOffset,dwCNT_prims);
+				RCache.stat.r.s_details.add	(dwCNT_verts);
+			}
+		}
+		vOffset		+=	Object.number_vertices;
+		iOffset		+=	Object.number_indices;
 	}
 }
 

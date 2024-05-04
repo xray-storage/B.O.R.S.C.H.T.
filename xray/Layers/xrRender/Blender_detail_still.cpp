@@ -39,6 +39,9 @@ void	CBlender_Detail_Still::Compile	(CBlender_Compile& C)
 {
 	IBlender::Compile	(C);
 	
+	BOOL bInstancing = !!strstr(Core.Params,"-details_instanced");
+	LPCSTR vs_name;
+	
 	if (C.bEditor)
 	{
 		C.PassBegin		();
@@ -60,18 +63,32 @@ void	CBlender_Detail_Still::Compile	(CBlender_Compile& C)
 		switch (C.iElement)
 		{
 		case SE_R1_NORMAL_HQ:
-			C.r_Pass	("detail_wave",		"detail",FALSE,TRUE,TRUE,FALSE, D3DBLEND_ONE,D3DBLEND_ZERO,oBlend.value?TRUE:FALSE,oBlend.value?200:0);
+			vs_name = bInstancing ? "inst_detail_wave" : "detail_wave";
+			C.r_Pass	(vs_name,	"detail",FALSE,TRUE,TRUE,FALSE, D3DBLEND_ONE,D3DBLEND_ZERO,oBlend.value?TRUE:FALSE,oBlend.value?200:0);
 			C.r_Sampler	("s_base",	C.L_textures[0]);
 			C.r_End		();
 			break;
 		case SE_R1_NORMAL_LQ:
-			C.r_Pass	("detail_still",	"detail",FALSE,TRUE,TRUE,FALSE, D3DBLEND_ONE,D3DBLEND_ZERO,oBlend.value?TRUE:FALSE,oBlend.value?200:0);
+			vs_name = bInstancing ? "inst_detail_still" : "detail_still";
+			C.r_Pass	(vs_name,	"detail",FALSE,TRUE,TRUE,FALSE, D3DBLEND_ONE,D3DBLEND_ZERO,oBlend.value?TRUE:FALSE,oBlend.value?200:0);
 			C.r_Sampler	("s_base",	C.L_textures[0]);
 			C.r_End		();
 			break;
 		case SE_R1_LPOINT:
+			vs_name = bInstancing ? "inst_detail_point" : "detail_point";
+			C.r_Pass		(vs_name,"add_point",FALSE,TRUE,FALSE,TRUE,D3DBLEND_ONE,D3DBLEND_ONE,oBlend.value?TRUE:FALSE,oBlend.value?200:0);
+			C.r_Sampler		("s_base",	C.L_textures[0]);
+			C.r_Sampler_clf	("s_lmap",	TEX_POINT_ATT		);
+			C.r_Sampler_clf	("s_att",	TEX_POINT_ATT		);
+			C.r_End			();
 			break;
 		case SE_R1_LSPOT:
+			vs_name = bInstancing ? "inst_detail_spot" : "detail_spot";
+			C.r_Pass		(vs_name,"add_spot",FALSE,TRUE,FALSE,TRUE,D3DBLEND_ONE,D3DBLEND_ONE,oBlend.value?TRUE:FALSE,oBlend.value?200:0);
+			C.r_Sampler		("s_base",	C.L_textures[0]);
+			C.r_Sampler_clf	("s_lmap",	"internal\\internal_light_att",		true);
+			C.r_Sampler_clf	("s_att",	TEX_SPOT_ATT		);
+			C.r_End			();
 			break;
 		case SE_R1_LMODELS:
 			break;
@@ -87,13 +104,18 @@ void	CBlender_Detail_Still::Compile	(CBlender_Compile& C)
 {
 	IBlender::Compile	(C);
 
+	BOOL bInstancing = !!strstr(Core.Params,"-details_instanced");
+	LPCSTR vs_name;
+
 	switch(C.iElement) 
 	{
 	case SE_R2_NORMAL_HQ: 		// deffer wave
-		uber_deffer				(C,false,"detail_w","base",true);
+		vs_name = bInstancing ? "detail_w_inst" : "detail_w";
+		uber_deffer				(C,false,vs_name,"base",true);
 		break;
 	case SE_R2_NORMAL_LQ: 		// deffer still
-		uber_deffer				(C,false,"detail_s","base",true);
+		vs_name = bInstancing ? "detail_s_inst" : "detail_s";
+		uber_deffer				(C,false,vs_name,"base",true);
 		break;
 	}
 }

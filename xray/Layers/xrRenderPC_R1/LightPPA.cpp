@@ -8,6 +8,7 @@
 #include "../../xrEngine/environment.h"
 #include "../xrRender/fbasicvisual.h"
 #include "../../xrEngine/CustomHUD.h"
+#include "../xrRender/DetailManager.h"
 
 const u32	MAX_POLYGONS			=	1024*8;
 const float MAX_DISTANCE			=	50.f;
@@ -141,7 +142,7 @@ void CLightR_Manager::render_point	()
 }
 */
 
-void CLightR_Manager::render_point	()
+void CLightR_Manager::render_point	(CDetailManager* details)
 {
 	// for each light
 	Fvector		lc_COP		= Device.vCameraPosition	;
@@ -209,11 +210,14 @@ void CLightR_Manager::render_point	()
 		if (bHUD)			g_pGameLevel->pHUD->Render_Last		();	
 		RImplementation.r_dsgraph_render_graph					(0);
 		if (bHUD)			RImplementation.r_dsgraph_render_hud();	
+
+		// grass
+		if(details && details->UpdateVisibleM_LPoint(L->position, L->range))
+			details->Render(1);
 	}
-	//		??? grass ???
 }
 
-void CLightR_Manager::render_spot	()
+void CLightR_Manager::render_spot	(CDetailManager* details)
 {
 	// for each light
 	//	Msg	("l=%d",selected_spot.size());
@@ -285,20 +289,26 @@ void CLightR_Manager::render_spot	()
 		RImplementation.r_dsgraph_render_graph			(0);
 		if (bHUD)	RImplementation.r_dsgraph_render_hud();	
 		//	RCache.set_ClipPlanes					(false,	&L_combine);
+
+		// grass
+		if(details && details->UpdateVisibleM_LSpot(L->position, L->direction, L->cone, L->range))
+			details->Render(2);
 	}
-	//		??? grass ???
 }
 
-void CLightR_Manager::render		()
+void CLightR_Manager::render		(CDetailManager* details)
 {
+	if (!ps_r1_flags.test(R1FLAG_DLIGHTS_DETAIL))
+		details = NULL;
+
 	if (selected_spot.size())		{ 
 		RImplementation.phase		= CRender::PHASE_SPOT;
-		render_spot			();	
+		render_spot			(details);	
 		selected_spot.clear	();	
 	}
 	if (selected_point.size())		{ 
 		RImplementation.phase		= CRender::PHASE_POINT;
-		render_point		();	
+		render_point		(details);	
 		selected_point.clear(); 
 	}
 }

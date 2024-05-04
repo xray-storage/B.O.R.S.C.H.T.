@@ -353,7 +353,61 @@ void CDetailManager::UpdateVisibleM()
 #endif
 }
 
-void CDetailManager::Render	()
+u32 CDetailManager::UpdateVisibleM_LPoint(const Fvector& P, float R) 
+{ 
+	u32 count = 0;
+	float R2 = R*R;
+	int i, j, k, m; 
+
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < m_visibles[i].size(); j++) {
+			for (k = 0; k < m_visibles[i][j].size(); k++) {
+				SlotItemVec& vec = *m_visibles[i][j][k];
+				for (m = 0; m < vec.size(); m++) {
+					vec[m]->dlight_flag = 1234;
+					if (P.distance_to_sqr(vec[m]->mRotY.c) < R2)
+					{
+						vec[m]->dlight_flag = 1;
+						count++;
+					}
+				}
+			}
+		}
+	}
+
+	return count;
+}
+
+u32 CDetailManager::UpdateVisibleM_LSpot(const Fvector& P, const Fvector& Ldir, float angle, float R)
+{
+	u32 count = 0;
+	float R2 = R*R;
+	float cos_angle = cos(angle);
+	int i, j, k, m;
+
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < m_visibles[i].size(); j++) {
+			for (k = 0; k < m_visibles[i][j].size(); k++) {
+				SlotItemVec& vec = *m_visibles[i][j][k];
+				for (m = 0; m < vec.size(); m++) {
+					vec[m]->dlight_flag = 1234;
+					if (P.distance_to_sqr(vec[m]->mRotY.c) < R2) {
+						Fvector D; D.sub(vec[m]->mRotY.c, P);
+						D.normalize();
+						if (D.dotproduct(Ldir)>=cos_angle) {
+							vec[m]->dlight_flag = 2;
+							count++;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return count;
+}
+
+void CDetailManager::Render	(u16 dlight_flag)
 {
 #ifndef _EDITOR
 	if (0==dtFS)						return;
@@ -378,7 +432,7 @@ void CDetailManager::Render	()
 
 	RCache.set_CullMode		(CULL_NONE);
 	RCache.set_xform_world	(Fidentity);
-	if (UseVS())			hw_Render	();
+	if (UseVS())			hw_Render	(dlight_flag);
 	else					soft_Render	();
 	RCache.set_CullMode		(CULL_CCW);
 #ifdef _EDITOR

@@ -46,7 +46,7 @@ void CDetailManager::hw_Load_Shaders()
 	hwc_s_array			= T1.get("array");
 }
 
-void CDetailManager::hw_Render()
+void CDetailManager::hw_Render(u16 dlight_flag)
 {
 	// Render-prepare
 	//	Update timer

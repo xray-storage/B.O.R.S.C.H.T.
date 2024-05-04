@@ -52,7 +52,8 @@ public:
 		float						scale;
 		float						scale_calculated;
 		Fmatrix						mRotY;
-		u32							vis_ID;				// индекс в visibility списке он же тип [не качается, качается1, качается2]
+		u16							vis_ID;				// индекс в visibility списке он же тип [не качается, качается1, качается2]
+		u16							dlight_flag;
 		float						c_hemi;
 		float						c_sun;
 #if RENDER==R_R1
@@ -136,8 +137,9 @@ public:
 
 	PSS								poolSI;										// pool из которого выделяются SlotItem
 
-	void							UpdateVisibleM	();
-	void							UpdateVisibleS	();
+	void							UpdateVisibleM			();
+	u32								UpdateVisibleM_LPoint	(const Fvector& P, float R);
+	u32								UpdateVisibleM_LSpot	(const Fvector& P, const Fvector& Ldir, float angle, float R);
 public:
 #ifdef _EDITOR
 	virtual ObjectList* 			GetSnapList		()=0;
@@ -163,15 +165,29 @@ public:
 	ref_constant					hwc_s_consts;
 	ref_constant					hwc_s_xform;
 	ref_constant					hwc_s_array;
+	ref_constant					hwc_lp_consts;
+	ref_constant					hwc_lp_wave;
+	ref_constant					hwc_lp_wind;
+	ref_constant					hwc_lp_array;
+	ref_constant					hwc_ls_consts;
+	ref_constant					hwc_ls_wave;
+	ref_constant					hwc_ls_wind;
+	ref_constant					hwc_ls_array;
 	void							hw_Load			();
 	void							hw_Load_Geom	();
 	void							hw_Load_Shaders	();
 	void							hw_Unload		();
-	void							hw_Render		();
+	void							hw_Render		(u16 dlight_flag);
+
+	BOOL							bInstancing;
+	u32								dwMaxInstances;
+	IDirect3DVertexBuffer9*			hw_VBInstances;
+	void							hw_Load_Geom_instanced();
 #ifdef	USE_DX10
 	void							hw_Render_dump	(const Fvector4 &consts, const Fvector4 &wave, const Fvector4 &wind, u32 var_id, u32 lod_id);
 #else	//	USE_DX10
-	void							hw_Render_dump	(ref_constant array, u32 var_id, u32 lod_id, u32 c_base);
+	void							hw_Render_dump	(ref_constant array, u32 var_id, u32 lod_id, u16 dlight_flag);
+	void							hw_Render_instanced	(u32 var_id, u32 lod_id, u16 dlight_flag);
 #endif	//	USE_DX10
 
 public:
@@ -193,7 +209,7 @@ public:
 
 	void							Load			();
 	void							Unload			();
-	void							Render			();
+	void							Render			(u16 dlight_flag = 1234);
 
 	/// MT stuff
 	xrCriticalSection				MT;

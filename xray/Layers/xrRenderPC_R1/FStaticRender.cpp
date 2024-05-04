@@ -563,7 +563,7 @@ void	CRender::Render		()
 	r_pmask										(true,false);	// disable priority "1"
 	o.vis_intersect								= TRUE			;
 	HOM.Disable									();
-	L_Dynamic->render							();				// addititional light sources
+	L_Dynamic->render							(Details);		// addititional light sources
 	if(Wallmarks){
 		g_r										= 0;
 		Wallmarks->Render						();				// wallmarks has priority as normal geometry

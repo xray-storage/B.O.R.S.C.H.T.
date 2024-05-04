@@ -76,6 +76,7 @@ extern ECORE_API	float		ps_r1_fog_luminance;	//1.f r1-only
 enum
 {
 	R1FLAG_DLIGHTS				= (1<<0),
+	R1FLAG_DLIGHTS_DETAIL		= (1<<1)
 };
 
 // R2

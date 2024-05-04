@@ -8,6 +8,8 @@
 
 #include "../xrRender/light.h"
 
+class CDetailManager;
+
 struct	CLightR_Vertex
 {
 	Fvector			P;
@@ -26,9 +28,9 @@ public:
 	virtual ~CLightR_Manager		();
 
 	void			add				(light* L);
-	void			render			();
-	void			render_point	();
-	void			render_spot		();
+	void			render			(CDetailManager* details);
+	void			render_point	(CDetailManager* details);
+	void			render_spot		(CDetailManager* details);
 };
 
 //////////////////////////////////////////////////////////////////////////
