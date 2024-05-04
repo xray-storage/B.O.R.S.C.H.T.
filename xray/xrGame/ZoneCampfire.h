@@ -11,8 +11,8 @@ protected:
 	bool					m_turned_on;
 	u32						m_turn_time;
 
-		virtual	void		PlayIdleParticles			(bool bIdleLight=true);
-		virtual	void		StopIdleParticles			(bool bIdleLight=true);
+		virtual	void		PlayIdleParticles			();
+		virtual	void		StopIdleParticles			(bool bSmooth=true);
 		virtual BOOL		AlwaysTheCrow				();
 		virtual	void		UpdateWorkload				(u32 dt);
 

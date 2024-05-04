@@ -275,8 +275,8 @@ protected:
 
 
 	//для визуализации зоны
-		virtual	void		PlayIdleParticles			(bool bIdleLight=true);
-		virtual	void		StopIdleParticles			(bool bIdleLight=true);
+		virtual	void		PlayIdleParticles			();
+		virtual	void		StopIdleParticles			(bool bSmooth);
 				void		PlayAccumParticles			();
 				void		PlayAwakingParticles		();
 				void		PlayBlowoutParticles		();

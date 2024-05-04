@@ -107,11 +107,11 @@ void CZoneCampfire::shedule_Update(u32	dt	)
 }
 
 
-void CZoneCampfire::PlayIdleParticles(bool bIdleLight)
+void CZoneCampfire::PlayIdleParticles()
 {
 	if(m_turn_time==0 || m_turn_time-Device.dwTimeGlobal<(OVL_TIME-2000))
 	{
-		inherited::PlayIdleParticles(bIdleLight);
+		inherited::PlayIdleParticles();
 		if(m_pEnablingParticles)
 		{
 			m_pEnablingParticles->Stop	(FALSE);
@@ -120,10 +120,10 @@ void CZoneCampfire::PlayIdleParticles(bool bIdleLight)
 	}
 }
 
-void CZoneCampfire::StopIdleParticles(bool bIdleLight)
+void CZoneCampfire::StopIdleParticles(bool bSmooth)
 {
 	if(m_turn_time==0 || m_turn_time-Device.dwTimeGlobal<(OVL_TIME-500))
-		inherited::StopIdleParticles(bIdleLight);
+		inherited::StopIdleParticles(bSmooth);
 }
 
 BOOL CZoneCampfire::AlwaysTheCrow()
@@ -144,7 +144,7 @@ void CZoneCampfire::UpdateWorkload(u32 dt)
 		if(m_turned_on)
 		{
 			k = 1.0f-k;
-			PlayIdleParticles	(true);
+			PlayIdleParticles	();
 			StartIdleLight		();
 		}else
 		{
@@ -176,10 +176,10 @@ void CZoneCampfire::UpdateWorkload(u32 dt)
 		m_turn_time = 0;
 		if(m_turned_on)
 		{
-			PlayIdleParticles(true);
+			PlayIdleParticles();
 		}else
 		{
-			StopIdleParticles(true);
+			StopIdleParticles(false);
 		}
 	}
 }

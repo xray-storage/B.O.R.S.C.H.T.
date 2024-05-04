@@ -344,7 +344,7 @@ BOOL CCustomZone::net_Spawn(CSE_Abstract* DC)
 
 void CCustomZone::net_Destroy() 
 {
-	StopIdleParticles		();
+	StopIdleParticles		(false);
 
 	inherited::net_Destroy	();
 
@@ -639,7 +639,7 @@ float CCustomZone::Power(float dist)
 	return  m_fMaxPower * RelativePower(dist);
 }
 
-void CCustomZone::PlayIdleParticles(bool bIdleLight)
+void CCustomZone::PlayIdleParticles()
 {
 	m_idle_sound.play_at_pos(0, Position(), true);
 
@@ -649,27 +649,33 @@ void CCustomZone::PlayIdleParticles(bool bIdleLight)
 		{
 			m_pIdleParticles = CParticlesObject::Create(m_sIdleParticles.c_str(),FALSE);
 			m_pIdleParticles->UpdateParent(XFORM(),zero_vel);
-		
-			m_pIdleParticles->UpdateParent(XFORM(),zero_vel);
-			m_pIdleParticles->Play(false);
 		}
+
+		m_pIdleParticles->UpdateParent(XFORM(), zero_vel);
+		m_pIdleParticles->Play(false);
 	}
-	if(bIdleLight)
-		StartIdleLight	();
+
+	StartIdleLight	();
 }
 
-void CCustomZone::StopIdleParticles(bool bIdleLight)
+void CCustomZone::StopIdleParticles(bool bSmooth)
 {
 	m_idle_sound.stop();
 
 	if(m_pIdleParticles)
 	{
-		m_pIdleParticles->Stop(FALSE);
-		CParticlesObject::Destroy(m_pIdleParticles);
+		if(bSmooth)
+		{
+			m_pIdleParticles->Stop(TRUE);
+		}
+		else
+		{
+			m_pIdleParticles->Stop(FALSE);
+			CParticlesObject::Destroy(m_pIdleParticles);
+		}
 	}
 
-	if(bIdleLight)
-		StopIdleLight();
+	StopIdleLight();
 }
 
 
@@ -1150,7 +1156,7 @@ bool CCustomZone::Disable()
 		if (!pObject) continue;
 		StopObjectIdleParticles(pObject);
 	}
-	StopIdleParticles	();
+	StopIdleParticles	(true);
 	return false;
 };
 
