@@ -196,6 +196,10 @@ Shader*	CResourceManager::_cpp_Create	(IBlender* B, LPCSTR s_shader, LPCSTR s_te
 	{
 		C.iElement			= 2;
 		C.bDetail			= FALSE;
+		// для более правильного освещения террейна фонариком на R1
+		if (RImplementation.get_generation() == IRender_interface::GENERATION_R1 &&
+			B->getDescription().CLS == B_BmmD)
+			C.bDetail = TRUE;
 		ShaderElement		E;
 		C._cpp_Compile		(&E);
 		S.E[2]				= _CreateElement	(E);
@@ -205,6 +209,10 @@ Shader*	CResourceManager::_cpp_Create	(IBlender* B, LPCSTR s_shader, LPCSTR s_te
 	{
 		C.iElement			= 3;
 		C.bDetail			= FALSE;
+		// для более правильного освещения террейна фонариком на R1
+		if (RImplementation.get_generation() == IRender_interface::GENERATION_R1 &&
+			B->getDescription().CLS == B_BmmD)
+			C.bDetail = TRUE;
 		ShaderElement		E;
 		C._cpp_Compile		(&E);
 		S.E[3]				= _CreateElement	(E);
