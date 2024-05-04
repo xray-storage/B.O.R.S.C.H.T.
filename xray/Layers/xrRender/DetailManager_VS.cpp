@@ -480,7 +480,7 @@ void	CDetailManager::hw_Render_dump		(ref_constant x_array, u32 var_id, u32 lod_
 #if RENDER==R_R1
 					Fvector C;
 					C.set					(c_ambient);
-//					C.mad					(c_lmap,Instance.c_rgb);
+					C.add					(Instance.c_rgb);
 					C.mad					(c_hemi,Instance.c_hemi);
 					C.mad					(c_sun,	Instance.c_sun);
 					c_storage[base+3].set	(C.x,			C.y,			C.z,			1.f		);
@@ -596,7 +596,7 @@ void	CDetailManager::hw_Render_instanced	(u32 var_id, u32 lod_id, u16 dlight_fla
 #if RENDER==R_R1
 					Fvector C;
 					C.set					(c_ambient);
-//					C.mad					(c_lmap,Instance.c_rgb);
+					C.add					(Instance.c_rgb);
 					C.mad					(c_hemi,Instance.c_hemi);
 					C.mad					(c_sun,	Instance.c_sun);
 					InstData.color.set		(C.x,			C.y,			C.z,			1.f		);
